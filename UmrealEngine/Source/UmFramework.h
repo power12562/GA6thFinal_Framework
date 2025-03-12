@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //WINDOW SDK
 #include <Windows.h>
@@ -38,4 +38,5 @@
 
 //Utility
 #include "Engine/Utility/DumpUtility.h"
+
 
