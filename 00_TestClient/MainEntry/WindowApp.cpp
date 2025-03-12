@@ -88,6 +88,11 @@ void WindowApp::ClientRender()
 
         }
         ImGui::End();
+        ImGui::Begin((const char*)u8"도킹 체크용.");
+        {
+
+        }
+        ImGui::End();
     }
     ImguiEndDraw();
     m_SwapChain1->Present(1, NULL);
