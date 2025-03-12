@@ -1,8 +1,6 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#pragma comment(lib, "Dbghelp.lib")
-
 struct ClientHelper
 {
 	/**클라이언트를 화면 가운데로 위치 시킨다.*/

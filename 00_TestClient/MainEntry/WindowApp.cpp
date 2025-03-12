@@ -79,7 +79,18 @@ void WindowApp::ClientUpdate()
 
 void WindowApp::ClientRender()
 {
+    constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
+    m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
+    ImguiBeginDraw();
+    {
+        ImGui::Begin((const char*)u8"WindowApp::ClientRender 함수에 테스트 코드 있음.");
+        {
 
+        }
+        ImGui::End();
+    }
+    ImguiEndDraw();
+    m_SwapChain1->Present(1, NULL);
 }
 
 void WindowApp::InitD311()
@@ -116,6 +127,10 @@ void WindowApp::InitImgui()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+    ImFontConfig fontConfig{};
+    io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\malgun.ttf", 20.0f, &fontConfig, ImGui::GetIO().Fonts->GetGlyphRangesKorean());
+
     ImGui_ImplWin32_Init(this->GetHWND());
     ImGui_ImplDX11_Init(this->m_device.Get(), this->m_deviceContext.Get());
 }
@@ -125,6 +140,20 @@ void WindowApp::UninitImgui()
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+}
+
+void WindowApp::ImguiBeginDraw()
+{
+    m_deviceContext->OMSetRenderTargets(1, m_backBufferRTV.GetAddressOf(), nullptr);
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+}
+
+void WindowApp::ImguiEndDraw()
+{
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 void WindowApp::InitDXGI()
@@ -147,6 +176,18 @@ void WindowApp::InitDXGI()
     screenDesc.RefreshRate.Denominator = 0;
 
     m_DXGIFactory4->CreateSwapChainForHwnd(m_device.Get(), GetHWND(), &swapDesc, &screenDesc, nullptr, &m_SwapChain1);
+
+    ComPtr<ID3D11Texture2D> pBackBufferTexture;
+    m_SwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBufferTexture); //스왑체인 백버퍼를 가져온다.
+    if (pBackBufferTexture)
+    {
+        m_device->CreateRenderTargetView(pBackBufferTexture.Get(), nullptr, &m_backBufferRTV);
+
+        D3D11_VIEWPORT viewPort{};
+        viewPort.Width  = clientSize.cx;
+        viewPort.Height = clientSize.cy;
+        m_deviceContext->RSSetViewports(1, &viewPort);
+    }
 }
 
 void WindowApp::UninitDXGI()

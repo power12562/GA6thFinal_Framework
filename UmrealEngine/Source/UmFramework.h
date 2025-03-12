@@ -7,6 +7,11 @@
 #include <directxtk/simplemath.h>
 #include <dbghelp.h>
 
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "Dbghelp.lib")
+
 //CRT
 #include <tchar.h>
 

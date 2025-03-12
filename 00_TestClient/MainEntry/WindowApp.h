@@ -33,9 +33,12 @@ private:
 
 	void InitImgui();
 	void UninitImgui();
+	void ImguiBeginDraw();
+	void ImguiEndDraw();
 
 	void InitDXGI();
 	void UninitDXGI();
 	ComPtr<IDXGIFactory4>   m_DXGIFactory4;
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
+	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
 };
