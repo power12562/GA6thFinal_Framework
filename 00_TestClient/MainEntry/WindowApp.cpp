@@ -87,7 +87,7 @@ void WindowApp::ClientRender()
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
     ImguiBeginDraw();
     {
-        ImGui::Begin((const char*)u8"WindowApp::ClientRender 함수에 테스트 코드 있음.");
+        ImGui::Begin((const char*)u8"타임 클래스 확인용");
         {
             ImGui::InputDouble("time scale", &Time.timeScale);
 
