@@ -63,6 +63,9 @@
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_win32.h">
       <Filter>헤더 파일\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Core\TimeSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Imgui\imgui_impl_win32.cpp">
       <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Core\TimeSystem.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

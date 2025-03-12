@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\Core\TimeSystem.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx12.h" />
     <ClInclude Include="Source\Engine\Imgui\imconfig.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Source\Engine\WindowAppCore\SimpleWindowClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\Core\TimeSystem.cpp" />
     <ClCompile Include="Source\Engine\Imgui\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

@@ -74,7 +74,11 @@ void WindowApp::ModuleUnitialize()
 
 void WindowApp::ClientUpdate()
 {
+    TimeSystem::Engine::TimeSystemUpdate();
+    while (TimeSystem::Engine::TimeSystemFixedUpdate())
+    {
 
+    }
 }
 
 void WindowApp::ClientRender()
@@ -85,6 +89,23 @@ void WindowApp::ClientRender()
     {
         ImGui::Begin((const char*)u8"WindowApp::ClientRender 함수에 테스트 코드 있음.");
         {
+            ImGui::InputDouble("time scale", &Time.timeScale);
+
+            ImGui::Text("time : %f", Time.time());
+            ImGui::Text("realtimeSinceStartup : %f", Time.realtimeSinceStartup());
+        
+            ImGui::Text("frameCount : %llu", Time.frameCount());
+
+            ImGui::Text("FPS : %d", Time.frameRate());
+            ImGui::Text("DeltaTime : %f", Time.deltaTime());
+
+            ImGui::Text("unscaledDeltaTime : %f", Time.unscaledDeltaTime());
+
+            ImGui::InputDouble("Fixed Time Step", &Time.fixedTimeStep);
+            ImGui::Text("fixedDeltaTime %f", Time.fixedDeltaTime());
+            ImGui::Text("fixedUnscaledDeltaTime %f", Time.fixedUnscaledDeltaTime());
+
+            ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
 
         }
         ImGui::End();
@@ -95,7 +116,7 @@ void WindowApp::ClientRender()
         ImGui::End();
     }
     ImguiEndDraw();
-    m_SwapChain1->Present(1, NULL);
+    m_SwapChain1->Present(1, 0);
 }
 
 void WindowApp::InitD311()

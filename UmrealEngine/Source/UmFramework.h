@@ -22,6 +22,7 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <limits>
 
 //ThirdParty
 #include "Engine/Imgui/imgui.h"
@@ -30,6 +31,8 @@
 #include "Engine/Imgui/imgui_impl_dx11.h"
 
 //Core
+#include "Engine/Core/TimeSystem.h"
+
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
 
 //Utility
