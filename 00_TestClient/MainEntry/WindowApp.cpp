@@ -1,6 +1,6 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "WindowApp.h"
-
+//??
 int APIENTRY wWinMain(
     _In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -87,13 +87,13 @@ void WindowApp::ClientRender()
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
     ImguiBeginDraw();
     {
-        ImGui::Begin((const char*)u8"WindowApp::ClientRender ÇÔ¼ö¿¡ Å×½ºÆ® ÄÚµå ÀÖÀ½.");
+        ImGui::Begin((const char*)u8"WindowApp::ClientRender í•¨ìˆ˜ì— í…ŒìŠ¤íŠ¸ ì½”ë“œ ìžˆìŒ.");
         {
             ImGui::InputDouble("time scale", &Time.timeScale);
 
             ImGui::Text("time : %f", Time.time());
             ImGui::Text("realtimeSinceStartup : %f", Time.realtimeSinceStartup());
-        
+
             ImGui::Text("frameCount : %llu", Time.frameCount());
 
             ImGui::Text("FPS : %d", Time.frameRate());
@@ -109,7 +109,8 @@ void WindowApp::ClientRender()
 
         }
         ImGui::End();
-        ImGui::Begin((const char*)u8"µµÅ· Ã¼Å©¿ë.");
+        
+        ImGui::Begin((const char*)u8"ë„í‚¹ í™•ì¸ìš©");
         {
 
         }
@@ -127,15 +128,15 @@ void WindowApp::InitD311()
 #endif
 
     D3D11CreateDevice(
-        NULL, 
-        D3D_DRIVER_TYPE_HARDWARE, 
-        NULL, 
-        flags, 
-        NULL, 
-        NULL, 
-        D3D11_SDK_VERSION, 
-        &m_device, 
-        NULL, 
+        NULL,
+        D3D_DRIVER_TYPE_HARDWARE,
+        NULL,
+        flags,
+        NULL,
+        NULL,
+        D3D11_SDK_VERSION,
+        &m_device,
+        NULL,
         &m_deviceContext
     );
 }
@@ -188,29 +189,29 @@ void WindowApp::InitDXGI()
     DXGI_SWAP_CHAIN_DESC1 swapDesc{};
     swapDesc.Width = clientSize.cx;
     swapDesc.Height = clientSize.cy;
-    swapDesc.BufferCount = 2; //¹öÆÛ °³¼ö
-    swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; //¹öÆÛ »ç¿ë ¹æ½Ä ÁöÁ¤
+    swapDesc.BufferCount = 2; //ë²„í¼ ê°œìˆ˜
+    swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; //ë²„í¼ ì‚¬ìš© ë°©ì‹ ì§€ì •
     swapDesc.SampleDesc.Count = 1;
     swapDesc.SampleDesc.Quality = 0;
-    swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; //ÇÃ¸³ ¸ðµå »ç¿ë.   
-    swapDesc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //ÀüÃ¼ È­¸é º¯È¯½Ã ÇØ»óµµ ¹× ¸ð´ÏÅÍ ¼³Á¤ ÀÚµ¿ º¯°æ ÇÃ·¡±×
-    swapDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //Ãâ·Â Æ÷¸ä ÁöÁ¤.
+    swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; //í”Œë¦½ ëª¨ë“œ ì‚¬ìš©.   
+    swapDesc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //ì „ì²´ í™”ë©´ ë³€í™˜ì‹œ í•´ìƒë„ ë° ëª¨ë‹ˆí„° ì„¤ì • ìžë™ ë³€ê²½ í”Œëž˜ê·¸
+    swapDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //ì¶œë ¥ í¬ë©§ ì§€ì •.
 
     DXGI_SWAP_CHAIN_FULLSCREEN_DESC screenDesc{};
-    screenDesc.Windowed = true; //Ã¢¸ðµå À¯¹«
+    screenDesc.Windowed = true; //ì°½ëª¨ë“œ ìœ ë¬´
     screenDesc.RefreshRate.Numerator = 0;
     screenDesc.RefreshRate.Denominator = 0;
 
     m_DXGIFactory4->CreateSwapChainForHwnd(m_device.Get(), GetHWND(), &swapDesc, &screenDesc, nullptr, &m_SwapChain1);
 
     ComPtr<ID3D11Texture2D> pBackBufferTexture;
-    m_SwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBufferTexture); //½º¿ÒÃ¼ÀÎ ¹é¹öÆÛ¸¦ °¡Á®¿Â´Ù.
+    m_SwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBufferTexture); //ìŠ¤ì™‘ì²´ì¸ ë°±ë²„í¼ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
     if (pBackBufferTexture)
     {
         m_device->CreateRenderTargetView(pBackBufferTexture.Get(), nullptr, &m_backBufferRTV);
 
         D3D11_VIEWPORT viewPort{};
-        viewPort.Width  = clientSize.cx;
+        viewPort.Width = clientSize.cx;
         viewPort.Height = clientSize.cy;
         m_deviceContext->RSSetViewports(1, &viewPort);
     }

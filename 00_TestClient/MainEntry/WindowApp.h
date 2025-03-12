@@ -1,6 +1,5 @@
 #pragma once
 #include "UmFramework.h"
-#include <dxgi1_4.h>
 
 using namespace Microsoft::WRL;
 

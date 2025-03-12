@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "SimpleWindowClient.h"
 
 static LRESULT DefaultWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -36,7 +36,7 @@ void SimpleWindowClient::Initialize(HINSTANCE _hinstance)
 
 void SimpleWindowClient::Run()
 {
-	// PeekMessage ¸Ş¼¼Áö°¡ ÀÖÀ¸¸é true,¾øÀ¸¸é false
+	// PeekMessage ë©”ì„¸ì§€ê°€ ìˆìœ¼ë©´ true,ì—†ìœ¼ë©´ false
 	while (!isRunEnd)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -44,7 +44,7 @@ void SimpleWindowClient::Run()
 			if (msg.message == WM_QUIT)
 				break;
 
-			TranslateMessage(&msg); // Å°ÀÔ·Â°ü·Ã ¸Ş½ÃÁö º¯È¯  WM_KEYDOWN -> WM_CHAR
+			TranslateMessage(&msg); // í‚¤ì…ë ¥ê´€ë ¨ ë©”ì‹œì§€ ë³€í™˜  WM_KEYDOWN -> WM_CHAR
 			DispatchMessage(&msg);
 		}
 		else
@@ -71,7 +71,7 @@ void SimpleWindowClient::WindowInit(HINSTANCE _hinstance)
 {
 	SimpleWindowClient::hInstance = _hinstance;
 
-	// À©µµ¿ì Å¬·¡½º ±¸Á¶Ã¼ ÃÊ±âÈ­
+	// ìœˆë„ìš° í´ë˜ìŠ¤ êµ¬ì¡°ì²´ ì´ˆê¸°í™”
 	WNDCLASSEX wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.style = winClassStyle;
@@ -81,21 +81,21 @@ void SimpleWindowClient::WindowInit(HINSTANCE _hinstance)
 	}
 	else
 	{
-		wc.lpfnWndProc = DefaultWndProc;	// ±âº» À©µµ¿ì ÇÁ·Î½ÃÀú ÇÔ¼ö
+		wc.lpfnWndProc = DefaultWndProc;	// ê¸°ë³¸ ìœˆë„ìš° í”„ë¡œì‹œì € í•¨ìˆ˜
 	}
-	wc.hInstance = hInstance;   // ÀÎ½ºÅÏ½º ÇÚµé
+	wc.hInstance = hInstance;   // ì¸ìŠ¤í„´ìŠ¤ í•¸ë“¤
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wc.lpszClassName = winClassName;
 
-	// À©µµ¿ì Å¬·¡½º µî·Ï
+	// ìœˆë„ìš° í´ë˜ìŠ¤ ë“±ë¡
 	if (!RegisterClassEx(&wc))
 	{
 		int error = GetLastError();
 		wchar_t errorStr[25]{};
-		swprintf_s(errorStr, L"À©µµ¿ì Å¬·¡½º µî·Ï ½ÇÆĞ. ¿¡·¯ : %d", error);
+		swprintf_s(errorStr, L"ìœˆë„ìš° í´ë˜ìŠ¤ ë“±ë¡ ì‹¤íŒ¨. ì—ëŸ¬ : %d", error);
 
-		MessageBox(NULL, errorStr, L"¿¡·¯", MB_OK | MB_ICONERROR);
+		MessageBox(NULL, errorStr, L"ì—ëŸ¬", MB_OK | MB_ICONERROR);
 		isRunEnd = true;
 		return;
 	}
@@ -109,7 +109,7 @@ void SimpleWindowClient::WindowInit(HINSTANCE _hinstance)
 	clientSize.cx = windowSize.cx - windowClientOffset.cx;
 	clientSize.cy = windowSize.cy - windowClientOffset.cy;
 
-	// À©µµ¿ì »ı¼º
+	// ìœˆë„ìš° ìƒì„±
 	hwnd = CreateWindowEx(
 		0,
 		winClassName,
@@ -125,13 +125,13 @@ void SimpleWindowClient::WindowInit(HINSTANCE _hinstance)
 		int error = GetLastError();
 		wchar_t errorStr[25]{};
 
-		swprintf_s(errorStr, L"À©µµ¿ì »ı¼º ½ÇÆĞ. ¿¡·¯ : %d", error);
-		MessageBox(hwnd, errorStr, L"¿¡·¯", MB_OK | MB_ICONERROR);
+		swprintf_s(errorStr, L"ìœˆë„ìš° ìƒì„± ì‹¤íŒ¨. ì—ëŸ¬ : %d", error);
+		MessageBox(hwnd, errorStr, L"ì—ëŸ¬", MB_OK | MB_ICONERROR);
 		isRunEnd = true;
 		return;
 	}
 
-	// À©µµ¿ì Ç¥½Ã
+	// ìœˆë„ìš° í‘œì‹œ
 	ShowWindow(hwnd, 10);
 	UpdateWindow(hwnd);
 	ClientHelper::WinToScreenCenter(hwnd);
