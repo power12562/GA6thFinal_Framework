@@ -139,11 +139,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EditorTools\EditorDebugView.h" />
+    <ClInclude Include="EditorTools\EditorSceneView.h" />
+    <ClInclude Include="EditorTools\EditorHierarchyView.h" />
+    <ClInclude Include="EditorTools\EditorInspectorView.h" />
+    <ClInclude Include="EditorTools\EditorDockSpace.h" />
+    <ClInclude Include="EditorTools\EditorMainMenuBar.h" />
     <ClInclude Include="MainEntry\Resource.h" />
     <ClInclude Include="MainEntry\targetver.h" />
     <ClInclude Include="MainEntry\WindowApp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EditorTools\EditorDebugView.cpp" />
+    <ClCompile Include="EditorTools\EditorSceneView.cpp" />
+    <ClCompile Include="EditorTools\EditorHierarchyView.cpp" />
+    <ClCompile Include="EditorTools\EditorInspectorView.cpp" />
+    <ClCompile Include="EditorTools\EditorDockSpace.cpp" />
+    <ClCompile Include="EditorTools\EditorMainMenuBar.cpp" />
     <ClCompile Include="MainEntry\WindowApp.cpp" />
   </ItemGroup>
   <ItemGroup>

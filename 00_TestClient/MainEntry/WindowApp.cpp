@@ -1,5 +1,12 @@
 ﻿#include "pch.h"
 #include "WindowApp.h"
+
+/* 에디터 툴 */
+#include "EditorTools/EditorDockSpace.h"
+
+WindowApp WindowApp::Application;
+WindowApp& Application = WindowApp::Application;
+
 //??
 int APIENTRY wWinMain(
     _In_ HINSTANCE hInstance,
@@ -11,10 +18,9 @@ int APIENTRY wWinMain(
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    WindowApp app;
-    app.Initialize(hInstance);
-    app.Run();
-    app.Uninitialize();
+    Application.Initialize(hInstance);
+    Application.Run();
+    Application.Uninitialize();
 
     return 0;
 }
@@ -49,7 +55,8 @@ WindowApp::~WindowApp() = default;
 
 void WindowApp::PreInitialize()
 {
-
+    /* 에디터 툴 초기화 */
+    Editor.PushTool(new EditorDockSpace);
 }
 
 void WindowApp::ModuleInitialize()
@@ -62,7 +69,6 @@ void WindowApp::ModuleInitialize()
 
 void WindowApp::PreUnitialize()
 {
-
 }
 
 void WindowApp::ModuleUnitialize()
@@ -85,38 +91,10 @@ void WindowApp::ClientRender()
 {
     constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
-    ImguiBeginDraw();
-    {
-        ImGui::Begin((const char*)u8"타임 클래스 확인용");
-        {
-            ImGui::InputDouble("time scale", &Time.timeScale);
+    m_deviceContext->OMSetRenderTargets(1, m_backBufferRTV.GetAddressOf(), nullptr);
+    
+    Editor.DrawGui();
 
-            ImGui::Text("time : %f", Time.time());
-            ImGui::Text("realtimeSinceStartup : %f", Time.realtimeSinceStartup());
-
-            ImGui::Text("frameCount : %llu", Time.frameCount());
-
-            ImGui::Text("FPS : %d", Time.frameRate());
-            ImGui::Text("DeltaTime : %f", Time.deltaTime());
-
-            ImGui::Text("unscaledDeltaTime : %f", Time.unscaledDeltaTime());
-
-            ImGui::InputDouble("Fixed Time Step", &Time.fixedTimeStep);
-            ImGui::Text("fixedDeltaTime %f", Time.fixedDeltaTime());
-            ImGui::Text("fixedUnscaledDeltaTime %f", Time.fixedUnscaledDeltaTime());
-
-            ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
-
-        }
-        ImGui::End();
-        
-        ImGui::Begin((const char*)u8"도킹 확인용");
-        {
-
-        }
-        ImGui::End();
-    }
-    ImguiEndDraw();
     m_SwapChain1->Present(1, 0);
 }
 
@@ -154,12 +132,25 @@ void WindowApp::InitImgui()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
+    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    ImGui::StyleColorsDark();
 
     ImFontConfig fontConfig{};
     io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\malgun.ttf", 20.0f, &fontConfig, ImGui::GetIO().Fonts->GetGlyphRangesKorean());
 
     ImGui_ImplWin32_Init(this->GetHWND());
     ImGui_ImplDX11_Init(this->m_device.Get(), this->m_deviceContext.Get());
+
+    Editor.OnGuiStart();
 }
 
 void WindowApp::UninitImgui()
@@ -171,7 +162,6 @@ void WindowApp::UninitImgui()
 
 void WindowApp::ImguiBeginDraw()
 {
-    m_deviceContext->OMSetRenderTargets(1, m_backBufferRTV.GetAddressOf(), nullptr);
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -179,6 +169,7 @@ void WindowApp::ImguiBeginDraw()
 
 void WindowApp::ImguiEndDraw()
 {
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }

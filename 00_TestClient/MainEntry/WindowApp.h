@@ -1,7 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "UmFramework.h"
 
 using namespace Microsoft::WRL;
+
+class WindowApp;
+extern WindowApp& Application;
 
 class WindowApp : public SimpleWindowClient
 {
@@ -11,6 +14,8 @@ class WindowApp : public SimpleWindowClient
 			_In_ LPWSTR lpCmdLine,
 			_In_ int nCmdShow);
 public:
+    static WindowApp Application;
+private:
 	WindowApp();
 	virtual ~WindowApp() override;
 

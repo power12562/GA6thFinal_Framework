@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define _CALLBACK
+
 //WINDOW SDK
 #include <Windows.h>
 #include <wrl.h>
@@ -23,7 +25,10 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <limits>
+
+#include <vector>
 
 //ThirdParty
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -42,6 +47,10 @@
 #include "Engine/Core/TimeSystem.h"
 
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
+
+// Editor
+#include "Engine/Editor/EditorManager.h"
+#include "Engine/Editor/EditorBase.h"
 
 //Utility
 #include "Engine/Utility/DumpUtility.h"

@@ -22,6 +22,9 @@
     <Filter Include="헤더 파일\guizmo">
       <UniqueIdentifier>{8f906698-71f5-4338-86e8-bb48a7450808}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{a5b88f64-2cda-4563-9dec-315ae8db0f6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\pch.h">
@@ -87,6 +90,12 @@
     <ClInclude Include="Source\Engine\Imgui\GraphEditor.h">
       <Filter>헤더 파일\guizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Editor\EditorManager.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Editor\EditorBase.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -127,6 +136,12 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Core\TimeSystem.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Editor\EditorManager.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Editor\EditorBase.cpp">
+      <Filter>Editor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
