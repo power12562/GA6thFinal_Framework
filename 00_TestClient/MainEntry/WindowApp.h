@@ -1,10 +1,12 @@
-#pragma once
+﻿#pragma once
 #include "UmFramework.h"
 
 using namespace Microsoft::WRL;
 
 class WindowApp : public SimpleWindowClient
 {
+    USING_PROPERTY(WindowApp);
+
 	friend	int APIENTRY wWinMain(
 			_In_ HINSTANCE hInstance,
 			_In_opt_ HINSTANCE hPrevInstance,
@@ -40,4 +42,16 @@ private:
 	ComPtr<IDXGIFactory4>   m_DXGIFactory4;
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
+
+    float testFloat;
+public:
+    GETTER(testFloat)
+    {
+        return testFloat;
+    }
+    SETTER(testFloat)
+    {
+        testFloat = value;
+    }
+    PROPERTY(float, testFloat, TestFloat);
 };

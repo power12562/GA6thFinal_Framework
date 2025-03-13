@@ -112,7 +112,13 @@ void WindowApp::ClientRender()
         
         ImGui::Begin((const char*)u8"도킹 확인용");
         {
-
+            //프로퍼티 테스트
+            float input{};
+            input = TestFloat;
+            if (ImGui::InputFloat("TestFloat", &input) && ImGui::IsItemDeactivatedAfterEdit())
+            {
+                TestFloat += input;
+            }
         }
         ImGui::End();
     }
@@ -221,3 +227,4 @@ void WindowApp::UninitDXGI()
 {
 
 }
+
