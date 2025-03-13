@@ -26,10 +26,17 @@
 #include <limits>
 
 //ThirdParty
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "Engine/Imgui/imgui.h"
 #include "Engine/Imgui/imgui_stdlib.h"
 #include "Engine/Imgui/imgui_impl_win32.h"
 #include "Engine/Imgui/imgui_impl_dx11.h"
+
+#include "Engine/Imgui/ImGuizmo.h"
+#include "Engine/Imgui/ImSequencer.h"
+#include "Engine/Imgui/ImZoomSlider.h"
+#include "Engine/Imgui/ImCurveEdit.h"
+#include "Engine/Imgui/GraphEditor.h"
 
 //Core
 #include "Engine/Core/TimeSystem.h"

@@ -19,6 +19,9 @@
     <Filter Include="소스 파일\imgui">
       <UniqueIdentifier>{9f4da9ab-ce48-4179-ac8c-0d31af6f01e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\guizmo">
+      <UniqueIdentifier>{8f906698-71f5-4338-86e8-bb48a7450808}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\pch.h">
@@ -65,6 +68,24 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Core\TimeSystem.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\ImSequencer.h">
+      <Filter>헤더 파일\guizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\ImZoomSlider.h">
+      <Filter>헤더 파일\guizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\ImCurveEdit.h">
+      <Filter>헤더 파일\guizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\ImGradient.h">
+      <Filter>헤더 파일\guizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\ImGuizmo.h">
+      <Filter>헤더 파일\guizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\GraphEditor.h">
+      <Filter>헤더 파일\guizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
