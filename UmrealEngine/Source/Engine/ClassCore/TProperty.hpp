@@ -45,7 +45,8 @@ SETTER(field_name)
 
 #define PROPERTY(field_name, property_name)                                                    \
 public:                                                                                        \
-    TProperty<property_class_type, field_name##_property_getter_t, field_name##_property_setter_t> property_name{this};
+     using property_name##_property_t = TProperty<property_class_type, field_name##_property_getter_t, field_name##_property_setter_t>; \
+     property_name##_property_t property_name{this};
 
 struct property_void_type
 {
@@ -63,6 +64,7 @@ class TProperty
     using getterType = std::conditional_t<is_getter, getter, char>;
     using setterType = std::conditional_t<is_setter, setter, char>;
     using field_type = std::conditional_t<is_getter, typename getter::Type, typename setter::Type>;
+
 public:
     TProperty(
         owner_type* _this

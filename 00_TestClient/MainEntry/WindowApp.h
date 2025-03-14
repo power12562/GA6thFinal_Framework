@@ -54,6 +54,8 @@ public:
         testFloat = value;
     }
     PROPERTY(testFloat, Float)
+public:
+    
 };
 
     
