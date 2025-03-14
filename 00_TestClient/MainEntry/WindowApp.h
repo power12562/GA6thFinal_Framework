@@ -53,10 +53,7 @@ public:
     {
         testFloat = value;
     }
-    PROPERTY(testFloat, Float);
-    
-
-    
+    PROPERTY(testFloat, Float)
 };
 
     
