@@ -120,6 +120,8 @@ void WindowApp::ClientRender()
                Float += input;
             }
             ImGui::Text(Float.type.name());
+
+            ImGui::InputReflectFields(this);   
         }
         ImGui::End();
     }

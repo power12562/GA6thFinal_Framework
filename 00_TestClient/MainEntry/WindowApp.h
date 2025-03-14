@@ -5,7 +5,7 @@ using namespace Microsoft::WRL;
 
 class WindowApp : public SimpleWindowClient
 {
-    USING_PROPERTY(WindowApp);
+    USING_PROPERTY(WindowApp)
 
 	friend	int APIENTRY wWinMain(
 			_In_ HINSTANCE hInstance,
@@ -43,19 +43,23 @@ private:
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
 
-    float testFloat;
+    float testFloat = 10.f;
 public:
-    GETTER(testFloat)
-    {
-        return testFloat;
-    }
-    SETTER(testFloat)
-    {
-        testFloat = value;
-    }
-    PROPERTY(testFloat, Float)
+    REFLECT_FIELDS_BASE_BEGIN()
+    float rflFloat = 1.0f;
+    int rflInt = 1;
+    REFLECT_FIELDS_BASE_END(WindowApp, public)
+
 public:
-    
+    GETTER(float, Float)
+    {
+        return reflect_fields.rflFloat;
+    }
+    SETTER(float, Float)
+    {
+        reflect_fields.rflFloat = value;
+    }
+    PROPERTY(Float)
 };
 
     

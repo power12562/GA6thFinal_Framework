@@ -5,33 +5,31 @@
 #define USING_PROPERTY(class_name) \
 using property_class_type = class_name;
 
-#define GETTER(field_name)                                                                     \
+#define GETTER(type, property_name)                                                            \
 private:                                                                                       \
-struct field_name##_property_getter_struct                                                     \
+struct property_name##_property_getter_struct                                                  \
 {                                                                                              \
-    using Type = decltype(field_name);                                                         \
-    static constexpr const char* name = #field_name;                                           \
-    decltype(field_name)& operator()(property_class_type* _this) const                         \
+    using Type = type;                                                                         \
+    static constexpr const char* name = #property_name;                                        \
+    type& operator()(property_class_type* _this) const                                         \
     {                                                                                          \
-        return _this->field_name##_property_getter();                                          \
+        return _this->property_name##_property_getter();                                       \
     }                                                                                          \
 };                                                                                             \
-using field_name##_property_getter_t = field_name##_property_getter_struct;                    \
-decltype(field_name)& field_name##_property_getter()                                         
+type& property_name##_property_getter()                                         
                                                                                                
-#define SETTER(field_name)                                                                     \
+#define SETTER(type, property_name)                                                            \
 private:                                                                                       \
-struct field_name##_property_setter_struct                                                     \
+struct property_name##_property_setter_struct                                                  \
 {                                                                                              \
-    using Type = decltype(field_name);                                                         \
-    static constexpr const char* name = #field_name;                                           \
-    void operator()(property_class_type* _this, const decltype(field_name)& value)             \
+    using Type = type;                                                                         \
+    static constexpr const char* name = #property_name;                                        \
+    void operator()(property_class_type* _this, const type& value)                             \
     {                                                                                          \
-        _this->field_name##_property_setter(value);                                            \
+        _this->property_name##_property_setter(value);                                         \
     }                                                                                          \
 };                                                                                             \
-using field_name##_property_setter_t = field_name##_property_setter_struct;                    \
-void field_name##_property_setter(const decltype(field_name)& value)
+void property_name##_property_setter(const type& value)
 
 #define GETTER_ONLY(field_name)                                                                \
 private:                                                                                       \
@@ -43,9 +41,9 @@ private:                                                                        
 using field_name##_property_getter_t = property_void_type;                                     \
 SETTER(field_name)   
 
-#define PROPERTY(field_name, property_name)                                                    \
+#define PROPERTY(property_name)                                                                \
 public:                                                                                        \
-     using property_name##_property_t = TProperty<property_class_type, field_name##_property_getter_t, field_name##_property_setter_t>; \
+     using property_name##_property_t = TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct>; \
      property_name##_property_t property_name{this};
 
 struct property_void_type
@@ -57,9 +55,14 @@ struct property_void_type
 template <typename owner_type, class getter, class setter>
 class TProperty
 {
+private:
     static constexpr bool is_getter = !std::is_same_v<getter::Type, void>;
     static constexpr bool is_setter = !std::is_same_v<setter::Type, void>;
     static_assert(is_getter || is_setter, "TProperty must have either a getter or a setter.");
+
+    static constexpr bool is_same_type_get_set = std::is_same_v<getter::Type, setter::Type>;
+    static constexpr bool is_only = is_getter != is_setter;
+    static_assert(is_only || is_same_type_get_set, "The getter and setter have different types.");
 
     using getterType = std::conditional_t<is_getter, getter, char>;
     using setterType = std::conditional_t<is_setter, setter, char>;

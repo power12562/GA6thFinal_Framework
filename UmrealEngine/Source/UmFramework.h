@@ -32,6 +32,8 @@
 #include "Engine/Imgui/imgui_impl_dx11.h"
 
 //Class Core
+#include "Engine/ClassCore/container_traits.h"
+#include "Engine//ClassCore/ReflectHelper.h"
 #include "Engine/ClassCore/TProperty.hpp"
 
 //Core
