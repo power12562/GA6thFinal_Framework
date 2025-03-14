@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 # imgui
 imgui.ini
+
+# cpp hint
+cpp.hint
