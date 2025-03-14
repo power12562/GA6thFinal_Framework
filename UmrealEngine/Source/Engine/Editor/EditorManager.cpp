@@ -64,7 +64,9 @@ void EditorManager::DrawGui()
     {
         if (tool)
         {
+            ImGui::PushID(reinterpret_cast<uintptr_t>(tool));
             tool->DrawGui();
+            ImGui::PopID();
         }
     }
     /* =========================== */

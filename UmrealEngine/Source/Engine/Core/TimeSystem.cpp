@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 TimeSystem TimeSystem::Time;
 TimeSystem& Time = TimeSystem::Time;

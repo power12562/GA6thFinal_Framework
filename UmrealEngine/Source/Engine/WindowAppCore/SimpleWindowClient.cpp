@@ -159,6 +159,7 @@ static LRESULT DefaultWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void SimpleWindowClient::SetStyleToWindowed()
 {
 	windowStyleEX = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
+    //windowStyleEX = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 }
 
 void SimpleWindowClient::SetStyleToBorderlessWindowed()

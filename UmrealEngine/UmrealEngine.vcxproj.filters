@@ -96,6 +96,9 @@
     <ClInclude Include="Source\Engine\Editor\EditorBase.h">
       <Filter>Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Editor\EditorEnum.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Editor\EditorBase.cpp">
       <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Editor\EditorEnum.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

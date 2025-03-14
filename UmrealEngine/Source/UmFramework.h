@@ -49,6 +49,7 @@
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
 
 // Editor
+#include "Engine/Editor/EditorEnum.h"
 #include "Engine/Editor/EditorManager.h"
 #include "Engine/Editor/EditorBase.h"
 

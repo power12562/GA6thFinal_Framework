@@ -2,7 +2,7 @@
 
 EditorInspectorView::EditorInspectorView()
 {
-    SetLabel("InspecterView");
+    SetLabel("InspectorView");
 }
 
 EditorInspectorView::~EditorInspectorView()

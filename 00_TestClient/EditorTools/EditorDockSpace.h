@@ -1,15 +1,6 @@
 ﻿#pragma once
 #include "UmFramework.h"
 
-enum class eDockSpaceArea
-{
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    SIZE,
-};
-
 // 에디터 탭이 윈도우 전체영역에도 도킹이 되도록 글로벌(?) 도킹 영역을 설정
 class EditorDockSpace 
     : public EditorWindow
@@ -53,7 +44,7 @@ private:
     /* 도킹 영역에 대한 ID값 */
     ImGuiID mDockSpaceAreaID[(INT)eDockSpaceArea::SIZE];
 
-    /* 초기 도킹 세팅 저장 값 */
+    /* 초기 도킹 세팅 저장 값(미구현) */
     const char* mDockAreaInitalData;
 private:
     void InitDockSpaceArea();

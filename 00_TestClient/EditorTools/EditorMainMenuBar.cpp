@@ -1,4 +1,5 @@
 ﻿#include "EditorMainMenuBar.h"
+#include "WindowApp.h"
 
 EditorMainMenuBar::EditorMainMenuBar()
 {
@@ -48,7 +49,7 @@ void EditorMainMenuBar::OnFrame()
 
         if (ImGui::MenuItem("Exit"))
         {
-            //Application::RunEnd();
+            Application.RunEnd();
         }
 
         ImGui::EndMenu();

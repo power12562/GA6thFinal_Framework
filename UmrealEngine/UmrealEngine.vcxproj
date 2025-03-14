@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\Editor\EditorEnum.h" />
     <ClInclude Include="Source\Engine\Editor\EditorBase.h" />
     <ClInclude Include="Source\Engine\Editor\EditorManager.h" />
     <ClInclude Include="Source\Engine\Core\TimeSystem.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Source\Engine\WindowAppCore\SimpleWindowClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\Editor\EditorEnum.cpp" />
     <ClCompile Include="Source\Engine\Editor\EditorBase.cpp" />
     <ClCompile Include="Source\Engine\Editor\EditorManager.cpp" />
     <ClCompile Include="Source\Engine\Core\TimeSystem.cpp" />

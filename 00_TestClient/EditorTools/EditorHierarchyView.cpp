@@ -2,7 +2,7 @@
 
 EditorHierarchyView::EditorHierarchyView()
 {
-    SetLabel("HirearchyView");
+    SetLabel("HierarchyView");
 }
 
 EditorHierarchyView::~EditorHierarchyView()

@@ -3,6 +3,12 @@
 
 /* 에디터 툴 */
 #include "EditorTools/EditorDockSpace.h"
+#include "EditorTools/EditorDebugView.h"
+#include "EditorTools/EditorMainMenuBar.h"
+#include "EditorTools/EditorHierarchyView.h"
+#include "EditorTools/EditorInspectorView.h"
+#include "EditorTools/EditorSceneView.h"
+#include "EditorTools/EditorAssetBrowser.h"
 
 WindowApp WindowApp::Application;
 WindowApp& Application = WindowApp::Application;
@@ -34,6 +40,11 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
     switch (msg)
     {
+    case WM_SIZE:
+    {
+        // 리사이즈 렌더타겟 
+        break;
+    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -45,10 +56,16 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 WindowApp::WindowApp()
 {
-    this->SetStyleToWindowed();
-    this->clientSize = { 1920, 1080 };
+    // 기본 모니터의 가로, 세로 해상도 얻기
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    this->clientSize = { screenWidth, screenHeight };
+    //this->clientSize = { 1920, 1080 };
+
     this->windowName = L"TestClient";
     this->customWndProc = WndProc;
+
+    this->windowStyleEX = WS_OVERLAPPEDWINDOW;
 }
 WindowApp::~WindowApp() = default;
 
@@ -57,6 +74,13 @@ void WindowApp::PreInitialize()
 {
     /* 에디터 툴 초기화 */
     Editor.PushTool(new EditorDockSpace);
+    Editor.PushTool(new EditorMainMenuBar);
+    Editor.PushTool(new EditorDebugView);
+    Editor.PushTool(new EditorHierarchyView);
+    Editor.PushTool(new EditorInspectorView);
+    Editor.PushTool(new EditorSceneView);
+    Editor.PushTool(new EditorSceneView);
+    Editor.PushTool(new EditorAssetBrowser);
 }
 
 void WindowApp::ModuleInitialize()
@@ -210,5 +234,5 @@ void WindowApp::InitDXGI()
 
 void WindowApp::UninitDXGI()
 {
-
+   
 }

@@ -1,19 +1,9 @@
 ﻿#include "EditorDockSpace.h"
-#include "EditorTools/EditorDebugView.h"
-#include "EditorTools/EditorMainMenuBar.h"
-#include "EditorTools/EditorHierarchyView.h"
-#include "EditorTools/EditorInspectorView.h"
-#include "EditorTools/EditorSceneView.h"
 
 EditorDockSpace::EditorDockSpace()
 {
     SetLabel("EditorDockSpace");
     SetDockFlag(ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoWindowMenuButton);
-    mEditorWindowArray.push_back(new EditorMainMenuBar);
-    mEditorWindowArray.push_back(new EditorDebugView);
-    mEditorWindowArray.push_back(new EditorHierarchyView);
-    mEditorWindowArray.push_back(new EditorInspectorView);
-    mEditorWindowArray.push_back(new EditorSceneView);
 }
 
 EditorDockSpace::~EditorDockSpace()
@@ -38,7 +28,7 @@ void EditorDockSpace::OnFrame()
     style.WindowMinSize.x = 370.0f;
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
-        mDockSpaceMainID = ImGui::GetID("DockSpace");
+        mDockSpaceMainID = ImGui::GetID("MainDockSpace");
         InitDockSpaceArea();
         ImGui::DockSpace(mDockSpaceMainID, ImVec2(0.0f, 0.0f), mDockNodeFlags);
     }
@@ -86,7 +76,7 @@ void EditorDockSpace::OnPostFrame()
 {
     //////////////////////////////////////////
     /* ========GUI Drawing======== */
-     //////////////////////////////////////////
+    //////////////////////////////////////////
     for (auto& tool : mEditorWindowArray)
     {
         if (tool)
@@ -99,25 +89,36 @@ void EditorDockSpace::OnPostFrame()
 void EditorDockSpace::InitDockSpaceArea()
 {
     // 딱 한번만 초기 레이아웃
-    if (ImGui::DockBuilderGetNode(mDockSpaceMainID) == NULL)
+    if (NULL == ImGui::DockBuilderGetNode(mDockSpaceMainID))
     {
         ImGui::DockBuilderRemoveNode(mDockSpaceMainID);
         ImGui::DockBuilderAddNode(mDockSpaceMainID, mDockNodeFlags); // 새로 추가
 
         ImGuiID dock_main_id = mDockSpaceMainID; // This variable will track the document node, however we are not using it here as we aren't docking anything into it.
         // 왼쪽 20%
-        mDockSpaceAreaID[(INT)eDockSpaceArea::LEFT] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, NULL, &dock_main_id);
+        mDockSpaceAreaID[(INT)eDockSpaceArea::LEFT] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.30f, NULL, &dock_main_id);
         // 오른쪽 20%
-        mDockSpaceAreaID[(INT)eDockSpaceArea::RIGHT] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, NULL, &dock_main_id);
+        mDockSpaceAreaID[(INT)eDockSpaceArea::RIGHT] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.30f, NULL, &dock_main_id);
         // 위쪽 25%
-        mDockSpaceAreaID[(INT)eDockSpaceArea::UP] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.25f, NULL, &dock_main_id);
+        mDockSpaceAreaID[(INT)eDockSpaceArea::UP] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.50f, NULL, &dock_main_id);
         // 아래쪽 25%
-        mDockSpaceAreaID[(INT)eDockSpaceArea::DOWN] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, NULL, &dock_main_id);
-        // 창 배치
+        mDockSpaceAreaID[(INT)eDockSpaceArea::DOWN] = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.50f, NULL, &dock_main_id);
+
+        // 창 배치 (이건 추후 Dock클래스에 함수로 빼자)
         ImGui::DockBuilderDockWindow("HierarchyView", GetDockSpaceAreaID(eDockSpaceArea::RIGHT));
         ImGui::DockBuilderDockWindow("InspectorView", GetDockSpaceAreaID(eDockSpaceArea::LEFT));
-        ImGui::DockBuilderDockWindow("Debug", GetDockSpaceAreaID(eDockSpaceArea::DOWN));
+        ImGui::DockBuilderDockWindow("Debug", GetDockSpaceAreaID(eDockSpaceArea::RIGHT));
+        ImGui::DockBuilderDockWindow("AssetBrowser", GetDockSpaceAreaID(eDockSpaceArea::DOWN));
         ImGui::DockBuilderDockWindow("SceneView", GetDockSpaceAreaID(eDockSpaceArea::UP));
+
+        for (auto& tool : mEditorWindowArray)
+        {
+            if (tool)
+            {
+                tool->DrawGui();
+                ImGui::DockBuilderDockWindow("HierarchyView", GetDockSpaceAreaID(eDockSpaceArea::RIGHT));
+            }
+        }
 
         ImGui::DockBuilderFinish(mDockSpaceMainID);
 

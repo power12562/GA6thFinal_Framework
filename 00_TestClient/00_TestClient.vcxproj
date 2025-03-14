@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EditorTools\EditorAssetBrowser.h" />
     <ClInclude Include="EditorTools\EditorDebugView.h" />
     <ClInclude Include="EditorTools\EditorSceneView.h" />
     <ClInclude Include="EditorTools\EditorHierarchyView.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="MainEntry\WindowApp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EditorTools\EditorAssetBrowser.cpp" />
     <ClCompile Include="EditorTools\EditorDebugView.cpp" />
     <ClCompile Include="EditorTools\EditorSceneView.cpp" />
     <ClCompile Include="EditorTools\EditorHierarchyView.cpp" />
