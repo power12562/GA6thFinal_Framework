@@ -18,7 +18,8 @@ public:
 private:
 	WindowApp();
 	virtual ~WindowApp() override;
-
+public:
+    void ResizeRenderTarget(UINT width, UINT height);
 private:
 	virtual void PreInitialize();
 	virtual void ModuleInitialize();

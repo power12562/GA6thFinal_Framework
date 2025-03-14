@@ -29,7 +29,7 @@ void EditorWindow::DrawGui()
 {
     OnPreFrame();
 
-    ImGui::Begin(std::format("{}##{}", mLabel, id).c_str(), nullptr, mFlag);
+    ImGui::Begin(mLabel.c_str(), nullptr, mFlag);
 
     OnFrame();
 

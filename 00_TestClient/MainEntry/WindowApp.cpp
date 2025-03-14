@@ -43,6 +43,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_SIZE:
     {
         // 리사이즈 렌더타겟 
+        Application.ResizeRenderTarget(LOWORD(lParam), HIWORD(lParam));
         break;
     }
     case WM_DESTROY:
@@ -69,6 +70,45 @@ WindowApp::WindowApp()
 }
 WindowApp::~WindowApp() = default;
 
+void WindowApp::ResizeRenderTarget(UINT width, UINT height)
+{
+    if (m_SwapChain1 && m_deviceContext)
+    {
+        D3D11_VIEWPORT viewport = {};
+        viewport.TopLeftX = 0.0f;
+        viewport.TopLeftY = 0.0f;
+        viewport.Width = static_cast<float>(width);
+        viewport.Height = static_cast<float>(height);
+        viewport.MinDepth = 0.0f;
+        viewport.MaxDepth = 1.0f;
+
+        m_backBufferRTV.Reset();
+
+        HRESULT hr = m_SwapChain1->ResizeBuffers(0, // 현재 개수 유지
+            (UINT)viewport.Width, // 해상도 변경
+            (UINT)viewport.Height,
+            DXGI_FORMAT_UNKNOWN, // 현재 포맷 유지
+            0);
+
+        // Get backbuffer by Swapchain
+        ComPtr<ID3D11Texture2D> backBufferTex = nullptr;
+        hr = m_SwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(backBufferTex.GetAddressOf()));
+        D3D11_TEXTURE2D_DESC desc = {};
+        backBufferTex->GetDesc(&desc);
+        // Create RenderTargetView
+        if (backBufferTex)
+        {
+            hr = m_device->CreateRenderTargetView(backBufferTex.Get(), nullptr, m_backBufferRTV.GetAddressOf());
+            if (FAILED(hr))
+            {
+                assert(false, "HResult Failed To CreateRenderTargetView");
+            }
+        }
+        m_deviceContext->RSSetViewports(1, &viewport);
+    }
+   
+}
+
 
 void WindowApp::PreInitialize()
 {
@@ -78,7 +118,6 @@ void WindowApp::PreInitialize()
     Editor.PushTool(new EditorDebugView);
     Editor.PushTool(new EditorHierarchyView);
     Editor.PushTool(new EditorInspectorView);
-    Editor.PushTool(new EditorSceneView);
     Editor.PushTool(new EditorSceneView);
     Editor.PushTool(new EditorAssetBrowser);
 }
