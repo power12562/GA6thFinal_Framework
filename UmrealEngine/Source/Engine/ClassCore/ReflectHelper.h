@@ -1,4 +1,7 @@
 ﻿#pragma once
+#undef max
+#undef min
+
 #include <rfl/json.hpp>
 #include <rfl.hpp>
 #include <functional>
@@ -6,8 +9,8 @@
 #include <ranges>
 #include <iostream>
 
-//reflect-cpp 라이브러 docs https://rfl.getml.com/docs-readme/#the-basics
-//github https://github.com/getml/reflect-cpp
+//reflect-cpp 라이브러리 docs https://rfl.getml.com/docs-readme/#the-basics
+//reflect-cpp github https://github.com/getml/reflect-cpp
 
 #define  REFLECT_FIELDS_BASE_BEGIN()						    \
 public:                                                         \
@@ -40,22 +43,30 @@ namespace ImGui
 	{
 		struct InputAutoSettingInt
 		{
-			static float v_speed;
-			static int v_min;
-			static int v_max;
-			static std::string format;
-			static ImGuiSliderFlags flags;
+			static int step;
+			static int step_fast;
+			static ImGuiInputTextFlags flags;
 		};
 		extern InputAutoSettingInt Int;
+
 		struct InputAutoSettingFloat
 		{
-			static float v_speed;
-			static float v_min;
-			static float v_max;
-			static std::string format;
-			static ImGuiSliderFlags flags;
+			static float step;
+			static float step_fast;
+            static std::string format;
+			static ImGuiInputTextFlags flags;
 		};
 		extern InputAutoSettingFloat Float;
+
+        struct InputAutoSettingDouble
+        {
+            static double step;
+            static double step_fast;
+            static std::string format;
+            static ImGuiInputTextFlags flags;
+        };
+        extern InputAutoSettingDouble Double;
+
 		struct InputAutoSettingString
 		{
 			static ImGuiInputTextFlags flags;
@@ -97,20 +108,26 @@ namespace ImGui
                     if constexpr (std::is_same_v<OriginType, int>)
                     {
                         int* val = (int*)value;
-                        isEdit = ImGui::DragInt(name, val,
-                            Int.v_speed,
-                            Int.v_min,
-                            Int.v_max,
-                            Int.format.c_str(),
+                        isEdit = ImGui::InputInt(name, val,
+                            Int.step,
+                            Int.step_fast,
                             Int.flags);
                     }
                     else if constexpr (std::is_same_v<OriginType, float>)
                     {
                         float* val = (float*)value;
-                        isEdit = ImGui::DragFloat(name, val,
-                            Float.v_speed,
-                            Float.v_min,
-                            Float.v_max,
+                        isEdit = ImGui::InputFloat(name, val,
+                            Float.step,
+                            Float.step_fast,
+                            Float.format.c_str(),
+                            Float.flags);
+                    }
+                    else if constexpr (std::is_same_v<OriginType, double>)
+                    {
+                        double* val = (double*)value;
+                        isEdit = ImGui::InputDouble(name, val,
+                            Float.step,
+                            Float.step_fast,
                             Float.format.c_str(),
                             Float.flags);
                     }

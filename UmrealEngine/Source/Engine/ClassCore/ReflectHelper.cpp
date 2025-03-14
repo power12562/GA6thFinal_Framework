@@ -5,26 +5,27 @@
 using namespace ImGui::InputAutoSetting;
 
 //Int 설정
-float InputAutoSettingInt::v_speed = 1.f;
-int InputAutoSettingInt::v_min = 0;
-int InputAutoSettingInt::v_max = 0;
-std::string InputAutoSettingInt::format = "%d";
-ImGuiSliderFlags InputAutoSettingInt::flags = 0;
-
+int InputAutoSettingInt::step = 0;
+int InputAutoSettingInt::step_fast = 0;
+ImGuiInputTextFlags InputAutoSettingInt::flags = 0;
 InputAutoSettingInt Int;
 
 //Float 설정
-float InputAutoSettingFloat::v_speed = 1.f;
-float InputAutoSettingFloat::v_min = 0;
-float InputAutoSettingFloat::v_max = 0;
+float InputAutoSettingFloat::step = 0;
+float InputAutoSettingFloat::step_fast = 0;
 std::string InputAutoSettingFloat::format = "%.3f";
-ImGuiSliderFlags InputAutoSettingFloat::flags = 0;
-
+ImGuiInputTextFlags InputAutoSettingFloat::flags = 0;
 InputAutoSettingFloat Float;
+
+//Double 설정
+double InputAutoSettingDouble::step = 0;
+double InputAutoSettingDouble::step_fast = 0;
+std::string InputAutoSettingDouble::format = "%.6f";
+ImGuiInputTextFlags InputAutoSettingDouble::flags = 0;
+InputAutoSettingDouble Double;
 
 //String 설정
 ImGuiInputTextFlags InputAutoSettingString::flags = 0;
 ImGuiInputTextCallback InputAutoSettingString::callback = nullptr;
 void* InputAutoSettingString::user_data = nullptr;
-
 InputAutoSettingString String;

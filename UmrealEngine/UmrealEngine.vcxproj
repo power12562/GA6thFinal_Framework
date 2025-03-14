@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\ClassCore\container_traits.h" />
     <ClInclude Include="Source\Engine\ClassCore\ReflectHelper.h" />
     <ClInclude Include="Source\Engine\Core\TimeSystem.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx11.h" />
