@@ -31,8 +31,8 @@
 #include "Engine/Imgui/imgui_impl_win32.h"
 #include "Engine/Imgui/imgui_impl_dx11.h"
 
-//Template Core
-#include "Engine/TCore/TProperty.hpp"
+//Class Core
+#include "Engine/ClassCore/TProperty.hpp"
 
 //Core
 #include "Engine/Core/TimeSystem.h"

@@ -3,13 +3,15 @@
 
 //프로퍼티 사용시 1회 포함
 #define USING_PROPERTY(class_name) \
-using OwnerType = class_name;
+using Class_Type = class_name;
 
 #define GETTER(field_name)                                                                     \
 private:                                                                                       \
 struct field_name##_property_getter_struct                                                     \
 {                                                                                              \
-    decltype(field_name)& operator()(OwnerType* _this) const                                   \
+    using Type = decltype(field_name);                                                         \
+    static constexpr const char* name = #field_name;                                           \
+    decltype(field_name)& operator()(Class_Type* _this) const                                  \
     {                                                                                          \
         return _this->field_name##_property_getter();                                          \
     }                                                                                          \
@@ -17,13 +19,15 @@ struct field_name##_property_getter_struct                                      
 using field_name##_property_getter_t = field_name##_property_getter_struct;                    \
 decltype(field_name)& field_name##_property_getter()                                         
                                                                                                
-#define SETTER(field_name)                                                                   \
+#define SETTER(field_name)                                                                     \
 private:                                                                                       \
 struct field_name##_property_setter_struct                                                     \
 {                                                                                              \
-    void operator()(OwnerType* _this, const decltype(field_name)& value)      \
+    using Type = decltype(field_name);                                                         \
+    static constexpr const char* name = #field_name;                                           \
+    void operator()(Class_Type* _this, const decltype(field_name)& value)                      \
     {                                                                                          \
-        _this->field_name##_property_setter(value);                                     \
+        _this->field_name##_property_setter(value);                                            \
     }                                                                                          \
 };                                                                                             \
 using field_name##_property_setter_t = field_name##_property_setter_struct;                    \
@@ -31,41 +35,47 @@ void field_name##_property_setter(const decltype(field_name)& value)
 
 #define GETTER_ONLY(field_name)                                                                \
 private:                                                                                       \
-using field_name##_property_setter_t = void;                                                   \
+using field_name##_property_setter_t = property_void_type;                                     \
 GETTER(field_name)               
 
 #define SETTER_ONLY(field_name)                                                                \
 private:                                                                                       \
-using field_name##_property_getter_t = void;                                                   \
+using field_name##_property_getter_t = property_void_type;                                     \
 SETTER(field_name)   
 
-#define PROPERTY(field_type, field_name, property_name)                                                                             \
-public:                                                                                                                             \
-    TProperty<OwnerType, field_type, field_name##_property_getter_t, field_name##_property_setter_t> property_name{ this };  
+#define PROPERTY(field_name, property_name)                                                    \
+public:                                                                                        \
+    TProperty<Class_Type, field_name##_property_getter_t, field_name##_property_setter_t> property_name{this};
+
+struct property_void_type
+{
+    using Type = void;
+};
 
 //Set, Get 함수 선언 도움을 위한 헬퍼 템플릿 클래스
-template <typename owner_type, typename field_type, class getter = void, class setter = void>
+template <typename owner_type, class getter, class setter>
 class TProperty
 {
-    static constexpr bool is_getter = !std::is_same_v<getter, void>;
-    static constexpr bool is_setter = !std::is_same_v<setter, void>;
+    static constexpr bool is_getter = !std::is_same_v<getter::Type, void>;
+    static constexpr bool is_setter = !std::is_same_v<setter::Type, void>;
     static_assert(is_getter || is_setter, "TProperty must have either a getter or a setter.");
+
+    using getterType = std::conditional_t<is_getter, getter, char>;
+    using setterType = std::conditional_t<is_setter, setter, char>;
+    using field_type = std::conditional_t<is_getter, typename getter::Type, typename setter::Type>;
 public:
     TProperty(
         owner_type* _this
     ) 
         :
-        owner(_this)
+        owner(_this),
+        type(typeid(field_type))
     {
         
     }
 
 private:
     owner_type* owner = nullptr;
-
-    using getterType = std::conditional_t<is_getter, getter, char>;
-    using setterType = std::conditional_t<is_setter, setter, char>;
-
     getterType get{};
     setterType set{};
 
@@ -79,6 +89,21 @@ private:
     }
 
 public:
+    //프로퍼티가 사용하는 field name
+    inline constexpr const char* name() const
+    {
+        if constexpr (is_getter)
+        {
+            return getterType::name;
+        }
+        else
+        {
+            return setterType::name;
+        } 
+    }
+    //프로퍼티가 사용하는 field typeid
+    const type_info& type;
+
     //Read
     inline operator const field_type& () const requires(is_getter)
     { 

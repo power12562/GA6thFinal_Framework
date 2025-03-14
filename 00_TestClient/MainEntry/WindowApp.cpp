@@ -114,11 +114,12 @@ void WindowApp::ClientRender()
         {
             //프로퍼티 테스트
             float input{};
-            input = TestFloat;
-            if (ImGui::InputFloat("TestFloat", &input) && ImGui::IsItemDeactivatedAfterEdit())
+            input = Float;
+            if (ImGui::InputFloat(Float.name(), &input) && ImGui::IsItemDeactivatedAfterEdit())
             {
-                TestFloat += input;
+               Float += input;
             }
+            ImGui::Text(Float.type.name());
         }
         ImGui::End();
     }
