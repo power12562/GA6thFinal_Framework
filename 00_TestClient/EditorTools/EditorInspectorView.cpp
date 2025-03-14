@@ -3,6 +3,7 @@
 EditorInspectorView::EditorInspectorView()
 {
     SetLabel("InspectorView");
+    SetInitialDockSpaceArea(eDockSpaceArea::RIGHT);
 }
 
 EditorInspectorView::~EditorInspectorView()
@@ -21,7 +22,7 @@ void _CALLBACK EditorInspectorView::OnPreFrame()
 
 void _CALLBACK EditorInspectorView::OnFrame()
 {
-    ImGui::Text("Label: %s", mLabel.c_str());
+    ImGui::Text("Label: %s", GetLabel().c_str());
     ImGui::Text("Flag: %d", mFlag);
     ImGui::Text("DockID: %d", ImGui::GetWindowDockID());
 

@@ -2,7 +2,7 @@
 #include "WindowApp.h"
 
 /* 에디터 툴 */
-#include "EditorTools/EditorDockSpace.h"
+//#include "EditorTools/EditorDockSpace.h"
 #include "EditorTools/EditorDebugView.h"
 #include "EditorTools/EditorMainMenuBar.h"
 #include "EditorTools/EditorHierarchyView.h"
@@ -58,10 +58,10 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 WindowApp::WindowApp()
 {
     // 기본 모니터의 가로, 세로 해상도 얻기
-    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-    this->clientSize = { screenWidth, screenHeight };
-    //this->clientSize = { 1920, 1080 };
+    //int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    //int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    //this->clientSize = { screenWidth, screenHeight };
+    this->clientSize = { 1920, 1080 };
 
     this->windowName = L"TestClient";
     this->customWndProc = WndProc;
@@ -113,13 +113,13 @@ void WindowApp::ResizeRenderTarget(UINT width, UINT height)
 void WindowApp::PreInitialize()
 {
     /* 에디터 툴 초기화 */
-    Editor.PushTool(new EditorDockSpace);
+    //Editor.PushTool(new EditorDockSpace);
     Editor.PushTool(new EditorMainMenuBar);
-    Editor.PushTool(new EditorDebugView);
     Editor.PushTool(new EditorHierarchyView);
     Editor.PushTool(new EditorInspectorView);
     Editor.PushTool(new EditorSceneView);
     Editor.PushTool(new EditorAssetBrowser);
+    Editor.PushTool(new EditorDebugView);
 }
 
 void WindowApp::ModuleInitialize()
@@ -197,6 +197,8 @@ void WindowApp::InitImgui()
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
+    ImGui::StyleColorsDark();
+
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -205,7 +207,7 @@ void WindowApp::InitImgui()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    ImGui::StyleColorsDark();
+    EditorManager::InitImGuiThemeStyle();
 
     ImFontConfig fontConfig{};
     io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\malgun.ttf", 20.0f, &fontConfig, ImGui::GetIO().Fonts->GetGlyphRangesKorean());

@@ -29,6 +29,7 @@
 #include <limits>
 
 #include <vector>
+#include <map>
 
 //ThirdParty
 #define IMGUI_DEFINE_MATH_OPERATORS

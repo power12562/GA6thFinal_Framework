@@ -3,6 +3,7 @@
 EditorDebugView::EditorDebugView()
 {
     SetLabel("Debug");
+    SetInitialDockSpaceArea(eDockSpaceArea::DOWN);
 }
 
 EditorDebugView::~EditorDebugView()
@@ -39,7 +40,7 @@ void _CALLBACK EditorDebugView::OnFrame()
 
     ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
 
-    ImGui::Text("Label: %s", mLabel.c_str());
+    ImGui::Text("Label: %s", GetLabel().c_str());
     ImGui::Text("Flag: %d", mFlag);
     ImGui::Text("DockID: %d", ImGui::GetWindowDockID());
 }

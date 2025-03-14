@@ -1,5 +1,15 @@
 ﻿#include "pch.h"
 #include "EditorBase.h"
+#include "EditorManager.h"
+
+EditorTool::EditorTool()
+{
+}
+
+EditorMenuBar::EditorMenuBar()
+{
+    mEditorToolType = eEditorToolType::MENU_BAR;
+}
 
 void EditorMenuBar::DrawGui()
 {
@@ -14,7 +24,12 @@ void EditorMenuBar::DrawGui()
     OnPostFrame();
 }
 
-/* 
+EditorWindow::EditorWindow()
+{
+    mEditorToolType = eEditorToolType::WINDOW;
+}
+
+/*
 2025.03.13 -  
 Begin의 if문 안에 End를 넣으니까 같은 Tab으로 Docking시도 시 Missing End() 예외가 발생하며 터짐.
 이유는 ImGui 공식 문서에 있었다...
@@ -27,12 +42,16 @@ When using Docking, it is expected that all dockable windows are submitted each 
 */
 void EditorWindow::DrawGui()
 {
-    OnPreFrame();
+    if (GetToolActive())
+    {
+        OnPreFrame();
 
-    ImGui::Begin(mLabel.c_str(), nullptr, mFlag);
+        ImGui::Begin(GetLabel().c_str(), nullptr, mFlag);
 
-    OnFrame();
+        OnFrame();
 
-    ImGui::End();
-    OnPostFrame();
+        ImGui::End();
+
+        OnPostFrame();
+    }
 }

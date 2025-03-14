@@ -47,5 +47,6 @@ private:
     /* 초기 도킹 세팅 저장 값(미구현) */
     const char* mDockAreaInitalData;
 private:
+    /* 최초로 에디터를 킬 경우 초기 툴의 DockSpace 공간 지정 */
     void InitDockSpaceArea();
 };

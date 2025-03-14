@@ -3,6 +3,7 @@
 
 EditorMainMenuBar::EditorMainMenuBar()
 {
+    SetLabel("MainMenuBar");
 }
 
 EditorMainMenuBar::~EditorMainMenuBar()
@@ -51,6 +52,45 @@ void EditorMainMenuBar::OnFrame()
         {
             Application.RunEnd();
         }
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Window"))
+    {
+        if (ImGui::BeginMenu("Tools", "-"))
+        {
+            for (auto& [key, tool] : Editor.GetRefToolArray())
+            {
+                if (tool->GetEditorToolType() != eEditorToolType::WINDOW)
+                    continue;
+
+                bool active = tool->GetToolActive();
+                if (ImGui::MenuItem((key + "##123").c_str(), "-", active))
+                {
+                    tool->SetToolActive(active ? false : true);
+                }
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::Separator();
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Editor"))
+    {
+        if (ImGui::MenuItem("Full Screen", "-"))
+        {
+            bool isFullScreen = Editor.IsDockPadding();
+            isFullScreen ? Editor.SetDockPadding(false) : Editor.SetDockPadding(true);
+        }
+        if (ImGui::MenuItem("Padding", "-"))
+        {
+            bool isPadding = Editor.IsDockPadding();
+            isPadding ? Editor.SetDockFullSpace(false) : Editor.SetDockFullSpace(true);
+        }
+        ImGui::Separator();
 
         ImGui::EndMenu();
     }

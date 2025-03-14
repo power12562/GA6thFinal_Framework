@@ -1,4 +1,6 @@
 ﻿#include "EditorDockSpace.h"
+#include "EditorDockSpace.h"
+#include "EditorDockSpace.h"
 
 EditorDockSpace::EditorDockSpace()
 {
@@ -44,7 +46,7 @@ void EditorDockSpace::OnGuiStart()
 void EditorDockSpace::OnPreFrame()
 {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // because it would be confusing to have two docking targets within each others.
+    // because it would be confusing to have two docking targets within each others.
     SetFlag(ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking);
     if (mIsFullSpace)
     {
@@ -111,14 +113,13 @@ void EditorDockSpace::InitDockSpaceArea()
         ImGui::DockBuilderDockWindow("AssetBrowser", GetDockSpaceAreaID(eDockSpaceArea::DOWN));
         ImGui::DockBuilderDockWindow("SceneView", GetDockSpaceAreaID(eDockSpaceArea::UP));
 
-        for (auto& tool : mEditorWindowArray)
-        {
-            if (tool)
-            {
-                tool->DrawGui();
-                ImGui::DockBuilderDockWindow("HierarchyView", GetDockSpaceAreaID(eDockSpaceArea::RIGHT));
-            }
-        }
+        //for (auto& tool : mEditorWindowArray)
+        //{
+        //    if (tool & tool.)
+        //    {
+        //        ImGui::DockBuilderDockWindow(tool.get, GetDockSpaceAreaID(eDockSpaceArea::RIGHT));
+        //    }
+        //}
 
         ImGui::DockBuilderFinish(mDockSpaceMainID);
 

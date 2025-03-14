@@ -3,6 +3,7 @@
 EditorAssetBrowser::EditorAssetBrowser()
 {
     SetLabel("AssetBrowser");
+    SetInitialDockSpaceArea(eDockSpaceArea::DOWN);
 }
 
 EditorAssetBrowser::~EditorAssetBrowser()
@@ -21,7 +22,7 @@ void _CALLBACK EditorAssetBrowser::OnPreFrame()
 
 void _CALLBACK EditorAssetBrowser::OnFrame()
 {
-    ImGui::Text("Label: %s", mLabel.c_str());
+    ImGui::Text("Label: %s", GetLabel().c_str());
     ImGui::Text("Flag: %d", mFlag);
     ImGui::Text("DockID: %d", ImGui::GetWindowDockID());
 
