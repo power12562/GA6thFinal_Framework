@@ -3,7 +3,7 @@
 
 //프로퍼티 사용시 1회 포함
 #define USING_PROPERTY(class_name) \
-using Class_Type = class_name;
+using property_class_type = class_name;
 
 #define GETTER(field_name)                                                                     \
 private:                                                                                       \
@@ -11,7 +11,7 @@ struct field_name##_property_getter_struct                                      
 {                                                                                              \
     using Type = decltype(field_name);                                                         \
     static constexpr const char* name = #field_name;                                           \
-    decltype(field_name)& operator()(Class_Type* _this) const                                  \
+    decltype(field_name)& operator()(property_class_type* _this) const                         \
     {                                                                                          \
         return _this->field_name##_property_getter();                                          \
     }                                                                                          \
@@ -25,7 +25,7 @@ struct field_name##_property_setter_struct                                      
 {                                                                                              \
     using Type = decltype(field_name);                                                         \
     static constexpr const char* name = #field_name;                                           \
-    void operator()(Class_Type* _this, const decltype(field_name)& value)                      \
+    void operator()(property_class_type* _this, const decltype(field_name)& value)             \
     {                                                                                          \
         _this->field_name##_property_setter(value);                                            \
     }                                                                                          \
@@ -45,7 +45,7 @@ SETTER(field_name)
 
 #define PROPERTY(field_name, property_name)                                                    \
 public:                                                                                        \
-    TProperty<Class_Type, field_name##_property_getter_t, field_name##_property_setter_t> property_name{this};
+    TProperty<property_class_type, field_name##_property_getter_t, field_name##_property_setter_t> property_name{this};
 
 struct property_void_type
 {

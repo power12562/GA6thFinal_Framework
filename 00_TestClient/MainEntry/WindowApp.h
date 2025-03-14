@@ -53,8 +53,9 @@ public:
     {
         testFloat = value;
     }
-public: 
     PROPERTY(testFloat, Float);
+    
+
     
 };
 
