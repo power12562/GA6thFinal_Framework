@@ -1,9 +1,7 @@
-﻿#include <functional> 
-#include <type_traits>
-
-//프로퍼티 사용시 1회 포함
-#define USING_PROPERTY(class_name) \
-using property_class_type = class_name;
+﻿//프로퍼티 사용시 1회 포함
+#define USING_PROPERTY(class_name)                                                             \
+private:                                                                                       \
+using property_class_type = class_name;                                                                           
 
 #define GETTER(type, property_name)                                                            \
 private:                                                                                       \
@@ -44,6 +42,7 @@ SETTER(field_name)
 #define PROPERTY(property_name)                                                                \
 public:                                                                                        \
      using property_name##_property_t = TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct>; \
+     friend property_name##_property_t;                                                                                                                 \
      property_name##_property_t property_name{this};
 
 struct property_void_type
@@ -66,9 +65,8 @@ private:
 
     using getterType = std::conditional_t<is_getter, getter, char>;
     using setterType = std::conditional_t<is_setter, setter, char>;
-    using field_type = std::conditional_t<is_getter, typename getter::Type, typename setter::Type>;
-
 public:
+    using field_type = std::conditional_t<is_getter, typename getter::Type, typename setter::Type>;
     TProperty(
         owner_type* _this
     ) 

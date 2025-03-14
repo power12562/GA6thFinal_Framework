@@ -5,8 +5,6 @@ using namespace Microsoft::WRL;
 
 class WindowApp : public SimpleWindowClient
 {
-    USING_PROPERTY(WindowApp)
-
 	friend	int APIENTRY wWinMain(
 			_In_ HINSTANCE hInstance,
 			_In_opt_ HINSTANCE hPrevInstance,
@@ -47,13 +45,16 @@ private:
 public:
     REFLECT_FIELDS_BASE_BEGIN()
     float rflFloat = 1.0f;
+    double rflDouble = 1.333;
     int rflInt = 1;
     bool rflBool = false;
-    std::array<bool, 10> rflArrayBool;
-    std::vector<float> rflVectorFloat;
+    std::array<bool, 10> rflArrayBool{};
+    std::vector<float> rflVectorFloat{};
     REFLECT_FIELDS_BASE_END(WindowApp, public)
 
 public:
+    USING_PROPERTY(WindowApp)
+
     GETTER(float, Float)
     {
         return reflect_fields.rflFloat;
