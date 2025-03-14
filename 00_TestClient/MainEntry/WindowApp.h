@@ -48,6 +48,9 @@ public:
     REFLECT_FIELDS_BASE_BEGIN()
     float rflFloat = 1.0f;
     int rflInt = 1;
+    bool rflBool = false;
+    std::array<bool, 10> rflArrayBool;
+    std::vector<float> rflVectorFloat;
     REFLECT_FIELDS_BASE_END(WindowApp, public)
 
 public:

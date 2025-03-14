@@ -89,9 +89,12 @@ namespace ImGui
             auto NotArrayTypeFunc =
                 [](auto* value, const char* name)
                 {
+                    using OriginType = std::remove_cvref_t<decltype(*value)>;
+
                     using namespace InputAutoSetting;
                     bool isEdit = false;
-                    if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*value)>, int>)
+
+                    if constexpr (std::is_same_v<OriginType, int>)
                     {
                         int* val = (int*)value;
                         isEdit = ImGui::DragInt(name, val,
@@ -101,7 +104,7 @@ namespace ImGui
                             Int.format.c_str(),
                             Int.flags);
                     }
-                    else if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*value)>, float>)
+                    else if constexpr (std::is_same_v<OriginType, float>)
                     {
                         float* val = (float*)value;
                         isEdit = ImGui::DragFloat(name, val,
@@ -111,12 +114,12 @@ namespace ImGui
                             Float.format.c_str(),
                             Float.flags);
                     }
-                    else if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*value)>, bool>)
+                    else if constexpr (std::is_same_v<OriginType, bool>)
                     {
                         bool* val = (bool*)value;
                         isEdit = ImGui::Checkbox(name, value);
                     }
-                    else if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*value)>, std::string>)
+                    else if constexpr (std::is_same_v<OriginType, std::string>)
                     {
                         std::string* val = (std::string*)value;
                         isEdit = ImGui::InputText(name, val,
@@ -130,8 +133,10 @@ namespace ImGui
             auto ArrayTypeFunc =
                 [&name, &value, &NotArrayTypeFunc](const type_info& type)
                 {
+                    using OriginType = std::remove_cvref_t<decltype(*value)>;
+
                     bool isEdit = false;
-                    if constexpr (type_utils::is_std_array_v<std::remove_cvref_t<decltype(*value)>>)
+                    if constexpr (type_utils::is_std_array_v<OriginType>)
                     {
                         if (ImGui::CollapsingHeader((const char*)name.data()))
                         {
@@ -146,7 +151,7 @@ namespace ImGui
                             }
                         }
                     }
-                    else if constexpr (type_utils::is_std_vector_v<std::remove_cvref_t<decltype(*value)>>)
+                    else if constexpr (type_utils::is_std_vector_v<OriginType>)
                     {
                         if constexpr (std::ranges::range<decltype(*value)>)
                         {
