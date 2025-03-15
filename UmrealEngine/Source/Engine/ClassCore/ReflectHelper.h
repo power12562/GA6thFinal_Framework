@@ -7,28 +7,32 @@
 //reflect-cpp 라이브러리 docs https://rfl.getml.com/docs-readme/#the-basics
 //reflect-cpp github https://github.com/getml/reflect-cpp
 
-#define  REFLECT_FIELDS_BASE_BEGIN()						    \
-public:                                                         \
-struct reflect_struct								            \
+#define  REFLECT_FIELDS_BASE_BEGIN()						        \
+public:                                                             \
+struct reflect_struct								                \
 {                                 
-#define REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier)	\
-};                                                              \
-fields_access_modifier##:                                       \
-reflect_struct reflect_fields;						            \
-                                                                \
-public:                                                         \
-using ReflectionType = reflect_struct;					        \
-CLASS(const ReflectionType& _impl)						        \
-: reflect_fields(_impl) {}								        \
-const ReflectionType& reflection() const { return reflect_fields; } 
+#define REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier)	    \
+};                                                                  \
+fields_access_modifier##:                                           \
+reflect_struct reflect_fields;						                \
+                                                                    \
+public:                                                             \
+using ReflectionType = reflect_struct;					            \
+CLASS(const ReflectionType& _impl)						            \
+: reflect_fields(_impl) {}								            \
+const ReflectionType& reflection() const { return reflect_fields; } \
+virtual void imgui_draw_reflect_fields()                            \
+{                                                                   \
+    ImGui::InputReflectFields(this);                                \
+}
 
-#define  REFLECT_FIELDS_BEGIN(BASE)							    \
-using Base = BASE;										        \
-struct reflect_struct									        \
-{														        \
+#define  REFLECT_FIELDS_BEGIN(BASE)							        \
+using Base = BASE;										            \
+struct reflect_struct									            \
+{														            \
 	rfl::Flatten<BASE::reflect_struct> Basefields{};	 
 
-#define REFLECT_FIELDS_END(CLASS, fields_access_modifier)	    \
+#define REFLECT_FIELDS_END(CLASS, fields_access_modifier)	        \
 REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier)
 
 //ImGui Inspector helper

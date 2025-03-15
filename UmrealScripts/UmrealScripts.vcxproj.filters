@@ -21,7 +21,10 @@
     <ClInclude Include="UmrealScripts.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="IncludeScripts.h">
+    <ClInclude Include="ScriptsFramework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,6 +36,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="UmrealScripts.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptsFramework.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

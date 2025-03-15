@@ -65,11 +65,17 @@ void WindowApp::ModuleInitialize()
     constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
 #endif
     using NewScripts = Component*(*)();
+    using InitScripts = void(*)(const EngineCores& core);
     HMODULE scriptsDll = LoadLibraryW(scriptsPath);
     if (scriptsDll != NULL)
     {
         auto funcList = Utility::GetDLLFuntionNameList(scriptsDll);
-        auto NewTestComponent = (NewScripts)GetProcAddress(scriptsDll, funcList.back().c_str());
+        auto InitDLLCores = (InitScripts)GetProcAddress(scriptsDll, funcList[0].c_str());
+        InitDLLCores(EngineCores{
+            Time
+            });
+
+        auto NewTestComponent = (NewScripts)GetProcAddress(scriptsDll, funcList[1].c_str());
         Component* test = NewTestComponent();
         testComponent.reset(test);
     }
@@ -138,7 +144,13 @@ void WindowApp::ClientRender()
 
         ImGui::Begin((const char*)u8"dll 테스트 용임");
         {
-            testComponent->Update(); //ㅙ 안됌????
+            testComponent->Update(); //잘됌
+        }
+        ImGui::End();
+
+        ImGui::Begin((const char*)u8"dll 리플렉션 테스트 용임");
+        {
+            testComponent->imgui_draw_reflect_fields();
         }
         ImGui::End();
     }

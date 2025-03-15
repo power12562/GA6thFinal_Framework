@@ -1,13 +1,14 @@
 ﻿#pragma once
-
 class TimeSystem;
+#ifndef UMREALSCRIPTS_EXPORT
 extern TimeSystem& Time;
+#endif
 
 class TimeSystem
 {
 public:
-    //싱글톤용 인스턴스
     static TimeSystem Time;
+
 private:
     TimeSystem();
     ~TimeSystem();

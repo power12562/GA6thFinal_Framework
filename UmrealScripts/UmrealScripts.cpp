@@ -1,6 +1,13 @@
-﻿#include "UmrealScripts.h"
+﻿#include "Scripts.h"
+#include "UmrealScripts.h"
 
-extern "C" UMREALSCRIPTS_DECLSPEC Component* NewTestScripts()
+UMREALSCRIPTS_DECLSPEC void InitalizeScript(const EngineCores& engineCores)
+{
+    ImGui::SetCurrentContext(engineCores.imguiContext);
+    UmrealEngine = std::make_unique<EngineCores>(engineCores);
+}
+
+UMREALSCRIPTS_DECLSPEC Component* NewTestScript()
 {
     return new TestComponent();
 }

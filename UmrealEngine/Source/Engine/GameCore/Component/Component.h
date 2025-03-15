@@ -34,16 +34,14 @@ public:
     /// LateUpdate 는 Update가 모두 끝난 후 호출됩니다.
     /// </summary>
     virtual void LateUpdate() {};
-
-
-
-private:
-
-
+  
 
 
 
 public:
     REFLECT_FIELDS_BASE_BEGIN()
-    REFLECT_FIELDS_BASE_END(Component, private)  
+    float component_test_rfl_float{};
+    bool component_test_rfl_bool{};
+    int component_test_rfl_int{};
+    REFLECT_FIELDS_BASE_END(Component, public)
 };
