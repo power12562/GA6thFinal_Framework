@@ -113,13 +113,7 @@ void WindowApp::ClientRender()
         ImGui::Begin((const char*)u8"도킹 확인용");
         {
             //프로퍼티 테스트
-            float input{};
-            input = Float;
-            if (ImGui::InputFloat(Float.name(), &input) && ImGui::IsItemDeactivatedAfterEdit())
-            {
-               Float += input;
-            }
-            ImGui::Text(Float.type.name());
+            ImGui::Private::InputAuto(Float);
 
             ImGui::InputReflectFields(this);   
         }

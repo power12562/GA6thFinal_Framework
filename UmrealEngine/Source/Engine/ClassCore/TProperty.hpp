@@ -50,6 +50,11 @@ struct property_void_type
     using Type = void;
 };
 
+// 예제: field_type이 있는 타입
+struct WithFieldType {
+    using field_type = double;
+};
+
 //Set, Get 함수 선언 도움을 위한 헬퍼 템플릿 클래스
 template <typename owner_type, class getter, class setter>
 class TProperty
@@ -72,7 +77,7 @@ public:
     ) 
         :
         owner(_this),
-        type(typeid(field_type))
+        type_id(typeid(field_type))
     {
         
     }
@@ -81,6 +86,7 @@ private:
     owner_type* owner = nullptr;
     getterType get{};
     setterType set{};
+    const type_info& type_id;
 
     field_type& Getter() const
     {
@@ -93,19 +99,27 @@ private:
 
 public:
     //프로퍼티가 사용하는 field name
-    inline constexpr const char* name() const
+    inline constexpr std::string_view name() const
     {
         if constexpr (is_getter)
         {
-            return getterType::name;
+            return std::string_view(getterType::name);
         }
         else
         {
-            return setterType::name;
+            return std::string_view(setterType::name);
         } 
     }
     //프로퍼티가 사용하는 field typeid
-    const type_info& type;
+    inline const type_info& type() const
+    {
+        return type_id;
+    }
+    //프로퍼티의 ptr
+    inline auto* value()
+    {
+        return this;
+    }
 
     //Read
     inline operator const field_type& () const requires(is_getter)
@@ -195,3 +209,26 @@ public:
 
 };
 
+//프로퍼티 클래스의 type을 가져오기 위한 헬퍼 템플릿
+namespace type_utils
+{
+    template <typename T>
+    constexpr bool is_TProperty_v = false;
+
+    template <typename owner_type, class getter, class setter>
+    constexpr bool is_TProperty_v<TProperty<owner_type, getter, setter>> = true;
+
+    template <typename T, typename = void>
+    struct get_field_type
+    {
+        using type = T;
+    };
+    template <typename T>
+    struct get_field_type<T, std::void_t<typename T::field_type>>
+    {
+        using type = typename T::field_type;
+    };
+    //field_type이 존재하면 해당 타입을 없으면 원본 타입 사용.
+    template <typename T>
+    using get_field_type_t = typename get_field_type<T>::type;
+}

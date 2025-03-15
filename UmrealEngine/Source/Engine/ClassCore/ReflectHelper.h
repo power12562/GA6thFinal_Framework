@@ -95,49 +95,76 @@ namespace ImGui
             auto NotArrayTypeFunc =
                 [](auto* value, const char* name)
                 {
-                    using OriginType = std::remove_cvref_t<decltype(*value)>;
-
                     using namespace InputAutoSetting;
+                    using value_type = std::remove_cvref_t<decltype(*value)>;
+                    using OriginType = type_utils::get_field_type_t<value_type>;
+                
                     bool isEdit = false;
+                    auto& val = *value;
 
                     if constexpr (std::is_same_v<OriginType, int>)
-                    {
-                        int* val = (int*)value;
-                        isEdit = ImGui::InputInt(name, val,
+                    {                       
+                        int input = val;
+                        isEdit = ImGui::InputInt(name, &input,
                             Int.step,
                             Int.step_fast,
                             Int.flags);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = input;
+                        }
                     }
                     else if constexpr (std::is_same_v<OriginType, float>)
                     {
-                        float* val = (float*)value;
-                        isEdit = ImGui::InputFloat(name, val,
+                        float input = val;
+                        isEdit = ImGui::InputFloat(name, &input,
                             Float.step,
                             Float.step_fast,
                             Float.format.c_str(),
                             Float.flags);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = input;
+                        }
                     }
                     else if constexpr (std::is_same_v<OriginType, double>)
                     {
-                        double* val = (double*)value;
-                        isEdit = ImGui::InputDouble(name, val,
+                        double input = val;
+                        isEdit = ImGui::InputDouble(name, &input,
                             Float.step,
                             Float.step_fast,
                             Float.format.c_str(),
                             Float.flags);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = input;
+                        }
                     }
                     else if constexpr (std::is_same_v<OriginType, bool>)
                     {
-                        bool* val = (bool*)value;
-                        isEdit = ImGui::Checkbox(name, value);
+                        bool input = val;
+                        isEdit = ImGui::Checkbox(name, &input);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = input;
+                        }
                     }
                     else if constexpr (std::is_same_v<OriginType, std::string>)
                     {
-                        std::string* val = (std::string*)value;
-                        isEdit = ImGui::InputText(name, val,
+                        static std::string input = val;
+                        isEdit = ImGui::InputText(name, &input,
                             String.flags,
                             String.callback,
                             String.user_data);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = input;
+                        }
                     }
                     return isEdit;
                 };

@@ -61,6 +61,7 @@ public:
     }
     SETTER(float, Float)
     {
+        reflect_fields.rflBool = !reflect_fields.rflBool;
         reflect_fields.rflFloat = value;
     }
     PROPERTY(Float)
