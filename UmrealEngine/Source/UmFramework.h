@@ -41,6 +41,7 @@
 
 //Utility
 #include "Engine/Utility/DumpUtility.h"
+#include "Engine/Utility/dllUtility.h"
 
 //Class Core
 #include "Engine/ClassCore/TProperty.hpp"

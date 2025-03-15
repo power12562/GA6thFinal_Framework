@@ -41,6 +41,8 @@ private:
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
 
     float testFloat = 10.f;
+    
+    std::unique_ptr<Component> testComponent;
 public:
     REFLECT_FIELDS_BASE_BEGIN()
     float rflFloat = 1.0f;

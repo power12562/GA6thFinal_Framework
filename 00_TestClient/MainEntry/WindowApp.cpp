@@ -57,6 +57,22 @@ void WindowApp::ModuleInitialize()
     InitD311();
     InitImgui();
     InitDXGI();
+
+    //dll 테스트
+#ifdef _DEBUG
+    constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Debug/UmrealScripts.dll";
+#else
+    constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
+#endif
+    using NewScripts = Component*(*)();
+    HMODULE scriptsDll = LoadLibraryW(scriptsPath);
+    if (scriptsDll != NULL)
+    {
+        auto funcList = Utility::GetDLLFuntionNameList(scriptsDll);
+        auto NewTestComponent = (NewScripts)GetProcAddress(scriptsDll, funcList.back().c_str());
+        Component* test = NewTestComponent();
+        testComponent.reset(test);
+    }
 }
 
 
@@ -117,6 +133,12 @@ void WindowApp::ClientRender()
 
             //리플렉션 테스트
             ImGui::InputReflectFields(this);   
+        }
+        ImGui::End();
+
+        ImGui::Begin((const char*)u8"dll 테스트 용임");
+        {
+            testComponent->Update(); //ㅙ 안됌????
         }
         ImGui::End();
     }
