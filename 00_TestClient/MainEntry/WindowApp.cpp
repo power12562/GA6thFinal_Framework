@@ -115,6 +115,7 @@ void WindowApp::ClientRender()
             //프로퍼티 테스트
             ImGui::Private::InputAuto(Float);
 
+            //리플렉션 테스트
             ImGui::InputReflectFields(this);   
         }
         ImGui::End();

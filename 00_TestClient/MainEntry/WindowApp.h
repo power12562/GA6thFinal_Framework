@@ -2,7 +2,6 @@
 #include "UmFramework.h"
 
 using namespace Microsoft::WRL;
-
 class WindowApp : public SimpleWindowClient
 {
 	friend	int APIENTRY wWinMain(

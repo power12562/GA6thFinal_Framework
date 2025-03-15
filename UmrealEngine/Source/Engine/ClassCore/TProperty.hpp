@@ -99,7 +99,7 @@ private:
 
 public:
     //프로퍼티가 사용하는 field name
-    inline constexpr std::string_view name() const
+    inline static constexpr std::string_view name()
     {
         if constexpr (is_getter)
         {

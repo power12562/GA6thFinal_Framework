@@ -39,17 +39,22 @@
 #include "Engine/Imgui/imgui_impl_win32.h"
 #include "Engine/Imgui/imgui_impl_dx11.h"
 
+//Utility
+#include "Engine/Utility/DumpUtility.h"
+
 //Class Core
 #include "Engine/ClassCore/TProperty.hpp"
 #include "Engine/ClassCore/container_traits.h"
 #include "Engine/ClassCore/ReflectHelper.h"
 
-//Core
-#include "Engine/Core/TimeSystem.h"
+//Engine Core
+#include "Engine/EngineCore/TimeSystem.h"
 
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
 
-//Utility
-#include "Engine/Utility/DumpUtility.h"
+//Game Core
+#include "Engine/GameCore/Component/Component.h"
+
+
 
 
