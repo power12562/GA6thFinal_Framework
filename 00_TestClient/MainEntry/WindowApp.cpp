@@ -58,27 +58,7 @@ void WindowApp::ModuleInitialize()
     InitImgui();
     InitDXGI();
 
-    //dll 테스트
-#ifdef _DEBUG
-    constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Debug/UmrealScripts.dll";
-#else
-    constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
-#endif
-    using NewScripts = Component*(*)();
-    using InitScripts = void(*)(const EngineCores& core);
-    HMODULE scriptsDll = LoadLibraryW(scriptsPath);
-    if (scriptsDll != NULL)
-    {
-        auto funcList = Utility::GetDLLFuntionNameList(scriptsDll);
-        auto InitDLLCores = (InitScripts)GetProcAddress(scriptsDll, funcList[0].c_str());
-        InitDLLCores(EngineCores{
-            Time
-            });
-
-        auto NewTestComponent = (NewScripts)GetProcAddress(scriptsDll, funcList[1].c_str());
-        Component* test = NewTestComponent();
-        testComponent.reset(test);
-    }
+    ReloadDLLTest();
 }
 
 
@@ -89,6 +69,11 @@ void WindowApp::PreUnitialize()
 
 void WindowApp::ModuleUnitialize()
 {
+    testComponent.reset();
+    if (m_scriptsDll != NULL)
+    {
+        FreeLibrary(m_scriptsDll);
+    }    
     UninitDXGI();
     UninitImgui();
     UninitD311();
@@ -144,13 +129,20 @@ void WindowApp::ClientRender()
 
         ImGui::Begin((const char*)u8"dll 테스트 용임");
         {
-            testComponent->Update(); //잘됌
+            if(testComponent)
+                testComponent->Update(); //잘됌
+
+            if(ImGui::Button((const char*)u8"DLL 리로드"))
+            {
+                ReloadDLLTest();
+            }
         }
         ImGui::End();
 
         ImGui::Begin((const char*)u8"dll 리플렉션 테스트 용임");
         {
-            testComponent->imgui_draw_reflect_fields();
+            if (testComponent)
+                testComponent->imgui_draw_reflect_fields(); //잘됌
         }
         ImGui::End();
     }
@@ -258,5 +250,41 @@ void WindowApp::InitDXGI()
 void WindowApp::UninitDXGI()
 {
 
+}
+
+void WindowApp::ReloadDLLTest()
+{
+    using NewScripts = Component *(*)();
+    using InitScripts = void(*)(const EngineCores& core);
+
+    if (m_scriptsDll != NULL)
+    {
+        testComponent.reset();
+        FreeLibrary(m_scriptsDll);
+        m_scriptsDll = NULL;
+
+        if (!Utility::RunBatchFile(batchPath))
+            return;
+    }
+
+    if (!std::filesystem::exists(scriptsPath))
+    {
+        if (!Utility::RunBatchFile(batchPath))
+            return;
+    }
+
+    m_scriptsDll = LoadLibraryW(scriptsPath);
+    if (m_scriptsDll != NULL)
+    {
+        auto funcList = Utility::GetDLLFuntionNameList(m_scriptsDll);
+        auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[0].c_str());
+        InitDLLCores(EngineCores{
+            Time
+            });
+
+        auto NewTestComponent = (NewScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
+        Component* test = NewTestComponent();
+        testComponent.reset(test);
+    }
 }
 

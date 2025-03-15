@@ -40,8 +40,19 @@ private:
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
 
-    float testFloat = 10.f;
-    
+    //dll 테스트
+#ifdef _DEBUG
+    static constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Debug/UmrealScripts.dll";
+    static constexpr const wchar_t* batchPath = L"..\\UmrealScripts\\build_debug.bat";
+#else
+    static constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
+    static constexpr const wchar_t* batchPath = L"..\\UmrealScripts\\build_release.bat";
+#endif
+
+    void ReloadDLLTest();
+    HMODULE m_scriptsDll{};
+
+    float testFloat = 10.f;  
     std::unique_ptr<Component> testComponent;
 public:
     REFLECT_FIELDS_BASE_BEGIN()

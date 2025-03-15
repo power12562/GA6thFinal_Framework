@@ -150,13 +150,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Scripts.h" />
-    <ClInclude Include="ScriptsFramework.h" />
+    <ClInclude Include="UmScriptsFramework.h" />
     <ClInclude Include="TestScriptComponent.h" />
     <ClInclude Include="UmrealScripts.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="ScriptsFramework.cpp" />
+    <ClCompile Include="UmScriptsFramework.cpp" />
     <ClCompile Include="TestScriptComponent.cpp" />
     <ClCompile Include="UmrealScripts.cpp" />
   </ItemGroup>

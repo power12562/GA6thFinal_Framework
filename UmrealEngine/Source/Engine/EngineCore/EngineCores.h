@@ -8,10 +8,10 @@ struct EngineCores
     )
         :
         Time(timeSystem),
-        imguiContext(ImGui::GetCurrentContext())
+        Imguicontext(*ImGui::GetCurrentContext())
     {}
     ~EngineCores() = default;
 
     TimeSystem& Time;
-    ImGuiContext* imguiContext;
+    ImGuiContext& Imguicontext;
 };

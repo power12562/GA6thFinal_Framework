@@ -34,3 +34,56 @@ std::vector<std::string> Utility::GetDLLFuntionNameList(HMODULE dllModule)
 
     return out;
 }
+
+bool Utility::RunBatchFile(const std::wstring_view BatchFilePath)
+{
+    using namespace std::string_literals;
+    bool result = false;
+
+    STARTUPINFOW  si = { sizeof(STARTUPINFOW) };
+    PROCESS_INFORMATION pi;
+    std::wstring commend = L"cmd.exe /c \""s + BatchFilePath.data() + L"\""s;
+
+    if (CreateProcessW(
+        NULL,                           // 애플리케이션 경로 (NULL이면 첫 번째 파라미터가 명령어로 간주됨)
+        (LPWSTR)commend.c_str(),        // 명령어 (배치 파일 경로)
+        NULL,                           // 프로세스 보안 속성
+        NULL,                           // 쓰레드 보안 속성
+        FALSE,                          // 자식 프로세스가 부모 프로세스를 상속할지 여부
+        0,                              // 생성 플래그 (예: CREATE_NEW_CONSOLE)
+        NULL,                           // 환경 변수
+        NULL,                           // 현재 작업 디렉토리
+        &si,                            // STARTUPINFO 구조체
+        &pi                             // PROCESS_INFORMATION 구조체
+    )) 
+    {
+        // 프로세스 종료 대기
+        WaitForSingleObject(pi.hProcess, INFINITE);
+
+        DWORD exitCode;
+        if (GetExitCodeProcess(pi.hProcess, &exitCode)) {
+            if (exitCode == 0) 
+            {
+                result = true;
+            }
+            else 
+            {
+                result = false;
+            }
+        }
+        else 
+        {
+            result = false;
+        }
+
+        // 프로세스 핸들 닫기
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
+    else 
+    {
+        return result;
+    }
+    return result;
+}
+

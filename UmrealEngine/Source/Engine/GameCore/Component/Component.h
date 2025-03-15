@@ -36,12 +36,7 @@ public:
     virtual void LateUpdate() {};
   
 
-
-
 public:
     REFLECT_FIELDS_BASE_BEGIN()
-    float component_test_rfl_float{};
-    bool component_test_rfl_bool{};
-    int component_test_rfl_int{};
     REFLECT_FIELDS_BASE_END(Component, public)
 };
