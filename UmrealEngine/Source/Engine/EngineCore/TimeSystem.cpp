@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 
-TimeSystem TimeSystem::Time;
-TimeSystem& Time = TimeSystem::Time;
+TimeSystem TimeSystem::instance;
+TimeSystem& Time = TimeSystem::instance;
 
 TimeSystem::TimeSystem()
 {

@@ -1,23 +1,20 @@
 ﻿//프로퍼티 사용시 1회 포함
 #define USING_PROPERTY(class_name)                                                             \
-private:                                                                                       \
 using property_class_type = class_name;                                                                           
 
 #define GETTER(type, property_name)                                                            \
-private:                                                                                       \
 struct property_name##_property_getter_struct                                                  \
 {                                                                                              \
     using Type = type;                                                                         \
     static constexpr const char* name = #property_name;                                        \
-    type& operator()(property_class_type* _this) const                                         \
+    type operator()(property_class_type* _this) const                                         \
     {                                                                                          \
         return _this->property_name##_property_getter();                                       \
     }                                                                                          \
 };                                                                                             \
-type& property_name##_property_getter()                                         
+type property_name##_property_getter()                                         
                                                                                                
 #define SETTER(type, property_name)                                                            \
-private:                                                                                       \
 struct property_name##_property_setter_struct                                                  \
 {                                                                                              \
     using Type = type;                                                                         \
@@ -29,21 +26,18 @@ struct property_name##_property_setter_struct                                   
 };                                                                                             \
 void property_name##_property_setter(const type& value)
 
-#define GETTER_ONLY(field_name)                                                                \
-private:                                                                                       \
-using field_name##_property_setter_t = property_void_type;                                     \
-GETTER(field_name)               
+#define GETTER_ONLY(type, property_name)                                                       \
+using property_name##_property_setter_struct = property_void_type;                             \
+GETTER(type, property_name)               
 
-#define SETTER_ONLY(field_name)                                                                \
-private:                                                                                       \
-using field_name##_property_getter_t = property_void_type;                                     \
-SETTER(field_name)   
+#define SETTER_ONLY(type, property_name)                                                       \
+using property_name##_property_getter_struct = property_void_type;                             \
+SETTER(type, property_name)   
 
 #define PROPERTY(property_name)                                                                \
-public:                                                                                        \
-     using property_name##_property_t = TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct>; \
-     friend property_name##_property_t;                                                                                                                 \
-     property_name##_property_t property_name{this};
+TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct> property_name{this};                \
+using property_name##_property_t = TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct>; \
+friend property_name##_property_t;                                                                                                                 
 
 struct property_void_type
 {
@@ -88,7 +82,7 @@ private:
     setterType set{};
     const type_info& type_id;
 
-    field_type& Getter() const
+    auto Getter() const
     {
         return get(owner);
     }
@@ -122,16 +116,16 @@ public:
     }
 
     //Read
-    inline operator const field_type& () const requires(is_getter)
+    inline operator auto() const requires(is_getter)
     { 
         return this->Getter();
     }
 
-    inline const field_type& operator->() requires ( std::is_pointer_v<owner_type>&& is_getter)
+    inline const auto operator->() requires ( std::is_pointer_v<owner_type>&& is_getter)
     { 
-        return  this->Getter();
+        return this->Getter();
     }
-    inline const field_type* operator->() requires (!std::is_pointer_v<owner_type>&& is_getter)
+    inline const auto* operator->() requires (!std::is_pointer_v<owner_type>&& is_getter)
     { 
         return &this->Getter();
     }

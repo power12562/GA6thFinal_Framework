@@ -50,13 +50,10 @@
 
 //Engine Core
 #include "Engine/EngineCore/TimeSystem.h"
-
+#include "Engine/EngineCore/SceneManager.h"
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
+#include "Engine/EngineCore/EngineCores.h" 
 
 //Game Core
+#include "Engine/GameCore/GameObject/GameObject.h"
 #include "Engine/GameCore/Component/Component.h"
-
-
-//
-#include "Engine/EngineCore/EngineCores.h"
-

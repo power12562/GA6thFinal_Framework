@@ -7,7 +7,7 @@ extern TimeSystem& Time;
 class TimeSystem
 {
 public:
-    static TimeSystem Time;
+    static TimeSystem instance;
 
 private:
     TimeSystem();

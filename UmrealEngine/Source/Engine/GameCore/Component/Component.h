@@ -3,6 +3,8 @@
 //참고 Unity Game Loop https://docs.unity3d.com/kr/2022.3/Manual/ExecutionOrder.html
 class Component
 {
+    friend class GameObject;
+    friend class ComponentFactory;
 public:
     Component();
     virtual ~Component();

@@ -4,14 +4,17 @@
 struct EngineCores
 {
     EngineCores(
-        TimeSystem& timeSystem
+        TimeSystem& _Time,
+        SceneManager& _sceneManager
     )
         :
-        Time(timeSystem),
-        Imguicontext(*ImGui::GetCurrentContext())
+        Imguicontext(*ImGui::GetCurrentContext()),
+        Time(_Time),
+        sceneManager(_sceneManager)
     {}
     ~EngineCores() = default;
 
-    TimeSystem& Time;
     ImGuiContext& Imguicontext;
+    TimeSystem& Time;
+    SceneManager& sceneManager;
 };

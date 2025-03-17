@@ -152,8 +152,10 @@
     <ClInclude Include="Source\Engine\ClassCore\container_traits.h" />
     <ClInclude Include="Source\Engine\ClassCore\ReflectHelper.h" />
     <ClInclude Include="Source\Engine\EngineCore\EngineCores.h" />
+    <ClInclude Include="Source\Engine\EngineCore\SceneManager.h" />
     <ClInclude Include="Source\Engine\EngineCore\TimeSystem.h" />
     <ClInclude Include="Source\Engine\GameCore\Component\Component.h" />
+    <ClInclude Include="Source\Engine\GameCore\GameObject\GameObject.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx12.h" />
     <ClInclude Include="Source\Engine\Imgui\imconfig.h" />
@@ -173,8 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\ClassCore\ReflectHelper.cpp" />
+    <ClCompile Include="Source\Engine\EngineCore\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\TimeSystem.cpp" />
     <ClCompile Include="Source\Engine\GameCore\Component\Component.cpp" />
+    <ClCompile Include="Source\Engine\GameCore\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\Engine\Imgui\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -220,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Utility\DumpUtility.cpp" />
     <ClCompile Include="Source\Engine\WindowAppCore\SimpleWindowClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

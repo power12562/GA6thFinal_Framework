@@ -10,7 +10,8 @@
 #define  REFLECT_FIELDS_BASE_BEGIN()						        \
 public:                                                             \
 struct reflect_struct								                \
-{                                 
+{                          
+
 #define REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier)	    \
 };                                                                  \
 fields_access_modifier##:                                           \

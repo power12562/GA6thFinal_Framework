@@ -49,6 +49,7 @@ WindowApp::~WindowApp() = default;
 
 void WindowApp::PreInitialize()
 {
+    Utility::RunBatchFile(batchPath);
 
 }
 
@@ -84,7 +85,7 @@ void WindowApp::ClientUpdate()
     TimeSystem::Engine::TimeSystemUpdate();
     while (TimeSystem::Engine::TimeSystemFixedUpdate())
     {
-
+       
     }
 }
 
@@ -279,7 +280,8 @@ void WindowApp::ReloadDLLTest()
         auto funcList = Utility::GetDLLFuntionNameList(m_scriptsDll);
         auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[0].c_str());
         InitDLLCores(EngineCores{
-            Time
+            Time,
+            sceneManager
             });
 
         auto NewTestComponent = (NewScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
