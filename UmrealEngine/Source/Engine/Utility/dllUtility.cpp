@@ -39,14 +39,13 @@ bool Utility::RunBatchFile(const std::wstring_view BatchFilePath)
 {
     using namespace std::string_literals;
     bool result = false;
+    std::wstring command = BatchFilePath.data();
 
     STARTUPINFOW  si = { sizeof(STARTUPINFOW) };
-    PROCESS_INFORMATION pi;
-    std::wstring commend = L"cmd.exe /c \""s + BatchFilePath.data() + L"\""s;
-
+    PROCESS_INFORMATION pi{};
     if (CreateProcessW(
         NULL,                           // 애플리케이션 경로 (NULL이면 첫 번째 파라미터가 명령어로 간주됨)
-        (LPWSTR)commend.c_str(),        // 명령어 (배치 파일 경로)
+        (LPWSTR)command.c_str(),        // 명령어 (배치 파일 경로)
         NULL,                           // 프로세스 보안 속성
         NULL,                           // 쓰레드 보안 속성
         FALSE,                          // 자식 프로세스가 부모 프로세스를 상속할지 여부

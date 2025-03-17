@@ -254,8 +254,8 @@ void WindowApp::UninitDXGI()
 
 void WindowApp::ReloadDLLTest()
 {
-    using NewScripts = Component *(*)();
     using InitScripts = void(*)(const EngineCores& core);
+    using NewScripts = Component *(*)();
 
     if (m_scriptsDll != NULL)
     {
