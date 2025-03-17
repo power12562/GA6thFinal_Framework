@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Engine\ClassCore\container_traits.h" />
     <ClInclude Include="Source\Engine\ClassCore\ReflectHelper.h" />
+    <ClInclude Include="Source\Engine\EngineCore\ComponentFactory.h" />
     <ClInclude Include="Source\Engine\EngineCore\EngineCores.h" />
     <ClInclude Include="Source\Engine\EngineCore\SceneManager.h" />
     <ClInclude Include="Source\Engine\EngineCore\TimeSystem.h" />
@@ -175,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\ClassCore\ReflectHelper.cpp" />
+    <ClCompile Include="Source\Engine\EngineCore\ComponentFactory.cpp" />
+    <ClCompile Include="Source\Engine\EngineCore\EngineCores.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\TimeSystem.cpp" />
     <ClCompile Include="Source\Engine\GameCore\Component\Component.cpp" />

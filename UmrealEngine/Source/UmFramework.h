@@ -1,4 +1,11 @@
 ﻿#pragma once
+//constexpr
+#ifdef UMREALSCRIPTS_EXPORT
+#define SCRIPTS_PROJECT true;
+constexpr bool IS_SCRIPTS_PROJECT = true;
+#else
+constexpr bool IS_SCRIPTS_PROJECT = false;
+#endif 
 
 //WINDOW SDK
 #include <Windows.h>
@@ -32,12 +39,14 @@
 #include <any>
 #include <typeinfo>
 #include <ranges>
+#include <concepts>
 
 //ThirdParty
 #include "Engine/Imgui/imgui.h"
 #include "Engine/Imgui/imgui_stdlib.h"
 #include "Engine/Imgui/imgui_impl_win32.h"
 #include "Engine/Imgui/imgui_impl_dx11.h"
+#include "Engine/Imgui/imgui_impl_dx12.h"
 
 //Utility
 #include "Engine/Utility/DumpUtility.h"
@@ -50,6 +59,7 @@
 
 //Engine Core
 #include "Engine/EngineCore/TimeSystem.h"
+#include "Engine/EngineCore/ComponentFactory.h"
 #include "Engine/EngineCore/SceneManager.h"
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
 #include "Engine/EngineCore/EngineCores.h" 
@@ -57,3 +67,4 @@
 //Game Core
 #include "Engine/GameCore/GameObject/GameObject.h"
 #include "Engine/GameCore/Component/Component.h"
+

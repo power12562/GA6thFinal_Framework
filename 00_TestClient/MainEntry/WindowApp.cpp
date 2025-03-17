@@ -49,8 +49,7 @@ WindowApp::~WindowApp() = default;
 
 void WindowApp::PreInitialize()
 {
-    Utility::RunBatchFile(batchPath);
-
+    m_testObject = std::make_unique<GameObject>();
 }
 
 void WindowApp::ModuleInitialize()
@@ -58,23 +57,19 @@ void WindowApp::ModuleInitialize()
     InitD311();
     InitImgui();
     InitDXGI();
-
-    ReloadDLLTest();
+    componentFactory.InitalizeComponentFactory();
 }
 
 
 void WindowApp::PreUnitialize()
 {
 
+
 }
 
 void WindowApp::ModuleUnitialize()
 {
-    testComponent.reset();
-    if (m_scriptsDll != NULL)
-    {
-        FreeLibrary(m_scriptsDll);
-    }    
+    componentFactory.UninitalizeComponentFactory();
     UninitDXGI();
     UninitImgui();
     UninitD311();
@@ -86,6 +81,7 @@ void WindowApp::ClientUpdate()
     while (TimeSystem::Engine::TimeSystemFixedUpdate())
     {
        
+           
     }
 }
 
@@ -118,32 +114,38 @@ void WindowApp::ClientRender()
         }
         ImGui::End();
         
-        ImGui::Begin((const char*)u8"도킹 확인용");
+        ImGui::Begin((const char*)u8"컴포넌트 추가 테스트");
         {
-            //프로퍼티 테스트
-            ImGui::Private::InputAuto(Float);
-
-            //리플렉션 테스트
-            ImGui::InputReflectFields(this);   
-        }
-        ImGui::End();
-
-        ImGui::Begin((const char*)u8"dll 테스트 용임");
-        {
-            if(testComponent)
-                testComponent->Update(); //잘됌
-
-            if(ImGui::Button((const char*)u8"DLL 리로드"))
+            for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
             {
-                ReloadDLLTest();
-            }
-        }
-        ImGui::End();
+                std::weak_ptr<Component> wptr = m_testObject->GetComponentAtIndex<Component>(i);
+                if (auto component = wptr.lock())
+                {
+                    ImGui::PushID(i);
+                    if(ImGui::CollapsingHeader(typeid(*component).name()))
+                    {
+                        component->imgui_draw_reflect_fields();
+                    }   
+                  
+                    component->Update(); //dll 업데이트 테스트
 
-        ImGui::Begin((const char*)u8"dll 리플렉션 테스트 용임");
-        {
-            if (testComponent)
-                testComponent->imgui_draw_reflect_fields(); //잘됌
+                    ImGui::PopID();
+                }
+            }
+
+            if (ImGui::CollapsingHeader((const char*)u8"컴포넌트 추가하기"))
+            {
+                for (auto& [key, func] : componentFactory.GetNewComponentFuncList())
+                {
+                    if (ImGui::Button(key.c_str()))
+                    {
+                        if (m_testObject)
+                        {
+                            componentFactory.NewComponent(m_testObject.get(), key);
+                        }
+                    }
+                }
+            }
         }
         ImGui::End();
     }
@@ -251,42 +253,5 @@ void WindowApp::InitDXGI()
 void WindowApp::UninitDXGI()
 {
 
-}
-
-void WindowApp::ReloadDLLTest()
-{
-    using InitScripts = void(*)(const EngineCores& core);
-    using NewScripts = Component *(*)();
-
-    if (m_scriptsDll != NULL)
-    {
-        testComponent.reset();
-        FreeLibrary(m_scriptsDll);
-        m_scriptsDll = NULL;
-
-        if (!Utility::RunBatchFile(batchPath))
-            return;
-    }
-
-    if (!std::filesystem::exists(scriptsPath))
-    {
-        if (!Utility::RunBatchFile(batchPath))
-            return;
-    }
-
-    m_scriptsDll = LoadLibraryW(scriptsPath);
-    if (m_scriptsDll != NULL)
-    {
-        auto funcList = Utility::GetDLLFuntionNameList(m_scriptsDll);
-        auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[0].c_str());
-        InitDLLCores(EngineCores{
-            Time,
-            sceneManager
-            });
-
-        auto NewTestComponent = (NewScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
-        Component* test = NewTestComponent();
-        testComponent.reset(test);
-    }
 }
 

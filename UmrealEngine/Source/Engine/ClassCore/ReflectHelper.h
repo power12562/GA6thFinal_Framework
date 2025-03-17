@@ -24,7 +24,9 @@ CLASS(const ReflectionType& _impl)						            \
 const ReflectionType& reflection() const { return reflect_fields; } \
 virtual void imgui_draw_reflect_fields()                            \
 {                                                                   \
+    ImGui::PushID(typeid(*this).hash_code());                       \
     ImGui::InputReflectFields(this);                                \
+    ImGui::PopID();                                                 \
 }
 
 #define  REFLECT_FIELDS_BEGIN(BASE)							        \
@@ -160,7 +162,8 @@ namespace ImGui
                     }
                     else if constexpr (std::is_same_v<OriginType, std::string>)
                     {
-                        static std::string input = val;
+                        static std::string input;
+                        input = val;
                         isEdit = ImGui::InputText(name, &input,
                             String.flags,
                             String.callback,

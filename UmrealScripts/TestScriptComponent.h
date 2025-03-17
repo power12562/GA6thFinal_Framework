@@ -8,7 +8,7 @@ public:
     virtual ~TestComponent() override {};
 public:
     REFLECT_FIELDS_BEGIN(Component)
-    //std::string dll_rfl_string{};
+    std::string component_name = "TestComponent";
     //std::array<bool, 5> dll_rfl_bools{};
     //std::vector<int> dll_rfl_ints{};
     //std::string dll_test_string{ "runtime add" };

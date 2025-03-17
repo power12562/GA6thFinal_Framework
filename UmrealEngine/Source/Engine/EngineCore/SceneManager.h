@@ -1,7 +1,7 @@
 ﻿#pragma once
 class GameObject;
 class SceneManager;
-#ifndef UMREALSCRIPTS_EXPORT
+#ifndef SCRIPTS_PROJECT
 extern SceneManager& sceneManager;
 #endif
 
@@ -76,6 +76,23 @@ public:
     /// </summary>
     /// <returns></returns>
     bool IsValid() { return false; }
+
+    /// <summary>
+    /// 다른 Scene인지 경로를 비교합니다.
+     /// </summary>
+    /// <returns>비교 결과</returns>
+    bool operator!=(const Scene& other)
+    {
+        return (std::wstring_view)path != other.path;
+    }
+    /// <summary>
+    /// 같은 Scene인지 경로를 비교합니다.
+    /// </summary>
+    /// <returns>비교 결과</returns>
+    bool operator==(const Scene& other)
+    {
+        return (std::wstring_view)path == other.path;
+    }
 };
 
 //함수는 일단 선언만. 구현은 나중에.

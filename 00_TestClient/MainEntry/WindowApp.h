@@ -40,43 +40,7 @@ private:
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
 
-    //dll 테스트
-#ifdef _DEBUG
-    static constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Debug/UmrealScripts.dll";
-    static constexpr const wchar_t* batchPath = L"..\\UmrealScripts\\build_debug.bat";
-#else
-    static constexpr const wchar_t* scriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
-    static constexpr const wchar_t* batchPath = L"..\\UmrealScripts\\build_release.bat";
-#endif
-
-    void ReloadDLLTest();
-    HMODULE m_scriptsDll{};
-
-    float testFloat = 10.f;  
-    std::unique_ptr<Component> testComponent;
-public:
-    REFLECT_FIELDS_BASE_BEGIN()
-    float rflFloat = 1.0f;
-    double rflDouble = 1.333;
-    int rflInt = 1;
-    bool rflBool = false;
-    std::array<bool, 10> rflArrayBool{};
-    std::vector<float> rflVectorFloat{};
-    REFLECT_FIELDS_BASE_END(WindowApp, public)
-
-public:
-    USING_PROPERTY(WindowApp)
-
-    GETTER(float, Float)
-    {
-        return reflect_fields.rflFloat;
-    }
-    SETTER(float, Float)
-    {
-        reflect_fields.rflBool = !reflect_fields.rflBool;
-        reflect_fields.rflFloat = value;
-    }
-    PROPERTY(Float)
+    std::unique_ptr<GameObject> m_testObject;
 };
 
     

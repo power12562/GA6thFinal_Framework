@@ -1,6 +1,6 @@
 ﻿#pragma once
 class TimeSystem;
-#ifndef UMREALSCRIPTS_EXPORT
+#ifndef SCRIPTS_PROJECT
 extern TimeSystem& Time;
 #endif
 

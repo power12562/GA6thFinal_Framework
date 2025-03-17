@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "UmScriptsFramework.h"
+#include "UmFramework.h"
 
 #ifdef UMREALSCRIPTS_EXPORT
 #define UMREALSCRIPTS_DECLSPEC __declspec(dllexport)
@@ -16,4 +16,16 @@
 extern "C" UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores);
 
 
-extern "C" UMREALSCRIPTS_DECLSPEC Component* NewTestScript();
+extern "C" UMREALSCRIPTS_DECLSPEC Component* NewTestComponent()
+#ifdef UMREALSCRIPTS_EXPORT
+{
+    return new TestComponent();
+}
+#endif
+
+extern "C" UMREALSCRIPTS_DECLSPEC Component* NewComponent2Test()
+#ifdef UMREALSCRIPTS_EXPORT
+{
+    return new Component2Test;
+}
+#endif

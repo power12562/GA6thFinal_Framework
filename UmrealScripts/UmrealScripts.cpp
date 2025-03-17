@@ -7,7 +7,3 @@ UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores
     ImGui::SetCurrentContext(&engineCores.Imguicontext);        //Imguicontext 동기화
 }
 
-UMREALSCRIPTS_DECLSPEC Component* NewTestScript()
-{
-    return new TestComponent();
-}
