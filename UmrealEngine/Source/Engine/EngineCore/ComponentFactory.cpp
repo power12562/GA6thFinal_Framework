@@ -43,12 +43,11 @@ bool ComponentFactory::InitalizeComponentFactory()
     {
         std::vector<std::string> funcList = dllUtility::GetDLLFuntionNameList(m_scriptsDll);
         MakeScriptFunc = (MakeUmScriptsFile)GetProcAddress(m_scriptsDll, funcList[0].c_str());
-
-        if (funcList[1] != "InitalizeUmrealScript")
+        if (funcList[0] != "CreateScriptFile")
         {
             FreeLibrary(m_scriptsDll);
             m_scriptsDll = NULL;
-            __debugbreak(); //스크립트 초기화 함수 에러.
+            __debugbreak(); //초기화 함수 에러.
             return false;
         }
 
@@ -58,8 +57,15 @@ bool ComponentFactory::InitalizeComponentFactory()
             sceneManager,
             componentFactory
             });
+        if (funcList[1] != "InitalizeUmrealScript")
+        {
+            FreeLibrary(m_scriptsDll);
+            m_scriptsDll = NULL;
+            __debugbreak(); //초기화 함수 에러.
+            return false;
+        }
 
-        for (size_t i = 2; i < funcList.size(); i++)
+        for (size_t i = 0; i < funcList.size(); i++)
         {
             std::string& funcName = funcList[i];
             if (funcName.find("New") != std::string::npos)

@@ -6,7 +6,7 @@ UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores
     ImGui::SetCurrentContext(&engineCores.Imguicontext);        //Imguicontext 동기화
 }
 
-UMREALSCRIPTS_DECLSPEC void CreateNewScript(const char* fileName)
+UMREALSCRIPTS_DECLSPEC void CreateScriptFile(const char* fileName)
 {
     using namespace std::string_literals;
     constexpr const wchar_t* scriptPorjectPath   = L"..\\UmrealScripts";
