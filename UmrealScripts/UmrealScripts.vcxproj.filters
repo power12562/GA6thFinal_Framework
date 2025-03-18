@@ -13,22 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="테스트 컴포넌트">
-      <UniqueIdentifier>{678b2ea8-1bda-4c01-99cd-c8f0c29fa3d1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UmrealScripts.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts.h">
+    <ClInclude Include="Scripts\TestFolder\TestScript.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestScriptComponent.h">
-      <Filter>테스트 컴포넌트</Filter>
-    </ClInclude>
-    <ClInclude Include="Component2Test.h">
-      <Filter>테스트 컴포넌트</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,11 +29,8 @@
     <ClCompile Include="UmrealScripts.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestScriptComponent.cpp">
-      <Filter>테스트 컴포넌트</Filter>
-    </ClCompile>
-    <ClCompile Include="Component2Test.cpp">
-      <Filter>테스트 컴포넌트</Filter>
+    <ClCompile Include="Scripts\TestFolder\TestScript.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

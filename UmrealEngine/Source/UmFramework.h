@@ -49,6 +49,7 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 #include "Engine/Imgui/imgui_impl_dx12.h"
 
 //Utility
+#include "Engine/Utility/utfHelper.h"
 #include "Engine/Utility/DumpUtility.h"
 #include "Engine/Utility/dllUtility.h"
 

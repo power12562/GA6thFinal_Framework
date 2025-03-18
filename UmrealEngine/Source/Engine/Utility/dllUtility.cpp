@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 
-std::vector<std::string> Utility::GetDLLFuntionNameList(HMODULE dllModule)
+std::vector<std::string> dllUtility::GetDLLFuntionNameList(HMODULE dllModule)
 {
     std::vector<std::string> out;
 
@@ -35,7 +35,7 @@ std::vector<std::string> Utility::GetDLLFuntionNameList(HMODULE dllModule)
     return out;
 }
 
-bool Utility::RunBatchFile(const std::wstring_view BatchFilePath)
+bool dllUtility::RunBatchFile(const std::wstring_view BatchFilePath)
 {
     using namespace std::string_literals;
     bool result = false;

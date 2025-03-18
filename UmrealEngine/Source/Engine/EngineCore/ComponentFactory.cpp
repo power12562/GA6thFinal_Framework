@@ -33,14 +33,18 @@ bool ComponentFactory::InitalizeComponentFactory()
         m_scriptsDll = NULL;
     }
 
-    if (!Utility::RunBatchFile(BuildBatchPath))
+    if (!dllUtility::RunBatchFile(BuildBatchPath))
         return false;
 
     m_scriptsDll = LoadLibraryW(ScriptsPath);
+    m_NewScriptsFunctionMap.clear();
+    m_NewScriptsKeyVec.clear();
     if (m_scriptsDll != NULL)
     {
-        std::vector<std::string> funcList = Utility::GetDLLFuntionNameList(m_scriptsDll);
-        if (funcList[0] != "InitalizeUmrealScript")
+        std::vector<std::string> funcList = dllUtility::GetDLLFuntionNameList(m_scriptsDll);
+        MakeScriptFunc = (MakeUmScriptsFile)GetProcAddress(m_scriptsDll, funcList[0].c_str());
+
+        if (funcList[1] != "InitalizeUmrealScript")
         {
             FreeLibrary(m_scriptsDll);
             m_scriptsDll = NULL;
@@ -48,16 +52,14 @@ bool ComponentFactory::InitalizeComponentFactory()
             return false;
         }
 
-        auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[0].c_str());
+        auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
         InitDLLCores(EngineCores{
             Time,
             sceneManager,
             componentFactory
             });
 
-        m_NewScriptsFunctionMap.clear();
-        m_NewScriptsFunctionVec.clear();
-        for (size_t i = 1; i < funcList.size(); i++)
+        for (size_t i = 2; i < funcList.size(); i++)
         {
             std::string& funcName = funcList[i];
             if (funcName.find("New") != std::string::npos)
@@ -65,16 +67,32 @@ bool ComponentFactory::InitalizeComponentFactory()
                 auto NewComponentFunc = (NewScripts)GetProcAddress(m_scriptsDll, funcName.c_str());
                 Component* component = NewComponentFunc();
                 const char* key = typeid(*component).name();
-                m_NewScriptsFunctionMap[key] = m_NewScriptsFunctionVec.size();
-                m_NewScriptsFunctionVec.emplace_back(key, NewComponentFunc);
+                m_NewScriptsFunctionMap[key] = NewComponentFunc;
+                m_NewScriptsKeyVec.emplace_back(key);
                 delete component;
             }
         }
         
-        //파괴된 컴포넌트 복구 추가해야함
+        //파괴된 컴포넌트 재생성 및 복구
         for (auto& [gameObject, key, index] : addList)
         {
-           
+            auto findIter = m_NewScriptsFunctionMap.find(key);
+            if (findIter != m_NewScriptsFunctionMap.end())
+            {              
+                //컴포넌트 존재하면 다시 생성
+                std::shared_ptr<Component> newComponent = NewComponent(key);
+                ResetComponent(gameObject, newComponent.get()); //엔진에서 사용하기 위해 초기화
+                newComponent->m_index = index;                  //인덱스 제대로 재설정
+                gameObject->m_components[index] = newComponent;
+            }
+        }
+        //존재 안하는거는 전부 제거
+        for (auto& [gameObject, key, index] : addList)
+        {
+            std::erase_if(gameObject->m_components, [](auto& sptr)
+                {
+                    return sptr == nullptr;
+                });
         }
     }
 }
@@ -88,26 +106,40 @@ void ComponentFactory::UninitalizeComponentFactory()
     }
 }
 
-bool ComponentFactory::NewComponent(GameObject* ownerObject, std::string_view typeid_name)
+bool ComponentFactory::AddComponentToObject(GameObject* ownerObject, std::string_view typeid_name)
 {
-    Component* newComponent = nullptr;
-    auto findIter = m_NewScriptsFunctionMap.find(typeid_name.data());
-    if (findIter != m_NewScriptsFunctionMap.end())
+    if(std::shared_ptr<Component> sptr_component = NewComponent(typeid_name))
     {
-        auto& [name, index] = *findIter;
-        newComponent = m_NewScriptsFunctionVec[index].second();    //컴포넌트 생성
-        std::shared_ptr<Component> sptr_component{newComponent};   //shared_ptr 생성
-        m_ComponentInstanceMap[name].emplace_back(sptr_component); //추적용 weak_ptr 생성 
-        ResetComponent(ownerObject, newComponent);
+        const char* name = typeid_name.data();
+        ResetComponent(ownerObject, sptr_component.get());
         ownerObject->m_components.emplace_back(sptr_component);  //오브젝트에 추가
         return true;
     }
     return false;
 }
 
+void ComponentFactory::MakeScriptFile(const char* fileName) const
+{
+    MakeScriptFunc(fileName);
+}
+
+std::shared_ptr<Component> ComponentFactory::NewComponent(std::string_view typeid_name)
+{
+    std::shared_ptr<Component> newComponent;
+    auto findIter = m_NewScriptsFunctionMap.find(typeid_name.data());
+    if (findIter != m_NewScriptsFunctionMap.end())
+    {
+        auto& [name, func] = *findIter;
+        newComponent.reset(func());                                //컴포넌트 생성
+        m_ComponentInstanceMap[name].emplace_back(newComponent);   //추적용 weak_ptr 생성 
+    }
+    return newComponent;
+}
+
 void ComponentFactory::ResetComponent(GameObject* ownerObject, Component* component)
 {
     //여긴 엔진에서 사용하기 위한 초기화 코드 
+    component->m_className = (typeid(*component).name() + 5);
     component->m_gameObect = ownerObject;
     component->m_index = ownerObject->m_components.size();
 

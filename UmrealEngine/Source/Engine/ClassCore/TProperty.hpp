@@ -121,11 +121,11 @@ public:
         return this->Getter();
     }
 
-    inline const auto operator->() requires ( std::is_pointer_v<owner_type>&& is_getter)
+    inline auto* operator->() requires ( std::is_pointer_v<owner_type> && is_getter)
     { 
         return this->Getter();
     }
-    inline const auto* operator->() requires (!std::is_pointer_v<owner_type>&& is_getter)
+    inline auto* operator->() requires (!std::is_pointer_v<owner_type> && std::is_reference_v<decltype(this->Getter())> && is_getter)
     { 
         return &this->Getter();
     }

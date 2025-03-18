@@ -81,17 +81,20 @@ void WindowApp::ClientUpdate()
     while (TimeSystem::Engine::TimeSystemFixedUpdate())
     {
        
-           
+          
     }
 }
 
 void WindowApp::ClientRender()
 {
+    using namespace u8_literals;
+
     constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
+
     ImguiBeginDraw();
     {
-        ImGui::Begin((const char*)u8"타임 클래스 확인용");
+        ImGui::Begin(u8"타임 클래스 확인용"to_char);
         {
             ImGui::InputDouble("time scale", &Time.timeScale);
 
@@ -114,7 +117,7 @@ void WindowApp::ClientRender()
         }
         ImGui::End();
         
-        ImGui::Begin((const char*)u8"컴포넌트 추가 테스트");
+        ImGui::Begin(u8"컴포넌트 추가 테스트"to_char);
         {
             for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
             {
@@ -122,26 +125,24 @@ void WindowApp::ClientRender()
                 if (auto component = wptr.lock())
                 {
                     ImGui::PushID(i);
-                    if(ImGui::CollapsingHeader(typeid(*component).name()))
+                    if(ImGui::CollapsingHeader(component->name()))
                     {
                         component->imgui_draw_reflect_fields();
-                    }   
-                  
-                    component->Update(); //dll 업데이트 테스트
-
+                        component->Update(); //dll 업데이트 테스트
+                    }                   
                     ImGui::PopID();
                 }
             }
 
-            if (ImGui::CollapsingHeader((const char*)u8"컴포넌트 추가하기"))
+            if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"to_char))
             {
-                for (auto& [key, func] : componentFactory.GetNewComponentFuncList())
+                for (auto& key : componentFactory.GetNewComponentFuncList())
                 {
                     if (ImGui::Button(key.c_str()))
                     {
                         if (m_testObject)
                         {
-                            componentFactory.NewComponent(m_testObject.get(), key);
+                            componentFactory.AddComponentToObject(m_testObject.get(), key);
                         }
                     }
                 }
@@ -149,6 +150,53 @@ void WindowApp::ClientRender()
         }
         ImGui::End();
     }
+    ImGui::Begin(u8"프로퍼티 테스트"to_char);
+    {
+        GameObject::MyStrusct st = m_testObject->TestStruct;
+        st.x = 10.f;
+        st.y = 15.f;
+        m_testObject->TestStruct = st;
+    }
+    ImGui::End();
+
+    ImGui::Begin(u8"컴포넌트 팩토리 테스트"to_char);
+    {
+        if (ImGui::Button(u8"스크립트 재 빌드"to_char))
+        {
+            componentFactory.InitalizeComponentFactory();
+        }
+
+        //새 스크립트 파일 만들기 테스트용
+        {
+            static ImVec2 popupPos{};
+            static std::string inputBuffer{};
+            if (ImGui::Button(u8"테스트 스크립트 파일 만들기"to_char))
+            {
+                popupPos = ImGui::GetMousePos();
+                inputBuffer.clear();
+                ImGui::OpenPopup(u8"파일 이름을 입력하세요."to_char);
+            }
+            
+            if (ImGui::BeginPopup(u8"파일 이름을 입력하세요."to_char))
+            {
+                ImGui::SetNextWindowPos(popupPos, ImGuiCond_Appearing);
+                ImGui::InputText("##new_script_file_name", &inputBuffer);
+                if (ImGui::Button("OK"))
+                {
+                    componentFactory.MakeScriptFile(inputBuffer.c_str());
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel"))
+                {
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::EndPopup();
+            }
+        }
+    }
+    ImGui::End();
+
     ImguiEndDraw();
     m_SwapChain1->Present(1, 0);
 }

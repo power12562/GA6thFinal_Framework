@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace Utility
+namespace dllUtility
 {
     /// <summary>
     /// 로드된 DLL 함수의 이름들을 반환합니다.

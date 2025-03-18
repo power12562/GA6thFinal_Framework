@@ -169,6 +169,7 @@
     <ClInclude Include="Source\Engine\Imgui\imgui_stdlib.h" />
     <ClInclude Include="Source\Engine\ClassCore\TProperty.hpp" />
     <ClInclude Include="Source\Engine\Utility\dllUtility.h" />
+    <ClInclude Include="Source\Engine\Utility\utfHelper.h" />
     <ClInclude Include="Source\UmFramework.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\Engine\Utility\DumpUtility.h" />
@@ -219,6 +220,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Utility\dllUtility.cpp" />
+    <ClCompile Include="Source\Engine\Utility\utfHelper.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

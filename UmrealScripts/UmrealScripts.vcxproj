@@ -149,15 +149,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Component2Test.h" />
-    <ClInclude Include="Scripts.h" />
-    <ClInclude Include="TestScriptComponent.h" />
+    <ClInclude Include="Scripts\TestFolder\TestScript.h" />
     <ClInclude Include="UmrealScripts.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component2Test.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="TestScriptComponent.cpp" />
+    <ClCompile Include="Scripts\TestFolder\TestScript.cpp" />
     <ClCompile Include="UmrealScripts.cpp" />
   </ItemGroup>
   <ItemGroup>

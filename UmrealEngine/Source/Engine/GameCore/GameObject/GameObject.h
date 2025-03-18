@@ -201,6 +201,7 @@ public:
     // get, set :
     //  게임 오브젝트에 대해 isStatic 플래그가 설정되어 있는지 여부.
     PROPERTY(isStatic);
+    
 
     GETTER(std::wstring_view, name)
     {
@@ -215,11 +216,36 @@ public:
     //  게임 오브젝트의 이름
     PROPERTY(name)
 
+    GETTER(float, testFloat)
+    {
+        return aaaa;
+    }
+    SETTER(float, testFloat)
+    {
+        aaaa = value;
+
+    }
+    PROPERTY(testFloat);
+
+    struct MyStrusct
+    {
+        float x = 3.f;
+        float y = 4.f;
+    };
+    GETTER(MyStrusct, TestStruct)
+    {
+        return myStruct;
+    }
+    SETTER(MyStrusct, TestStruct)
+    {
+        myStruct = value;
+    }
+    PROPERTY(TestStruct);
+
 private:
     std::vector<std::shared_ptr<Component>>  m_components;
-
-
-
+    float aaaa;
+    MyStrusct myStruct;
 
 public:
     //activeInHierarchy와 같음.
@@ -243,7 +269,7 @@ inline TComponent& GameObject::AddComponent()
 #else
     ComponentFactory& factory = UmrealEngine->componentFactory;
 #endif
-    bool result = factory.NewComponent(this, typeid(TComponent).name());
+    bool result = factory.AddComponentToObject(this, typeid(TComponent).name());
     if (result)
     {
         return *(this->m_components.back());

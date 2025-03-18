@@ -9,8 +9,15 @@ public:
     Component();
     virtual ~Component();
 
+public:
     /// <summary>
-    /// <para> 이 함수는 componentFactory.NewComponent() 직후 호출됩니다.                      </para>
+    /// 이 컴포넌트 클래스의 이름. 
+    /// </summary>
+    /// <returns></returns>
+    const char* name(); 
+
+    /// <summary>
+    /// <para> 이 함수는 componentFactory.AddComponentToObject() 직후 호출됩니다.              </para>
     /// <para> * 엔진 사용을 위한 초기화 이후 바로 호출됩니다.                                  </para>
     /// <para> 에디터 모드, 런타임 모드 상관 없이 게임 오브젝트에 추가하는 즉시 1회 호출됩니다.    </para>
     /// <para> 유니티는 런타임에서 호출 안하는데 일단은 런타임, 에디터 둘다 호출되도록 했습니다.   </para>
@@ -69,6 +76,7 @@ public:
     //get : 이 컴포넌트가 부착된 게임 오브젝트입니다. 컴포넌트는 항상 게임 오브젝트에 부착됩니다.
     PROPERTY(gameObect);
 private:
-    int m_index = -1;
+    std::string m_className;
     GameObject* m_gameObect = nullptr;
+    int m_index = -1;
 };
