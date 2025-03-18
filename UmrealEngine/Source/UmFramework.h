@@ -49,6 +49,9 @@
 
 #include "Engine/WindowAppCore/SimpleWindowClient.h"
 
+#include "Engine/Framework/SceneManager.h"
+#include "Engine/Framework/Scene.h"
+
 // Editor
 #include "Engine/Editor/EditorEnum.h"
 #include "Engine/Editor/EditorManager.h"

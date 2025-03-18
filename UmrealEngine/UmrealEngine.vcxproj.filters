@@ -99,6 +99,12 @@
     <ClInclude Include="Source\Engine\Editor\EditorEnum.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Framework\Scene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Framework\SceneManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -147,6 +153,12 @@
       <Filter>Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Editor\EditorEnum.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Framework\Scene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Framework\SceneManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

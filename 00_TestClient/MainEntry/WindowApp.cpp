@@ -144,10 +144,7 @@ void WindowApp::ModuleUnitialize()
 void WindowApp::ClientUpdate()
 {
     TimeSystem::Engine::TimeSystemUpdate();
-    while (TimeSystem::Engine::TimeSystemFixedUpdate())
-    {
 
-    }
 }
 
 void WindowApp::ClientRender()
