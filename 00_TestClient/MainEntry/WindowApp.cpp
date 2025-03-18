@@ -125,7 +125,7 @@ void WindowApp::ClientRender()
                 if (auto component = wptr.lock())
                 {
                     ImGui::PushID(i);
-                    if(ImGui::CollapsingHeader(component->name()))
+                    if(ImGui::CollapsingHeader(component->class_name()))
                     {
                         component->imgui_draw_reflect_fields();
                         component->Update(); //dll 업데이트 테스트
@@ -152,10 +152,7 @@ void WindowApp::ClientRender()
     }
     ImGui::Begin(u8"프로퍼티 테스트"to_char);
     {
-        GameObject::MyStrusct st = m_testObject->TestStruct;
-        st.x = 10.f;
-        st.y = 15.f;
-        m_testObject->TestStruct = st;
+
     }
     ImGui::End();
 

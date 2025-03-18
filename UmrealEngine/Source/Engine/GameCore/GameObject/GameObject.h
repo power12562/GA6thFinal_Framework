@@ -167,7 +167,21 @@ public:
     template<IS_BASE_COMPONENT_C TComponent>
     inline std::weak_ptr<TComponent> GetComponentAtIndex(size_t index);
 
+    /// <summary>
+    /// <para> TComponent 타입의 컴포넌트를 전부 찾아서 반환합니다. </para>
+    /// <para> 실패시 empty를 반환합니다.                         </para>
+    /// </summary>
+    /// <typeparam name="TComponent"></typeparam>
+    /// <returns>찾은 모든 컴포넌트에 대한 배열</returns>
+    template<IS_BASE_COMPONENT_C TComponent>
+    inline std::vector<std::weak_ptr<TComponent>> GetComponents();
+
+    /// <summary>
+    /// 이 오브젝트에 부착된 컴포넌트 개수를 반환합니다.
+    /// </summary>
+    /// <returns>이 오브젝트에 부착된 컴포넌트 개수.</returns>
     inline size_t GetComponentCount() { return m_components.size(); }
+
 //프로퍼티
 public:
     USING_PROPERTY(GameObject)
@@ -179,7 +193,6 @@ public:
     // 미구현
     // get : 실제 활성화 여부 (부모가 false면 false)
     PROPERTY(activeInHierarchy);
-    //실제 활성화 여부 (부모가 false면 false)
     
     GETTER_ONLY(bool, activeSelf)
     {
@@ -216,36 +229,8 @@ public:
     //  게임 오브젝트의 이름
     PROPERTY(name)
 
-    GETTER(float, testFloat)
-    {
-        return aaaa;
-    }
-    SETTER(float, testFloat)
-    {
-        aaaa = value;
-
-    }
-    PROPERTY(testFloat);
-
-    struct MyStrusct
-    {
-        float x = 3.f;
-        float y = 4.f;
-    };
-    GETTER(MyStrusct, TestStruct)
-    {
-        return myStruct;
-    }
-    SETTER(MyStrusct, TestStruct)
-    {
-        myStruct = value;
-    }
-    PROPERTY(TestStruct);
-
 private:
     std::vector<std::shared_ptr<Component>>  m_components;
-    float aaaa;
-    MyStrusct myStruct;
 
 public:
     //activeInHierarchy와 같음.
@@ -289,7 +274,7 @@ inline std::weak_ptr<TComponent> GameObject::GetComponent()
     {
         if (typeid(TComponent) == typeid(*component))
         {
-            result = component;
+            result = std::static_pointer_cast<TComponent>(component);
             break;
         }
     }
@@ -309,4 +294,18 @@ inline std::weak_ptr<TComponent> GameObject::GetComponentAtIndex(size_t index)
         result = std::dynamic_pointer_cast<TComponent>(m_components[index]);
         return result;
     }
+}
+
+template<IS_BASE_COMPONENT_C TComponent>
+inline std::vector<std::weak_ptr<TComponent>> GameObject::GetComponents()
+{
+    std::vector<std::weak_ptr<TComponent>> result;
+    for (auto& component : m_components)
+    {
+        if (typeid(TComponent) == typeid(*component))
+        {
+            result.emplace_back(std::static_pointer_cast<TComponent>(component));
+        }
+    }
+    return result;
 }

@@ -4,6 +4,7 @@ UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores
 {
     UmrealEngine = std::make_unique<EngineCores>(engineCores);  //코어 동기화
     ImGui::SetCurrentContext(&engineCores.Imguicontext);        //Imguicontext 동기화
+
 }
 
 UMREALSCRIPTS_DECLSPEC void CreateScriptFile(const char* fileName)
@@ -36,6 +37,7 @@ UMREALSCRIPTS_DECLSPEC void CreateScriptFile(const char* fileName)
         std::wofstream wofs(UmrealScriptsHeader, std::ios::app);
         if (wofs.is_open())
         {
+            wofs << L"\n";
             wofs << L"\n" << ScriptsHeaderData;
             wofs << L"\n" << UmrealScriptsHeaderData;
         }

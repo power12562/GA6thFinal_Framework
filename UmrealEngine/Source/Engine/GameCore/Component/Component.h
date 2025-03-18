@@ -5,16 +5,20 @@ class Component
 {
     friend class GameObject;
     friend class ComponentFactory;
+    USING_PROPERTY(Component)
 public:
     Component();
     virtual ~Component();
 
 public:
     /// <summary>
-    /// 이 컴포넌트 클래스의 이름. 
+    /// 이 컴포넌트 클래스 이름. 
     /// </summary>
-    /// <returns></returns>
-    const char* name(); 
+    /// <returns>컴포넌트 클래스 실제 이름</returns>
+    const char* class_name()
+    {
+        return m_className.c_str();;
+    }
 
     /// <summary>
     /// <para> 이 함수는 componentFactory.AddComponentToObject() 직후 호출됩니다.              </para>
@@ -67,7 +71,6 @@ public:
     REFLECT_FIELDS_BASE_END(Component, public)
 
 
-    USING_PROPERTY(Component)
 
     GETTER_ONLY(GameObject&, gameObect)
     {
@@ -78,5 +81,7 @@ public:
 private:
     std::string m_className;
     GameObject* m_gameObect = nullptr;
-    int m_index = -1;
+    int         m_index = -1;
+
+
 };
