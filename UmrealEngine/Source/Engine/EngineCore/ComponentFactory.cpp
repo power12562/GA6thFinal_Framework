@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 
 ComponentFactory ComponentFactory::instance;
-ComponentFactory& componentFactory = ComponentFactory::instance;
+ComponentFactory& componentFactory = ComponentFactory::Engine::GetInstance();
 
 ComponentFactory::ComponentFactory() = default;
 ComponentFactory::~ComponentFactory() = default;
@@ -33,17 +33,17 @@ bool ComponentFactory::InitalizeComponentFactory()
         m_scriptsDll = NULL;
     }
 
-    if (!dllUtility::RunBatchFile(BuildBatchPath))
+    if (!dllUtility::RunBatchFile(Engine::BuildBatchPath))
         return false;
 
-    m_scriptsDll = LoadLibraryW(ScriptsPath);
+    m_scriptsDll = LoadLibraryW(Engine::ScriptsDllPath);
     m_NewScriptsFunctionMap.clear();
     m_NewScriptsKeyVec.clear();
     if (m_scriptsDll != NULL)
     {
         std::vector<std::string> funcList = dllUtility::GetDLLFuntionNameList(m_scriptsDll);
         MakeScriptFunc = (MakeUmScriptsFile)GetProcAddress(m_scriptsDll, funcList[0].c_str());
-        if (funcList[0] != "CreateScriptFile")
+        if (funcList[0] != "CreateUmrealcSriptFile")
         {
             FreeLibrary(m_scriptsDll);
             m_scriptsDll = NULL;

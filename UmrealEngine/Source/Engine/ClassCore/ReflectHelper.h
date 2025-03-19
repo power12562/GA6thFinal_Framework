@@ -174,6 +174,20 @@ namespace ImGui
                             val = input;
                         }
                     }
+                    else if constexpr (std::is_same_v<OriginType, std::wstring>)
+                    {
+                        static std::string input;
+                        input = wstring_to_u8(val);
+                        isEdit = ImGui::InputText(name, &input,
+                            String.flags,
+                            String.callback,
+                            String.user_data);
+
+                        if (isEdit && ImGui::IsItemDeactivatedAfterEdit())
+                        {
+                            val = u8_to_wstring(input);
+                        }
+                    }
                     return isEdit;
                 };
 

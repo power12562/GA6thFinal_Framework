@@ -9,17 +9,24 @@ extern ComponentFactory& componentFactory;
 
 class ComponentFactory
 {
-public:
+private:
     static ComponentFactory instance;
-
-    //dll 경로
+public:
+    //엔진 접근용 네임스페이스
+    struct Engine
+    {
+        //싱글톤 객체 접근용
+        inline static ComponentFactory& GetInstance() { return instance; }
+        //dll 경로
 #ifdef _DEBUG
-    static constexpr const wchar_t* ScriptsPath = L"../UmrealScripts/bin/Debug/UmrealScripts.dll";
-    static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_debug.bat";
+        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Debug\\UmrealScripts.dll";
+        static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_debug.bat";
 #else
-    static constexpr const wchar_t* ScriptsPath = L"../UmrealScripts/bin/Release/UmrealScripts.dll";
-    static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_release.bat";
+        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Release\\UmrealScripts.dll";
+        static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_release.bat";
 #endif
+    };
+
 private:
     ComponentFactory();
     ~ComponentFactory();

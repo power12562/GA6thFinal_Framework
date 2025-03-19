@@ -98,11 +98,19 @@ public:
 //함수는 일단 선언만. 구현은 나중에.
 class SceneManager
 {
-public:
+private:
     //싱글톤용
     static SceneManager instance;
+public:
+    //엔진 접근용 네임스페이스
+    struct Engine
+    {
+        inline static SceneManager& GetInstance() { return SceneManager::instance; }
+    };
+
 private:
     SceneManager() = default;
     ~SceneManager() = default;
 public:
+
 };

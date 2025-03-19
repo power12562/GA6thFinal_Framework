@@ -8,5 +8,6 @@
 #define PCH_H
 
 #include "UmFramework.h"
+#include "../UmrealScripts/UmrealScripts.h"
 
 #endif //PCH_H

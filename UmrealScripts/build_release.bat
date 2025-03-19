@@ -26,6 +26,6 @@ if exist "%FILE_PATH%" (
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
 
 :: 솔루션 파일 열고 빌드
-msbuild "../GA6thFinal_Framework.sln" /p:Configuration=Release /t:Build /p:Platform=x64 /p:BuildProject=UmrealScripts
+msbuild "../GA6thFinal_Framework.sln" /t:UmrealScripts /p:Configuration=Release /p:Platform=x64 
 
 pause
