@@ -128,9 +128,9 @@ void WindowApp::ClientRender()
                     if(ImGui::CollapsingHeader(component->class_name()))
                     {
                         component->imgui_draw_reflect_fields();
-                        component->Update(); //dll 업데이트 테스트
                     }                   
                     ImGui::PopID();
+                    component->Update(); //dll 업데이트 테스트
                 }
             }
 

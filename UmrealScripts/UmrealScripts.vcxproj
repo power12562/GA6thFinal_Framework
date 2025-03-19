@@ -151,11 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Test\TestComponent.h" />
     <ClInclude Include="UmrealScriptCore.h" />
     <ClInclude Include="UmrealScripts.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Scripts\Test\TestComponent.cpp" />
     <ClCompile Include="UmrealScriptCore.cpp" />
     <ClCompile Include="UmrealScripts.cpp" />
   </ItemGroup>

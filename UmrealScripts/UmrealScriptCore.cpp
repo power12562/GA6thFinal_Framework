@@ -76,10 +76,14 @@ UMREALSCRIPTS_DECLSPEC void CreateUmrealcSriptFile(const char* fileName)
         }
         wofs.close();
 
-        auto message = std::format(L"스크립트 파일 생성 완료되었습니다.\n {}", filePath.c_str());
-        MessageBox(NULL, message.c_str(), L"스크립트 파일 생성 완료", NULL);
+        auto message = std::format(L"스크립트 파일 생성 완료되었습니다.\n 솔루션을 실행하겠습니까? \n {}", filePath.c_str());
+        int result = MessageBox(NULL, message.c_str(), L"스크립트 파일 생성 완료", MB_YESNO | MB_ICONINFORMATION);
 
-        HINSTANCE result = ShellExecuteW(NULL, L"open", filePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        if (result == IDYES)
+        {
+            constexpr const wchar_t* ScriptSlnFilePath = L"..\\UmrealScripts.sln";
+            HINSTANCE result = ShellExecuteW(NULL, L"open", ScriptSlnFilePath, NULL, NULL, SW_SHOWNORMAL);
+        }
     }   
 }
 

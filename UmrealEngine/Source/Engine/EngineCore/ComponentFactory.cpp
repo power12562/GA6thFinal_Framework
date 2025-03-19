@@ -100,13 +100,30 @@ bool ComponentFactory::InitalizeComponentFactory()
                     return sptr == nullptr;
                 });
         }
+
+
+        return true;
     }
+    return false;
 }
 
 void ComponentFactory::UninitalizeComponentFactory()
 {
     if (m_scriptsDll != NULL)
     {
+        //모든 컴포넌트 자원 회수
+        for (auto& [key, vec] : m_ComponentInstanceMap)
+        {
+            for (auto& wptr : vec)
+            {
+                if (auto component = wptr.lock())
+                {
+                    int index = component->GetComponentIndex();
+                    component->m_gameObect->m_components[index].reset(); //컴포넌트 파괴
+                }
+            }
+            vec.clear();
+        }
         FreeLibrary(m_scriptsDll);
         m_scriptsDll = NULL;
     }

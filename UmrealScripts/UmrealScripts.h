@@ -22,3 +22,6 @@ UMREALSCRIPT_NEWCOMPONENT(CLASS_NAME)
 
 //이 아래는 컴포넌트 생성 함수들을 추가합니다.
 //CreateScriptFile() 함수에서 직접 수정하기 때문에 주의해야 합니다.
+
+#include "Scripts\Test/TestComponent.h"
+UMREAL_COMPONENT(TestComponent)
