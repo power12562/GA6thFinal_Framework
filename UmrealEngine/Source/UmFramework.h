@@ -1,5 +1,5 @@
 ﻿#pragma once
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS 1
 
 //constexpr
 #ifdef UMREALSCRIPTS_EXPORT
@@ -42,6 +42,8 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 #include <typeinfo>
 #include <ranges>
 #include <concepts>
+#include <queue>
+#include <stack>
 
 //ThirdParty
 #include "Engine/Imgui/imgui.h"

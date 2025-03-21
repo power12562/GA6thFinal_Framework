@@ -111,6 +111,41 @@ public:
         /// 씬 매니저가 관리하는 오브젝트들을 업데이트합니다. 클라이언트에서 매 틱 호출해야합니다.
         /// </summary>
         static void SceneUpdate();
+
+        /// <summary>
+        /// 씬에 게임 오브젝트를 추가합니다.
+        /// </summary>
+        /// <param name="GameObject :">추가할 오브젝트</param>
+        static void AddGameObjectToLifeCycle(std::shared_ptr<GameObject> gameObject);
+
+        /// <summary>
+        /// 컴포넌트를 Awake, Start를 호출하기 위한 대기열에 추가합니다.
+        /// </summary>
+        /// <param name="component"></param>
+        static void AddComponentToLifeCycle(std::shared_ptr<Component> component);
+
+        /// <summary>
+        /// <para> 게임 오브젝트의 라이프 사이클 활성화 여부를 변경합니다. </para>
+        /// <para> false로 설정시 라이프 사이클 함수를 수행하지 않습니다. </para>
+        /// <param name="instanceID :">적용 대상의 instanceID</param>
+        /// <param name="value :">적용 값</param>
+        /// </summary>
+        static void SetGameObjectActive(int instanceID, bool value);
+
+        /// <summary>
+        /// <para> 컴포넌트의 라이프 사이클 활성화 여부를 변경합니다.     </para>
+        /// <para> false로 설정시 라이프 사이클 함수를 수행하지 않습니다. </para>
+        /// </summary>
+        /// <param name="component :">적용 대상</param>
+        /// <param name="value :">적용 값</param>
+        static void SetComponentEnable(Component* component, bool value);
+
+        /// <summary>
+        /// 게임 오브젝트의 이름으로 오브젝트를 탐색합니다.
+        /// </summary>
+        /// <param name="name :">찾을 오브젝트의 이름</param>
+        /// <returns>성공시 weak_ptr에 담아줍니다.</returns>
+        static std::weak_ptr<GameObject> FindGameObjectWithName(std::wstring_view name);
     };
 
 private:
@@ -123,10 +158,14 @@ private:
     void SceneUpdate();
 
 private:
-    void ObjectsFixedUpdate();
-    void ObjectsUpdate();
-    void ObjectsLateUpdate();
-
+    void ObjectsAwake();            //Awake 예정인 컴포넌트들의 Awake 함수를 호출합니다.
+    void ObjectsOnEnable();         //OnEnable 예정인 컴포넌트들의 Start 함수를 호출합니다.
+    void ObjectsStart();            //Start 예정인 컴포넌트들의 Start 함수를 호출합니다.
+    void ObjectsFixedUpdate();      //FixedUpdate를 호출합니다.
+    void ObjectsUpdate();           //Update를 호출합니다.
+    void ObjectsLateUpdate();       //LateUpdate를 호출합니다.
+    void ObjectsOnDisable();        //OnDisable 예정인 컴포넌트들의 함수들을 호출해줍니다.
+    void ObjectsAddToLifeCycle();   //추가 대기중인 오브젝트를 라이프 사이클에 포함시킵니다.
 private:
     /*게임오브젝트의 Life cycle 수행 여부를 확인하는 함수*/
     bool IsRuntimeActive(std::shared_ptr<GameObject>& obj);
@@ -134,4 +173,21 @@ private:
 private:
     //Life cycle에 포함되는 실제 오브젝트들 항목
     std::vector<std::shared_ptr<GameObject>> m_runtimeObjects;
+
+    //오브젝트 이름과 포인터로 관리하는 map
+    std::unordered_map<std::wstring, std::unordered_set<std::shared_ptr<GameObject>>> m_runtimeObjectsUnorderedMap;
+
+    //추가 대기열
+    std::vector<std::shared_ptr<GameObject>> m_AddGameObjectsQueue;
+    std::vector<std::shared_ptr<Component>> m_AddComponentsQueue;
+
+    //함수 호출 대기열
+    std::vector<std::shared_ptr<Component>> m_WaitAwakeVec;
+    std::vector<std::shared_ptr<Component>> m_WaitStartVec;
+
+    std::unordered_set<Component*> m_WaitOnEnableSet;
+    std::vector<Component*> m_WaitOnEnableVec;
+    std::unordered_set<Component*> m_WaitOnDisableSet;
+    std::vector<Component*> m_WaitOnDisableVec;
+
 };

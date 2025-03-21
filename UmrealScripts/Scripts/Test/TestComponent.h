@@ -13,11 +13,12 @@ public:
     std::string testString = "asdas";
     std::wstring testWstring = L"";
     std::array<int, 10> doubleArray{1,2,3,4,5,6,7,8,9, 10};
-    //std::vector<float> floatVector{};
+    std::vector<std::string> log{};
     REFLECT_FIELDS_END(TestComponent, public)
 
 private:
     float aa = 1.5;
+    bool scrollToBottom = false;
 public:
     GETTER(float, Out)
     {
@@ -30,6 +31,10 @@ public:
     PROPERTY(Out);
 
 public:
-    void Test();
-    virtual void Update();
+    void Test(std::string_view str);
+    virtual void Awake(); 
+    virtual void Start();
+    virtual void OnEnable();
+    virtual void Update() override;
+
 };

@@ -77,7 +77,7 @@ private:
     using MakeUmScriptsFile = void(*)(const char* fileName);
     using NewScripts = Component*(*)();
 
-    std::unordered_map<std::string, std::vector<std::weak_ptr<Component>>> m_ComponentInstanceMap;
+   std::vector<std::pair<std::string, std::weak_ptr<Component>>> m_ComponentInstanceVec;
 
     HMODULE m_scriptsDll{};
     std::map<std::string, NewScripts> m_NewScriptsFunctionMap{};

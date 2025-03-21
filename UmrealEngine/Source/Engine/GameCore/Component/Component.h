@@ -5,6 +5,7 @@ class Component
 {
     friend class GameObject;
     friend class ComponentFactory;
+    friend class SceneManager;
     USING_PROPERTY(Component)
 public:
     Component();
@@ -41,12 +42,18 @@ public:
     virtual void OnEnable() {};
 
     /// <summary>
+    /// <para>  오브젝트가 활성화된 경우에만 호출됩니다.                                                              </para>    
+    /// <para>  컴포넌트의 Disable 활성화 이후 이 함수를 호출합니다 true 상태인 경우 false가 될때까지 호출되지 않습니다.  </para>
+    /// </summary>
+    virtual void OnDisable() {};
+
+    /// <summary>
     /// <para>  컴포넌트의 첫번째 Update 전에 한번 호출됩니다.   </para>
     /// </summary>
     virtual void Start() {};
 
     /// <summary>
-    /// <para> FixedUpdate 는 종종 Update 보다 더 자주 호출됩니다.                                                                   </para>
+    /// <para> FixedUpdate 는 종종 Update 보다 더 자주 호출됩니다.                                                                  </para>
     /// <para> 프레임 속도가 낮은 경우 프레임당 여러 번 호출될 수 있으며 프레임 속도가 높은 경우 프레임 사이에 호출되지 않을 수 있습니다.  </para> 
     /// </summary>
     virtual void FixedUpdate() {};
@@ -70,18 +77,28 @@ public:
     REFLECT_FIELDS_BASE_BEGIN()
     REFLECT_FIELDS_BASE_END(Component, public)
 
-
-
     GETTER_ONLY(GameObject&, gameObect)
     {
         return *m_gameObect;
     }
     //get : 이 컴포넌트가 부착된 게임 오브젝트입니다. 컴포넌트는 항상 게임 오브젝트에 부착됩니다.
     PROPERTY(gameObect);
+
+    GETTER(bool, Enable)
+    {
+        return m_enable;
+    }
+    SETTER(bool, Enable)
+    {
+        SceneManager::Engine::SetComponentEnable(this, m_enable);
+    }
+    // get, set :
+    //  컴포넌트의 활성화 여부입니다.
+    PROPERTY(Enable);
 private:
     std::string m_className;
     GameObject* m_gameObect = nullptr;
     int         m_index = -1;
-
+    bool        m_enable = true;
 
 };

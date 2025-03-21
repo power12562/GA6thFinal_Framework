@@ -39,8 +39,6 @@ private:
 	ComPtr<IDXGIFactory4>   m_DXGIFactory4;
 	ComPtr<IDXGISwapChain1> m_SwapChain1;
 	ComPtr<ID3D11RenderTargetView> m_backBufferRTV;
-
-    std::unique_ptr<GameObject> m_testObject;
 };
 
     

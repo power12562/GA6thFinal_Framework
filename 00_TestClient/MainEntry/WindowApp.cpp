@@ -49,7 +49,7 @@ WindowApp::~WindowApp() = default;
 
 void WindowApp::PreInitialize()
 {
-    m_testObject = std::make_unique<GameObject>();
+   
 }
 
 void WindowApp::ModuleInitialize()
@@ -58,6 +58,9 @@ void WindowApp::ModuleInitialize()
     InitImgui();
     InitDXGI();
     componentFactory.InitalizeComponentFactory();
+
+    //오브젝트 생성 테스트
+    gameObjectFactory.NewGameObject(typeid(GameObject).name(), L"TestObject");
 }
 
 
@@ -77,6 +80,10 @@ void WindowApp::ModuleUnitialize()
 
 void WindowApp::ClientUpdate()
 {
+    constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
+    m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
+    ImguiBeginDraw();
+
     SceneManager::Engine::SceneUpdate();
 }
 
@@ -84,34 +91,32 @@ void WindowApp::ClientRender()
 {
     using namespace u8_literals;
 
-    constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
-    m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
-
-    ImguiBeginDraw();
+    ImGui::Begin(u8"타임 클래스 확인용"c_str);
     {
-        ImGui::Begin(u8"타임 클래스 확인용"c_str);
-        {
-            ImGui::InputDouble("time scale", &Time.timeScale);
+        ImGui::InputDouble("time scale", &Time.timeScale);
 
-            ImGui::Text("time : %f", Time.time());
-            ImGui::Text("realtimeSinceStartup : %f", Time.realtimeSinceStartup());
+        ImGui::Text("time : %f", Time.time());
+        ImGui::Text("realtimeSinceStartup : %f", Time.realtimeSinceStartup());
 
-            ImGui::Text("frameCount : %llu", Time.frameCount());
+        ImGui::Text("frameCount : %llu", Time.frameCount());
 
-            ImGui::Text("FPS : %d", Time.frameRate());
-            ImGui::Text("DeltaTime : %f", Time.deltaTime());
+        ImGui::Text("FPS : %d", Time.frameRate());
+        ImGui::Text("DeltaTime : %f", Time.deltaTime());
 
-            ImGui::Text("unscaledDeltaTime : %f", Time.unscaledDeltaTime());
+        ImGui::Text("unscaledDeltaTime : %f", Time.unscaledDeltaTime());
 
-            ImGui::InputDouble("Fixed Time Step", &Time.fixedTimeStep);
-            ImGui::Text("fixedDeltaTime %f", Time.fixedDeltaTime());
-            ImGui::Text("fixedUnscaledDeltaTime %f", Time.fixedUnscaledDeltaTime());
+        ImGui::InputDouble("Fixed Time Step", &Time.fixedTimeStep);
+        ImGui::Text("fixedDeltaTime %f", Time.fixedDeltaTime());
+        ImGui::Text("fixedUnscaledDeltaTime %f", Time.fixedUnscaledDeltaTime());
 
-            ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
-        }
-        ImGui::End();
-        
-        ImGui::Begin(u8"컴포넌트 추가 테스트"c_str);
+        ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
+    }
+    ImGui::End();
+
+    ImGui::Begin(u8"컴포넌트 추가 테스트"c_str);
+    {
+        std::shared_ptr<GameObject> m_testObject = GameObject::Find(L"TestObject").lock();
+        if (m_testObject)
         {
             for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
             {
@@ -119,12 +124,11 @@ void WindowApp::ClientRender()
                 if (auto component = wptr.lock())
                 {
                     ImGui::PushID(i);
-                    if(ImGui::CollapsingHeader(component->class_name()))
+                    if (ImGui::CollapsingHeader(component->class_name()))
                     {
                         component->imgui_draw_reflect_fields();
-                    }                   
+                    }
                     ImGui::PopID();
-                    component->Update(); //dll 업데이트 테스트
                     std::string json = component->serialized_reflect_fields();
                 }
             }
@@ -143,8 +147,9 @@ void WindowApp::ClientRender()
                 }
             }
         }
-        ImGui::End();
     }
+    ImGui::End();
+    
     ImGui::Begin(u8"프로퍼티 테스트"c_str);
     {
 

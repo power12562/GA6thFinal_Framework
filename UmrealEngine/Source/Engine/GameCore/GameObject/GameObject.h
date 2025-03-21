@@ -23,7 +23,10 @@ public:
     /// </summary>
     /// <param name="name :">검색할 오브젝트의 이름</param>
     /// <returns>찾은 오브젝트를 weak_ptr에 담아준다.</returns>
-    static std::weak_ptr<GameObject> Find(std::wstring_view name) { return std::weak_ptr<GameObject>(); }
+    static std::weak_ptr<GameObject> Find(std::wstring_view name) 
+    {  
+        return SceneManager::Engine::FindGameObjectWithName(name);
+    }
 
     /// <summary>
     /// <para> 구현 X                                                      </para>
@@ -128,12 +131,19 @@ public:
 
 public:
     /// <summary>
-    /// <para>구현 X                                                                  </para>
     /// <para>이 GameObject의 InstanceID를 반환합니다.                                 </para>
     /// <para>참고 : InstanceID는 매 런타임마다 달라집니다. 즉 UUID로 사용할 수 없습니다. </para>
     /// </summary>
     /// <returns>int InstanceID</returns>
-    int GetInstanceID() { return -1; }
+    int GetInstanceID() const { return m_instanceID; }
+
+    /// <summary>
+    /// 이 GameObject의 activeSelf 여부를 변경합니다.
+    /// </summary>
+    void SetActive(bool value)
+    {
+        SceneManager::Engine::SetGameObjectActive(m_instanceID, value);
+    }
 
     /// <summary>
     /// <para> 이 GameObject의 이름을 반환합니다. </para>
@@ -196,13 +206,12 @@ public:
    
     GETTER(bool, isStatic)
     {
-        return false;
+        return m_isStatic;
     }
     SETTER(bool, isStatic)
     {
-        return;
+        m_isStatic = value;
     }
-    //미구현
     // get, set :
     //  게임 오브젝트에 대해 isStatic 플래그가 설정되어 있는지 여부.
     PROPERTY(isStatic);
@@ -222,9 +231,11 @@ public:
     PROPERTY(name)
 
 private:
-    std::wstring                             m_name;
-    bool                                     m_activeSelf;
+    std::wstring                             m_name = L"null";
+    bool                                     m_activeSelf = true;
     std::vector<std::shared_ptr<Component>>  m_components;
+    int                                      m_instanceID = -1;
+    bool                                     m_isStatic = false;
 
 public:
     //activeInHierarchy와 같음.

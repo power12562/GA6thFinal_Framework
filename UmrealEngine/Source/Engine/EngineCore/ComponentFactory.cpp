@@ -18,19 +18,16 @@ bool ComponentFactory::InitalizeComponentFactory()
     if (m_scriptsDll != NULL)
     {
         //모든 컴포넌트 자원 회수
-        for (auto& [key, vec] : m_ComponentInstanceMap)
+        for (auto& [key, wptr] : m_ComponentInstanceVec)
         {
-            for (auto& wptr : vec)
+            if (auto component = wptr.lock())
             {
-                if (auto component = wptr.lock())
-                {
-                    int index = component->GetComponentIndex();
-                    addList.emplace_back(component->m_gameObect, key, index);
-                    component->m_gameObect->m_components[index].reset(); //컴포넌트 파괴
-                }
+                int index = component->GetComponentIndex();
+                addList.emplace_back(component->m_gameObect, key, index);
+                component->m_gameObect->m_components[index].reset(); //컴포넌트 파괴
             }
-            vec.clear();
         }
+        m_ComponentInstanceVec.clear();
 
         FreeLibrary(m_scriptsDll);
         m_scriptsDll = NULL;
@@ -120,18 +117,15 @@ void ComponentFactory::UninitalizeComponentFactory()
     if (m_scriptsDll != NULL)
     {
         //모든 컴포넌트 자원 회수
-        for (auto& [key, vec] : m_ComponentInstanceMap)
+        for (auto& [key, wptr] : m_ComponentInstanceVec)
         {
-            for (auto& wptr : vec)
+            if (auto component = wptr.lock())
             {
-                if (auto component = wptr.lock())
-                {
-                    int index = component->GetComponentIndex();
-                    component->m_gameObect->m_components[index].reset(); //컴포넌트 파괴
-                }
+                int index = component->GetComponentIndex();
+                component->m_gameObect->m_components[index].reset(); //컴포넌트 파괴
             }
-            vec.clear();
         }
+        m_ComponentInstanceVec.clear();
         FreeLibrary(m_scriptsDll);
         m_scriptsDll = NULL;
     }
@@ -144,6 +138,7 @@ bool ComponentFactory::AddComponentToObject(GameObject* ownerObject, std::string
         const char* name = typeid_name.data();
         ResetComponent(ownerObject, sptr_component.get());
         ownerObject->m_components.emplace_back(sptr_component);  //오브젝트에 추가
+        SceneManager::Engine::AddComponentToLifeCycle(sptr_component); //씬에 등록
         return true;
     }
     return false;
@@ -162,7 +157,7 @@ std::shared_ptr<Component> ComponentFactory::NewComponent(std::string_view typei
     {
         auto& [name, func] = *findIter;
         newComponent.reset(func());                                //컴포넌트 생성
-        m_ComponentInstanceMap[name].emplace_back(newComponent);   //추적용 weak_ptr 생성 
+        m_ComponentInstanceVec.emplace_back(name, newComponent);   //추적용 weak_ptr 생성 
     }
     return newComponent;
 }
