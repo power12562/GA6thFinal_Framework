@@ -1,9 +1,6 @@
 ﻿#pragma once
 class Component;
 
-template<typename T>
-concept IS_BASE_COMPONENT_C = std::is_base_of_v<Component, T>;
-
 //참고
 //Unity GameObject https://docs.unity3d.com/kr/2021.1/Manual/class-GameObject.html
 //Unity GameObject Script https://docs.unity3d.com/6000.0/Documentation/ScriptReference/GameObject.html
@@ -11,7 +8,10 @@ concept IS_BASE_COMPONENT_C = std::is_base_of_v<Component, T>;
 //함수는 일단 선언만. 구현은 나중에. 
 class GameObject 
 {
+    friend class GameObjectFactory;
     friend class ComponentFactory;
+    friend class SceneManager;
+    USING_PROPERTY(GameObject)
 
     //public static 함수
 public:
@@ -136,11 +136,10 @@ public:
     int GetInstanceID() { return -1; }
 
     /// <summary>
-    /// <para> 구현 X                            </para>
     /// <para> 이 GameObject의 이름을 반환합니다. </para>
     /// </summary>
     /// <returns>std::wstring_view 오브젝트의 이름</returns>
-    std::wstring_view ToWString() { return L""; }
+    std::wstring_view ToWString() { return m_name; }
 
     /// <summary>
     /// 컴포넌트를 추가합니다.
@@ -184,21 +183,14 @@ public:
 
 //프로퍼티
 public:
-    USING_PROPERTY(GameObject)
-
-    GETTER_ONLY(bool, activeInHierarchy)
-    {
-        return false;
-    }
-    // 미구현
-    // get : 실제 활성화 여부 (부모가 false면 false)
+    GETTER_ONLY(bool, activeInHierarchy);
+    // get : 실제 활성화 여부 (부모가 false면 false) 구현 x
     PROPERTY(activeInHierarchy);
     
     GETTER_ONLY(bool, activeSelf)
     {
-        return false;
+        return m_activeSelf;
     }
-    //미구현
     // get : 자신의 local active 여부 (실제 활성화 여부)
     PROPERTY(activeSelf);
    
@@ -218,7 +210,7 @@ public:
 
     GETTER(std::wstring_view, name)
     {
-        return this->ToWString();
+        return m_name;
     }
     SETTER(std::wstring_view, name)
     {
@@ -230,6 +222,8 @@ public:
     PROPERTY(name)
 
 private:
+    std::wstring                             m_name;
+    bool                                     m_activeSelf;
     std::vector<std::shared_ptr<Component>>  m_components;
 
 public:

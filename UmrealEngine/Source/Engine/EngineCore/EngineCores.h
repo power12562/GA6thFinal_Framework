@@ -6,13 +6,15 @@ public:
     EngineCores(
         TimeSystem& _Time,
         SceneManager& _sceneManager,
-        ComponentFactory& _componentFactory
+        ComponentFactory& _componentFactory,
+        GameObjectFactory& _gameObjectFactory
     )
         :
         Imguicontext(*ImGui::GetCurrentContext()),
         Time(_Time),
         sceneManager(_sceneManager),
-        componentFactory(_componentFactory)
+        componentFactory(_componentFactory),
+        gameObjectFactory(_gameObjectFactory)
     {
 
     }
@@ -21,6 +23,7 @@ public:
     ImGuiContext& Imguicontext;
     TimeSystem& Time;
     SceneManager& sceneManager;
+    GameObjectFactory& gameObjectFactory;
     ComponentFactory& componentFactory;
 };
 

@@ -106,6 +106,11 @@ public:
     struct Engine
     {
         inline static SceneManager& GetInstance() { return SceneManager::instance; }
+
+        /// <summary>
+        /// 씬 매니저가 관리하는 오브젝트들을 업데이트합니다. 클라이언트에서 매 틱 호출해야합니다.
+        /// </summary>
+        static void SceneUpdate();
     };
 
 private:
@@ -113,4 +118,20 @@ private:
     ~SceneManager() = default;
 public:
 
+private:
+    //Life cycle을 수행. 클라에서 매틱 호출해야함.
+    void SceneUpdate();
+
+private:
+    void ObjectsFixedUpdate();
+    void ObjectsUpdate();
+    void ObjectsLateUpdate();
+
+private:
+    /*게임오브젝트의 Life cycle 수행 여부를 확인하는 함수*/
+    bool IsRuntimeActive(std::shared_ptr<GameObject>& obj);
+
+private:
+    //Life cycle에 포함되는 실제 오브젝트들 항목
+    std::vector<std::shared_ptr<GameObject>> m_runtimeObjects;
 };

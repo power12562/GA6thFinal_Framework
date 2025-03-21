@@ -2,9 +2,19 @@
 
 namespace u8_literals
 {
-    const char* operator"" to_char(const char8_t* str, std::size_t len) 
+    const char* operator"" c_str(const char8_t* str, std::size_t len)
     {
         return reinterpret_cast<const char*>(str);
+    }
+
+    std::string operator"" to_string(const wchar_t* str, std::size_t len)
+    {
+        return wstring_to_u8(str);
+    }
+
+    std::wstring operator"" to_wstring(const char* str, std::size_t len)
+    {
+        return u8_to_wstring(str);
     }
 }
 

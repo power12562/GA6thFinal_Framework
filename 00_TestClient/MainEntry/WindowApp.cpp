@@ -77,12 +77,7 @@ void WindowApp::ModuleUnitialize()
 
 void WindowApp::ClientUpdate()
 {
-    TimeSystem::Engine::TimeSystemUpdate();
-    while (TimeSystem::Engine::TimeSystemFixedUpdate())
-    {
-       
-          
-    }
+    SceneManager::Engine::SceneUpdate();
 }
 
 void WindowApp::ClientRender()
@@ -94,7 +89,7 @@ void WindowApp::ClientRender()
 
     ImguiBeginDraw();
     {
-        ImGui::Begin(u8"타임 클래스 확인용"to_char);
+        ImGui::Begin(u8"타임 클래스 확인용"c_str);
         {
             ImGui::InputDouble("time scale", &Time.timeScale);
 
@@ -113,11 +108,10 @@ void WindowApp::ClientRender()
             ImGui::Text("fixedUnscaledDeltaTime %f", Time.fixedUnscaledDeltaTime());
 
             ImGui::InputDouble("maximumDeltaTime", &Time.maximumDeltaTime);
-
         }
         ImGui::End();
         
-        ImGui::Begin(u8"컴포넌트 추가 테스트"to_char);
+        ImGui::Begin(u8"컴포넌트 추가 테스트"c_str);
         {
             for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
             {
@@ -131,10 +125,11 @@ void WindowApp::ClientRender()
                     }                   
                     ImGui::PopID();
                     component->Update(); //dll 업데이트 테스트
+                    std::string json = component->serialized_reflect_fields();
                 }
             }
 
-            if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"to_char))
+            if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"c_str))
             {
                 for (auto& key : componentFactory.GetNewComponentFuncList())
                 {
@@ -150,15 +145,15 @@ void WindowApp::ClientRender()
         }
         ImGui::End();
     }
-    ImGui::Begin(u8"프로퍼티 테스트"to_char);
+    ImGui::Begin(u8"프로퍼티 테스트"c_str);
     {
 
     }
     ImGui::End();
 
-    ImGui::Begin(u8"컴포넌트 팩토리 테스트"to_char);
+    ImGui::Begin(u8"컴포넌트 팩토리 테스트"c_str);
     {
-        if (ImGui::Button(u8"스크립트 재 빌드"to_char))
+        if (ImGui::Button(u8"스크립트 재 빌드"c_str))
         {
             componentFactory.InitalizeComponentFactory();
         }
@@ -167,14 +162,14 @@ void WindowApp::ClientRender()
         {
             static ImVec2 popupPos{};
             static std::string inputBuffer{};
-            if (ImGui::Button(u8"테스트 스크립트 파일 만들기"to_char))
+            if (ImGui::Button(u8"테스트 스크립트 파일 만들기"c_str))
             {
                 popupPos = ImGui::GetMousePos();
                 inputBuffer.clear();
-                ImGui::OpenPopup(u8"파일 이름을 입력하세요."to_char);
+                ImGui::OpenPopup(u8"파일 이름을 입력하세요."c_str);
             }
             
-            if (ImGui::BeginPopup(u8"파일 이름을 입력하세요."to_char))
+            if (ImGui::BeginPopup(u8"파일 이름을 입력하세요."c_str))
             {
                 ImGui::SetNextWindowPos(popupPos, ImGuiCond_Appearing);
                 ImGui::InputText("##new_script_file_name", &inputBuffer);

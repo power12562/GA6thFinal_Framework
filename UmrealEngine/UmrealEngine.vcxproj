@@ -155,6 +155,7 @@
     <ClInclude Include="Source\Engine\ClassCore\ReflectHelper.h" />
     <ClInclude Include="Source\Engine\EngineCore\ComponentFactory.h" />
     <ClInclude Include="Source\Engine\EngineCore\EngineCores.h" />
+    <ClInclude Include="Source\Engine\EngineCore\GameObjectFactory.h" />
     <ClInclude Include="Source\Engine\EngineCore\SceneManager.h" />
     <ClInclude Include="Source\Engine\EngineCore\TimeSystem.h" />
     <ClInclude Include="Source\Engine\GameCore\Component\Component.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Source\Engine\ClassCore\ReflectHelper.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\ComponentFactory.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\EngineCores.cpp" />
+    <ClCompile Include="Source\Engine\EngineCore\GameObjectFactory.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\TimeSystem.cpp" />
     <ClCompile Include="Source\Engine\GameCore\Component\Component.cpp" />

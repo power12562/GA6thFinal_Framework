@@ -7,6 +7,9 @@ class ComponentFactory;
 extern ComponentFactory& componentFactory;
 #endif
 
+template<typename T>
+concept IS_BASE_COMPONENT_C = std::is_base_of_v<Component, T>;
+
 class ComponentFactory
 {
 private:
@@ -19,10 +22,10 @@ public:
         inline static ComponentFactory& GetInstance() { return instance; }
         //dll 경로
 #ifdef _DEBUG
-        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Debug\\UmrealScripts.dll";
+        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Debug";
         static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_debug.bat";
 #else
-        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Release\\UmrealScripts.dll";
+        static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Release";
         static constexpr const wchar_t* BuildBatchPath = L"..\\UmrealScripts\\build_release.bat";
 #endif
     };

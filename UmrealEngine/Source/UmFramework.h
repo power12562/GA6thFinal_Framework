@@ -1,4 +1,6 @@
 ﻿#pragma once
+#define _CRT_SECURE_NO_WARNINGS
+
 //constexpr
 #ifdef UMREALSCRIPTS_EXPORT
 #define SCRIPTS_PROJECT true;
@@ -60,6 +62,7 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 
 //Engine Core
 #include "Engine/EngineCore/TimeSystem.h"
+#include "Engine/EngineCore/GameObjectFactory.h"
 #include "Engine/EngineCore/ComponentFactory.h"
 #include "Engine/EngineCore/SceneManager.h"
 #include "Engine/WindowAppCore/SimpleWindowClient.h"

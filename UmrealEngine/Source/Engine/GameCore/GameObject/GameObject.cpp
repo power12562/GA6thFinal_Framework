@@ -30,4 +30,8 @@ GameObject::~GameObject()
     m_components.clear();
 }
 
+bool GameObject::activeInHierarchy_property_getter()
+{
+    return true;
+}
 

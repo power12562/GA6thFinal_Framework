@@ -7,7 +7,7 @@ struct property_name##_property_getter_struct                                   
 {                                                                                              \
     using Type = type;                                                                         \
     static constexpr const char* name = #property_name;                                        \
-    type operator()(property_class_type* _this) const                                         \
+    inline type operator()(property_class_type* _this) const                                   \
     {                                                                                          \
         return _this->property_name##_property_getter();                                       \
     }                                                                                          \
@@ -19,7 +19,7 @@ struct property_name##_property_setter_struct                                   
 {                                                                                              \
     using Type = type;                                                                         \
     static constexpr const char* name = #property_name;                                        \
-    void operator()(property_class_type* _this, const type& value)                             \
+    inline void operator()(property_class_type* _this, const type& value)                      \
     {                                                                                          \
         _this->property_name##_property_setter(value);                                         \
     }                                                                                          \

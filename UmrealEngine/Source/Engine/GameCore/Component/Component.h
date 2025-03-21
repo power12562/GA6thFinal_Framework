@@ -17,7 +17,7 @@ public:
     /// <returns>컴포넌트 클래스 실제 이름</returns>
     const char* class_name()
     {
-        return m_className.c_str();;
+        return m_className.c_str();
     }
 
     /// <summary>

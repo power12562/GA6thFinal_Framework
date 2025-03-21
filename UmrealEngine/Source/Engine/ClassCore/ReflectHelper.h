@@ -27,6 +27,10 @@ virtual void imgui_draw_reflect_fields()                            \
     ImGui::PushID(typeid(*this).hash_code());                       \
     ImGui::InputReflectFields(this);                                \
     ImGui::PopID();                                                 \
+}                                                                   \
+virtual std::string serialized_reflect_fields()                     \
+{                                                                   \
+    return json::SerializedObjet(this);                             \
 }
 
 #define  REFLECT_FIELDS_BEGIN(BASE)							        \
@@ -37,6 +41,15 @@ struct reflect_struct									            \
 
 #define REFLECT_FIELDS_END(CLASS, fields_access_modifier)	        \
 REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier)
+
+template <typename, typename = std::void_t<>>
+struct has_reflection : std::false_type {};
+
+template <typename T>
+struct has_reflection<T, std::void_t<decltype(std::declval<T>().reflection())>> : std::true_type {};
+
+template <typename T>
+constexpr bool has_reflection_v = has_reflection<T>::value;
 
 //ImGui Inspector helper
 namespace ImGui
@@ -84,6 +97,24 @@ namespace ImGui
     template<class T>
     void InputReflectFields(T* obj);
 }
+
+
+//serialized helper
+namespace json
+{
+    template<typename Type>
+    std::string SerializedObjet(Type& obj);
+
+    template<typename Type>
+    std::string SerializedObjet(Type* obj);
+}
+
+
+
+
+
+
+
 
 
 
@@ -278,3 +309,21 @@ namespace ImGui
     }
 }
 
+
+namespace json
+{
+    template<typename Type>
+    inline std::string SerializedObjet(Type& obj)
+    {
+        static_assert(has_reflection_v<Type>, "Type cannot be used for reflection.");
+
+
+        return rfl::json::write(obj);
+    }
+
+    template<typename Type>
+    inline std::string SerializedObjet(Type* obj)
+    {
+        return SerializedObjet(*obj);
+    }
+}
