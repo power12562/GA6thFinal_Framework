@@ -1,87 +1,92 @@
 ﻿#include "pch.h"
 
-SceneManager SceneManager::instance;
-SceneManager& sceneManager = SceneManager::Engine::GetInstance();
+ESceneManager& SceneManager = ESceneManager::Engine::GetInstance();
 
-void SceneManager::Engine::SceneUpdate()
+void ESceneManager::Engine::SceneUpdate()
 {
-    sceneManager.SceneUpdate();
+    SceneManager.SceneUpdate();
 }
 
-void SceneManager::Engine::AddGameObjectToLifeCycle(std::shared_ptr<GameObject> gameObject)
+void ESceneManager::Engine::AddGameObjectToLifeCycle(std::shared_ptr<GameObject> gameObject)
 {
-    auto [iter, result] = sceneManager.m_runtimeObjectsUnorderedMap[gameObject->m_name].insert(gameObject);
+    auto [iter, result] = SceneManager.m_runtimeObjectsUnorderedMap[gameObject->m_name].insert(gameObject);
     if (result == false)
     {
         assert(!"이미 추가한 게임 오브젝트 입니다.");
     }
     else
     {
-        sceneManager.m_AddGameObjectsQueue.push_back(gameObject);
+        SceneManager.m_AddGameObjectsQueue.push_back(gameObject);
     }
 }
 
-void SceneManager::Engine::AddComponentToLifeCycle(std::shared_ptr<Component> component)
+void ESceneManager::Engine::AddComponentToLifeCycle(std::shared_ptr<Component> component)
 {
-    sceneManager.m_AddComponentsQueue.push_back(component);
+    SceneManager.m_AddComponentsQueue.push_back(component);
 }
 
-void SceneManager::Engine::SetGameObjectActive(int instanceID, bool value)
+void ESceneManager::Engine::SetGameObjectActive(int instanceID, bool value)
 {
-    if (auto& gameObject = sceneManager.m_runtimeObjects[instanceID])
+    if (auto& gameObject = SceneManager.m_runtimeObjects[instanceID])
     {
         if (gameObject->m_activeSelf != value)
         {
             gameObject->m_activeSelf = value;
+
             //컴포넌트들의 On__able 함수를 호출하도록 합니다.
+            auto& [WaitSet, WaitVec] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
             for (auto& component : gameObject->m_components)
             {
-                std::unordered_set<Component*>& WaitSet = value ? sceneManager.m_WaitOnEnableSet : sceneManager.m_WaitOnDisableSet;
-                std::vector<Component*>& WaitVec = value ? sceneManager.m_WaitOnEnableVec : sceneManager.m_WaitOnDisableVec;
-                auto [iter, result] = WaitSet.insert(component.get());
-                if (result)
+                if (component->Enable)
                 {
-                    WaitVec.push_back(component.get()); 
+                    auto [iter, result] = WaitSet.insert(component.get());
+                    if (result)
+                    {
+                        WaitVec.push_back(component.get());
+                    }
                 }
             }
         }
     }
 }
 
-void SceneManager::Engine::SetComponentEnable(Component* component, bool value)
+void ESceneManager::Engine::SetComponentEnable(Component* component, bool value)
 {
     if (component && component->m_enable != value)
     {
         component->m_enable = value;
+
         //컴포넌트의 On__able 함수를 호출하도록 합니다.
-        std::unordered_set<Component*>& WaitSet = value ? sceneManager.m_WaitOnEnableSet : sceneManager.m_WaitOnDisableSet;
-        std::vector<Component*>& WaitVec = value ? sceneManager.m_WaitOnEnableVec : sceneManager.m_WaitOnDisableVec;
-        auto [iter, result] = WaitSet.insert(component);
-        if (result)
+        auto& [WaitSet, WaitVec] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+        if (component->gameObect->activeSelf)
         {
-            WaitVec.push_back(component);
+            auto [iter, result] = WaitSet.insert(component);
+            if (result)
+            {
+                WaitVec.push_back(component);
+            }
         }
     }
 }
 
-std::weak_ptr<GameObject> SceneManager::Engine::FindGameObjectWithName(std::wstring_view name)
+std::weak_ptr<GameObject> ESceneManager::Engine::FindGameObjectWithName(std::wstring_view name)
 {
     std::weak_ptr<GameObject> findObject;
-    auto findIter = sceneManager.m_runtimeObjectsUnorderedMap.find(name.data());
-    if (findIter != sceneManager.m_runtimeObjectsUnorderedMap.end() && !findIter->second.empty())
+    auto findIter = SceneManager.m_runtimeObjectsUnorderedMap.find(name.data());
+    if (findIter != SceneManager.m_runtimeObjectsUnorderedMap.end() && !findIter->second.empty())
     {
         findObject = *findIter->second.begin();
     }
     return findObject;
 }
 
-void SceneManager::SceneUpdate()
+void ESceneManager::SceneUpdate()
 {
-    TimeSystem::Engine::TimeSystemUpdate();
+    ETimeSystem::Engine::TimeSystemUpdate();
     ObjectsAwake();
     ObjectsOnEnable();
     ObjectsStart();
-    while (TimeSystem::Engine::TimeSystemFixedUpdate())
+    while (ETimeSystem::Engine::TimeSystemFixedUpdate())
     {
         ObjectsFixedUpdate();
     }
@@ -91,7 +96,7 @@ void SceneManager::SceneUpdate()
     ObjectsAddToLifeCycle();
 }
 
-void SceneManager::ObjectsAwake()
+void ESceneManager::ObjectsAwake()
 {
     for (auto& component : m_WaitAwakeVec)
     {
@@ -110,18 +115,7 @@ void SceneManager::ObjectsAwake()
         });
 }
 
-void SceneManager::ObjectsOnEnable()
-{
-    for (auto& component : m_WaitOnEnableVec)
-    {
-        component->m_enable = true;
-        component->OnEnable();
-    }
-    m_WaitOnEnableSet.clear();
-    m_WaitOnEnableVec.clear();
-}
-
-void SceneManager::ObjectsStart()
+void ESceneManager::ObjectsStart()
 {
     for (auto& component : m_WaitStartVec)
     {
@@ -136,7 +130,7 @@ void SceneManager::ObjectsStart()
         });
 }
 
-void SceneManager::ObjectsFixedUpdate()
+void ESceneManager::ObjectsFixedUpdate()
 {
     for (auto& obj : m_runtimeObjects)
     {
@@ -151,7 +145,7 @@ void SceneManager::ObjectsFixedUpdate()
     }
 }
 
-void SceneManager::ObjectsUpdate()
+void ESceneManager::ObjectsUpdate()
 {
     for (auto& obj : m_runtimeObjects)
     {
@@ -166,7 +160,7 @@ void SceneManager::ObjectsUpdate()
     }
 }
 
-void SceneManager::ObjectsLateUpdate()
+void ESceneManager::ObjectsLateUpdate()
 {
     for (auto& obj : m_runtimeObjects)
     {
@@ -181,18 +175,29 @@ void SceneManager::ObjectsLateUpdate()
     }
 }
 
-void SceneManager::ObjectsOnDisable()
+void ESceneManager::ObjectsOnEnable()
 {
-    for (auto& component : m_WaitOnDisableVec)
+    auto& [OnEnableSet, OnEnableVec] = m_OnEnableQueue;
+    for (auto& component : OnEnableVec)
     {
-        component->m_enable = false;
-        component->OnDisable();
+        component->OnEnable();
     }
-    m_WaitOnDisableSet.clear();
-    m_WaitOnDisableVec.clear();
+    OnEnableSet.clear();
+    OnEnableVec.clear();
 }
 
-void SceneManager::ObjectsAddToLifeCycle()
+void ESceneManager::ObjectsOnDisable()
+{
+    auto& [OnDisableSet, OnDisableVec] = m_OnDisableQueue;
+    for (auto& component : OnDisableVec)
+    {
+        component->OnDisable();
+    }
+    OnDisableSet.clear();
+    OnDisableVec.clear();
+}
+
+void ESceneManager::ObjectsAddToLifeCycle()
 {
     for (auto& gameObject : m_AddGameObjectsQueue)
     {
@@ -223,7 +228,7 @@ void SceneManager::ObjectsAddToLifeCycle()
     m_AddComponentsQueue.clear();
 }
 
-bool SceneManager::IsRuntimeActive(std::shared_ptr<GameObject>& obj)
+bool ESceneManager::IsRuntimeActive(std::shared_ptr<GameObject>& obj)
 {
     bool isEmpty = obj.get() == nullptr;
     bool isActive = obj->activeInHierarchy_property_getter();

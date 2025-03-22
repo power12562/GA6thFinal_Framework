@@ -21,7 +21,7 @@ extern "C" UMREALSCRIPTS_DECLSPEC void CreateUmrealcSriptFile(const char* fileNa
 /// </summary>
 /// <param name="engineCores :">엔진 코어 모음</param>
 /// <returns></returns>
-extern "C" UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores);
+extern "C" UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores, ImGuiContext* ImguiContext);
 
 
 

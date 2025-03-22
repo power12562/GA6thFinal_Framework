@@ -82,7 +82,7 @@ private:
     setterType set{};
     const type_info& type_id;
 
-    auto Getter() const
+    field_type Getter() const
     {
         return get(owner);
     }
@@ -125,7 +125,7 @@ public:
     { 
         return this->Getter();
     }
-    inline auto* operator->() requires (!std::is_pointer_v<owner_type> && std::is_reference_v<decltype(this->Getter())> && is_getter)
+    inline auto* operator->() requires (!std::is_pointer_v<owner_type> && std::is_reference_v<field_type> && is_getter)
     { 
         return &this->Getter();
     }

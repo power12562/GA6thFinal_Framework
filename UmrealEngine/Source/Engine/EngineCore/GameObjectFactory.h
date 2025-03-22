@@ -1,25 +1,23 @@
 ﻿#pragma once
 class GameObject;
-class GameObjectFactory;
-#ifndef SCRIPTS_PROJECT
-extern GameObjectFactory& gameObjectFactory;
-#endif
 
 template<typename T>
 concept IS_BASE_GAMEOBJECT_C = std::is_base_of_v<GameObject, T>;
 
-class GameObjectFactory
+class EGameObjectFactory
 {
 private:
-    GameObjectFactory();
-    ~GameObjectFactory();
-    
-    static GameObjectFactory instance;
+    EGameObjectFactory();
+    ~EGameObjectFactory();
 public:
     //엔진 접근용 네임스페이스
     struct Engine
     {
-        inline static GameObjectFactory& GetInstance() { return instance; }
+        inline static EGameObjectFactory& GetInstance() 
+        { 
+            static EGameObjectFactory instance;
+            return instance; 
+        }
 
     };
 
@@ -64,7 +62,7 @@ private:
 };
 
 template<IS_BASE_GAMEOBJECT_C TGameObject>
-inline void GameObjectFactory::RegisterGameObject()
+inline void EGameObjectFactory::RegisterGameObject()
 {
     const char* key = typeid(TGameObject).name();
     auto findIter = m_NewGameObjectFuncMap.find(key);

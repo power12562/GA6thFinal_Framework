@@ -1,17 +1,10 @@
 ﻿#pragma once
-class TimeSystem;
-#ifndef SCRIPTS_PROJECT
-extern TimeSystem& Time;
-#endif
 
-class TimeSystem
+class ETimeSystem
 {
 private:
-    static TimeSystem instance;
-
-private:
-    TimeSystem();
-    ~TimeSystem();
+    ETimeSystem();
+    ~ETimeSystem();
 
 public:
     //엔진 접근용 네임스페이스
@@ -24,7 +17,11 @@ public:
         static bool TimeSystemFixedUpdate();
 
         /*싱글톤 객체 접근용*/
-        inline static TimeSystem& GetInstance() { return TimeSystem::instance; }
+        inline static ETimeSystem& GetInstance() 
+        {
+            static ETimeSystem instance;
+            return instance; 
+        }
     };
 private:
     /*엔진 Update를 제어하기 위한 함수. 매프레임 호출해야함.*/

@@ -1,17 +1,16 @@
 ﻿#include "pch.h"
 
-TimeSystem TimeSystem::instance;
-TimeSystem& Time = TimeSystem::Engine::GetInstance();
+ETimeSystem& Time = ETimeSystem::Engine::GetInstance();
 
-TimeSystem::TimeSystem()
+ETimeSystem::ETimeSystem()
 {
 	QueryPerformanceFrequency(&m_frequency);
 	QueryPerformanceCounter(&m_previousTime);
 	QueryPerformanceCounter(&m_currentTime);
 }
-TimeSystem::~TimeSystem() = default;
+ETimeSystem::~ETimeSystem() = default;
 
-void TimeSystem::TimeSystemUpdate()
+void ETimeSystem::TimeSystemUpdate()
 {
 	++m_frameCount;
 
@@ -31,7 +30,7 @@ void TimeSystem::TimeSystemUpdate()
 	}
 }
 
-bool TimeSystem::TimeSystemFixedUpdate()
+bool ETimeSystem::TimeSystemFixedUpdate()
 {
 	if (m_elapsedFixedTime >= fixedTimeStep && fixedTimeStep > std::numeric_limits<double>::epsilon())
 	{
@@ -43,12 +42,12 @@ bool TimeSystem::TimeSystemFixedUpdate()
 	return false;
 }
 
-void TimeSystem::Engine::TimeSystemUpdate()
+void ETimeSystem::Engine::TimeSystemUpdate()
 {
 	Time.TimeSystemUpdate();
 }
 
-bool TimeSystem::Engine::TimeSystemFixedUpdate()
+bool ETimeSystem::Engine::TimeSystemFixedUpdate()
 {
 	return Time.TimeSystemFixedUpdate();
 }

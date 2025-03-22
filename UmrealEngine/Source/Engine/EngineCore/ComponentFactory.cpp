@@ -1,15 +1,12 @@
 ﻿#include "pch.h"
 
-ComponentFactory ComponentFactory::instance;
-ComponentFactory& componentFactory = ComponentFactory::Engine::GetInstance();
-
-ComponentFactory::ComponentFactory()
+EComponentFactory::EComponentFactory()
 {
-    SetDllDirectory(ComponentFactory::Engine::ScriptsDllPath);
+    SetDllDirectory(EComponentFactory::Engine::ScriptsDllPath);
 }
-ComponentFactory::~ComponentFactory() = default;
+EComponentFactory::~EComponentFactory() = default;
 
-bool ComponentFactory::InitalizeComponentFactory()
+bool EComponentFactory::InitalizeComponentFactory()
 {
     //복구해야할 컴포넌트 항목들
     static std::vector<std::tuple<GameObject*, std::string, int>> addList;
@@ -60,11 +57,12 @@ bool ComponentFactory::InitalizeComponentFactory()
 
     auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
     InitDLLCores(EngineCores{
-        Time,
-        sceneManager,
-        componentFactory,
-        gameObjectFactory
-        });
+        ETimeSystem::Engine::GetInstance(),
+        ESceneManager::Engine::GetInstance(),
+        EComponentFactory::Engine::GetInstance(),
+        EGameObjectFactory::Engine::GetInstance()
+        },
+        ImGui::GetCurrentContext());
     if (funcList[1] != "InitalizeUmrealScript")
     {
         FreeLibrary(m_scriptsDll);
@@ -112,7 +110,7 @@ bool ComponentFactory::InitalizeComponentFactory()
     return true;
 }
 
-void ComponentFactory::UninitalizeComponentFactory()
+void EComponentFactory::UninitalizeComponentFactory()
 {
     if (m_scriptsDll != NULL)
     {
@@ -131,25 +129,25 @@ void ComponentFactory::UninitalizeComponentFactory()
     }
 }
 
-bool ComponentFactory::AddComponentToObject(GameObject* ownerObject, std::string_view typeid_name)
+bool EComponentFactory::AddComponentToObject(GameObject* ownerObject, std::string_view typeid_name)
 {
     if(std::shared_ptr<Component> sptr_component = NewComponent(typeid_name))
     {
         const char* name = typeid_name.data();
         ResetComponent(ownerObject, sptr_component.get());
         ownerObject->m_components.emplace_back(sptr_component);  //오브젝트에 추가
-        SceneManager::Engine::AddComponentToLifeCycle(sptr_component); //씬에 등록
+        ESceneManager::Engine::AddComponentToLifeCycle(sptr_component); //씬에 등록
         return true;
     }
     return false;
 }
 
-void ComponentFactory::MakeScriptFile(const char* fileName) const
+void EComponentFactory::MakeScriptFile(const char* fileName) const
 {
     MakeScriptFunc(fileName);
 }
 
-std::shared_ptr<Component> ComponentFactory::NewComponent(std::string_view typeid_name)
+std::shared_ptr<Component> EComponentFactory::NewComponent(std::string_view typeid_name)
 {
     std::shared_ptr<Component> newComponent;
     auto findIter = m_NewScriptsFunctionMap.find(typeid_name.data());
@@ -162,7 +160,7 @@ std::shared_ptr<Component> ComponentFactory::NewComponent(std::string_view typei
     return newComponent;
 }
 
-void ComponentFactory::ResetComponent(GameObject* ownerObject, Component* component)
+void EComponentFactory::ResetComponent(GameObject* ownerObject, Component* component)
 {
     //여긴 엔진에서 사용하기 위한 초기화 코드 
     component->m_className = (typeid(*component).name() + 5);

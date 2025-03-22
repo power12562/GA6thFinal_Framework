@@ -4,8 +4,8 @@
 class Component
 {
     friend class GameObject;
-    friend class ComponentFactory;
-    friend class SceneManager;
+    friend class EComponentFactory;
+    friend class ESceneManager;
     USING_PROPERTY(Component)
 public:
     Component();
@@ -22,7 +22,7 @@ public:
     }
 
     /// <summary>
-    /// <para> 이 함수는 componentFactory.AddComponentToObject() 직후 호출됩니다.              </para>
+    /// <para> 이 함수는 ComponentFactory.AddComponentToObject() 직후 호출됩니다.              </para>
     /// <para> * 엔진 사용을 위한 초기화 이후 바로 호출됩니다.                                  </para>
     /// <para> 에디터 모드, 런타임 모드 상관 없이 게임 오브젝트에 추가하는 즉시 1회 호출됩니다.    </para>
     /// <para> 유니티는 런타임에서 호출 안하는데 일단은 런타임, 에디터 둘다 호출되도록 했습니다.   </para>
@@ -90,7 +90,7 @@ public:
     }
     SETTER(bool, Enable)
     {
-        SceneManager::Engine::SetComponentEnable(this, m_enable);
+        ESceneManager::Engine::SetComponentEnable(this, value);
     }
     // get, set :
     //  컴포넌트의 활성화 여부입니다.

@@ -1,9 +1,6 @@
 ﻿#pragma once
 class GameObject;
-class SceneManager;
-#ifndef SCRIPTS_PROJECT
-extern SceneManager& sceneManager;
-#endif
+class ESceneManager;
 
 //참고 
 // Unity SceneManager https://docs.unity3d.com/6000.0/Documentation/ScriptReference/SceneManagement.SceneManager.html
@@ -96,16 +93,17 @@ public:
 };
 
 //함수는 일단 선언만. 구현은 나중에.
-class SceneManager
+class ESceneManager
 {
-private:
-    //싱글톤용
-    static SceneManager instance;
 public:
     //엔진 접근용 네임스페이스
     struct Engine
     {
-        inline static SceneManager& GetInstance() { return SceneManager::instance; }
+        inline static ESceneManager& GetInstance() 
+        { 
+            static ESceneManager instance;
+            return instance; 
+        }
 
         /// <summary>
         /// 씬 매니저가 관리하는 오브젝트들을 업데이트합니다. 클라이언트에서 매 틱 호출해야합니다.
@@ -149,8 +147,8 @@ public:
     };
 
 private:
-    SceneManager() = default;
-    ~SceneManager() = default;
+    ESceneManager() = default;
+    ~ESceneManager() = default;
 public:
 
 private:
@@ -159,12 +157,12 @@ private:
 
 private:
     void ObjectsAwake();            //Awake 예정인 컴포넌트들의 Awake 함수를 호출합니다.
-    void ObjectsOnEnable();         //OnEnable 예정인 컴포넌트들의 Start 함수를 호출합니다.
+    void ObjectsOnEnable();         //OnEnable 예정인 컴포넌트들의 OnEnable 함수를 호출합니다.
     void ObjectsStart();            //Start 예정인 컴포넌트들의 Start 함수를 호출합니다.
     void ObjectsFixedUpdate();      //FixedUpdate를 호출합니다.
     void ObjectsUpdate();           //Update를 호출합니다.
     void ObjectsLateUpdate();       //LateUpdate를 호출합니다.
-    void ObjectsOnDisable();        //OnDisable 예정인 컴포넌트들의 함수들을 호출해줍니다.
+    void ObjectsOnDisable();        //OnDisable 예정인 컴포넌트들의 OnDisable 함수를 호출해줍니다.
     void ObjectsAddToLifeCycle();   //추가 대기중인 오브젝트를 라이프 사이클에 포함시킵니다.
 private:
     /*게임오브젝트의 Life cycle 수행 여부를 확인하는 함수*/
@@ -177,17 +175,15 @@ private:
     //오브젝트 이름과 포인터로 관리하는 map
     std::unordered_map<std::wstring, std::unordered_set<std::shared_ptr<GameObject>>> m_runtimeObjectsUnorderedMap;
 
-    //추가 대기열
+    //오브젝트 추가 대기열 
     std::vector<std::shared_ptr<GameObject>> m_AddGameObjectsQueue;
     std::vector<std::shared_ptr<Component>> m_AddComponentsQueue;
 
-    //함수 호출 대기열
+    //초기화 함수 호출 대기열
     std::vector<std::shared_ptr<Component>> m_WaitAwakeVec;
     std::vector<std::shared_ptr<Component>> m_WaitStartVec;
 
-    std::unordered_set<Component*> m_WaitOnEnableSet;
-    std::vector<Component*> m_WaitOnEnableVec;
-    std::unordered_set<Component*> m_WaitOnDisableSet;
-    std::vector<Component*> m_WaitOnDisableVec;
-
+    //OnEnable, OnDisable을 set과 같이 관리
+    std::pair<std::unordered_set<Component*>, std::vector<Component*>> m_OnEnableQueue;
+    std::pair<std::unordered_set<Component*>, std::vector<Component*>> m_OnDisableQueue;
 };

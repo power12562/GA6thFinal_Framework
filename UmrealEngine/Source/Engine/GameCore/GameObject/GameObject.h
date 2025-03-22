@@ -8,9 +8,9 @@ class Component;
 //함수는 일단 선언만. 구현은 나중에. 
 class GameObject 
 {
-    friend class GameObjectFactory;
-    friend class ComponentFactory;
-    friend class SceneManager;
+    friend class EGameObjectFactory;
+    friend class EComponentFactory;
+    friend class ESceneManager;
     USING_PROPERTY(GameObject)
 
     //public static 함수
@@ -25,7 +25,7 @@ public:
     /// <returns>찾은 오브젝트를 weak_ptr에 담아준다.</returns>
     static std::weak_ptr<GameObject> Find(std::wstring_view name) 
     {  
-        return SceneManager::Engine::FindGameObjectWithName(name);
+        return ESceneManager::Engine::FindGameObjectWithName(name);
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public:
     /// </summary>
     void SetActive(bool value)
     {
-        SceneManager::Engine::SetGameObjectActive(m_instanceID, value);
+        ESceneManager::Engine::SetGameObjectActive(m_instanceID, value);
     }
 
     /// <summary>
@@ -254,11 +254,8 @@ public:
 template<IS_BASE_COMPONENT_C TComponent >
 inline TComponent& GameObject::AddComponent()
 {
-#ifndef SCRIPTS_PROJECT
-    ComponentFactory& factory = componentFactory;
-#else
-    ComponentFactory& factory = UmrealEngine->componentFactory;
-#endif
+    EComponentFactory& factory = Engine->ComponentFactory;
+
     bool result = factory.AddComponentToObject(this, typeid(TComponent).name());
     if (result)
     {

@@ -35,6 +35,7 @@ public:
     virtual void Awake(); 
     virtual void Start();
     virtual void OnEnable();
+    virtual void OnDisable();
     virtual void Update() override;
 
 };

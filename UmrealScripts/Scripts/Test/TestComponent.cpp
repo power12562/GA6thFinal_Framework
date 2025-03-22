@@ -11,7 +11,7 @@ void TestComponent::Test(std::string_view str)
 void TestComponent::Update()
 {
     using namespace u8_literals;
-    ImGui::Begin(u8"로그 테스트"c_str);
+    ImGui::Begin(u8"로그 테스트"_c_str);
 
     if (ImGui::Button("Clear"))
     {
@@ -52,4 +52,7 @@ void TestComponent::OnEnable()
     Test("OnEnable!");
 }
 
-
+void TestComponent::OnDisable()
+{
+    Test("OnDisable!");
+}

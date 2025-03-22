@@ -2,24 +2,22 @@
 class GameObject;
 class Component;
 class EngineCores;
-class ComponentFactory;
-#ifndef SCRIPTS_PROJECT
-extern ComponentFactory& componentFactory;
-#endif
 
 template<typename T>
 concept IS_BASE_COMPONENT_C = std::is_base_of_v<Component, T>;
 
-class ComponentFactory
+class EComponentFactory
 {
-private:
-    static ComponentFactory instance;
 public:
     //엔진 접근용 네임스페이스
     struct Engine
     {
         //싱글톤 객체 접근용
-        inline static ComponentFactory& GetInstance() { return instance; }
+        inline static EComponentFactory& GetInstance() 
+        {
+            static EComponentFactory instance;
+            return instance; 
+        }
         //dll 경로
 #ifdef _DEBUG
         static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Debug";
@@ -31,8 +29,8 @@ public:
     };
 
 private:
-    ComponentFactory();
-    ~ComponentFactory();
+    EComponentFactory();
+    ~EComponentFactory();
 
 public:
     /// <summary>
@@ -73,7 +71,7 @@ public:
     /// <param name="fileName :">사용할 파일 이름</param>
     void MakeScriptFile(const char* fileName) const;
 private:
-    using InitScripts = void(*)(const EngineCores& core);
+    using InitScripts = void(*)(const EngineCores&, ImGuiContext*);
     using MakeUmScriptsFile = void(*)(const char* fileName);
     using NewScripts = Component*(*)();
 

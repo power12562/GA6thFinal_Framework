@@ -40,6 +40,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
+    <None Include="..\UmrealEngine\cpp.hint" />
   </ItemGroup>
 </Project>
