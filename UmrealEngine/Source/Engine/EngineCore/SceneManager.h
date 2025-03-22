@@ -184,6 +184,6 @@ private:
     std::vector<std::shared_ptr<Component>> m_WaitStartVec;
 
     //OnEnable, OnDisable을 set과 같이 관리
-    std::pair<std::unordered_set<Component*>, std::vector<Component*>> m_OnEnableQueue;
-    std::pair<std::unordered_set<Component*>, std::vector<Component*>> m_OnDisableQueue;
+    std::tuple<std::unordered_set<Component*>, std::vector<Component*>, std::vector<bool*>> m_OnEnableQueue;
+    std::tuple<std::unordered_set<Component*>, std::vector<Component*>, std::vector<bool*>> m_OnDisableQueue;
 };

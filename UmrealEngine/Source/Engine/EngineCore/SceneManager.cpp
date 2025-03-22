@@ -31,10 +31,9 @@ void ESceneManager::Engine::SetGameObjectActive(int instanceID, bool value)
     {
         if (gameObject->m_activeSelf != value)
         {
-            gameObject->m_activeSelf = value;
-
             //컴포넌트들의 On__able 함수를 호출하도록 합니다.
-            auto& [WaitSet, WaitVec] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+            auto& [WaitSet, WaitVec, WaitValue] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+            WaitValue.emplace_back(&gameObject->m_activeSelf);
             for (auto& component : gameObject->m_components)
             {
                 if (component->Enable)
@@ -42,7 +41,7 @@ void ESceneManager::Engine::SetGameObjectActive(int instanceID, bool value)
                     auto [iter, result] = WaitSet.insert(component.get());
                     if (result)
                     {
-                        WaitVec.push_back(component.get());
+                        WaitVec.emplace_back(component.get());
                     }
                 }
             }
@@ -54,10 +53,9 @@ void ESceneManager::Engine::SetComponentEnable(Component* component, bool value)
 {
     if (component && component->m_enable != value)
     {
-        component->m_enable = value;
-
         //컴포넌트의 On__able 함수를 호출하도록 합니다.
-        auto& [WaitSet, WaitVec] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+        auto& [WaitSet, WaitVec, WaitValue] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+        WaitValue.emplace_back(&component->m_enable);
         if (component->gameObect->activeSelf)
         {
             auto [iter, result] = WaitSet.insert(component);
@@ -177,24 +175,34 @@ void ESceneManager::ObjectsLateUpdate()
 
 void ESceneManager::ObjectsOnEnable()
 {
-    auto& [OnEnableSet, OnEnableVec] = m_OnEnableQueue;
+    auto& [OnEnableSet, OnEnableVec, OnEnableValue] = m_OnEnableQueue;
+    for (auto& value : OnEnableValue)
+    {
+        *value = true;  
+    }
     for (auto& component : OnEnableVec)
     {
         component->OnEnable();
     }
     OnEnableSet.clear();
     OnEnableVec.clear();
+    OnEnableValue.clear();
 }
 
 void ESceneManager::ObjectsOnDisable()
 {
-    auto& [OnDisableSet, OnDisableVec] = m_OnDisableQueue;
+    auto& [OnDisableSet, OnDisableVec, OnDisableValue] = m_OnDisableQueue;
+    for (auto& value : OnDisableValue)
+    {
+        *value = false;
+    }
     for (auto& component : OnDisableVec)
     {
         component->OnDisable();
     }
     OnDisableSet.clear();
     OnDisableVec.clear();
+    OnDisableValue.clear();
 }
 
 void ESceneManager::ObjectsAddToLifeCycle()
