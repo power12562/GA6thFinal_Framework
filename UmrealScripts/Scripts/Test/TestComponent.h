@@ -8,11 +8,11 @@ public:
     virtual ~TestComponent();
 
     REFLECT_FIELDS_BEGIN(Component)
-    int testint = 10;
-    float floatTest = 1.f;
-    std::string testString = "asdas";
-    std::wstring testWstring = L"";
-    std::array<int, 10> doubleArray{1,2,3,4,5,6,7,8,9, 10};
+    //int testint = 10;
+    //float floatTest = 1.f;
+    //std::string testString = "asdas";
+    //std::wstring testWstring = L"";
+    //std::array<int, 10> doubleArray{1,2,3,4,5,6,7,8,9, 10};
     std::vector<std::string> log{};
     REFLECT_FIELDS_END(TestComponent, public)
 

@@ -21,6 +21,7 @@ void GameObject::Destroy(GameObject& gameObject, float t)
 }
 
 GameObject::GameObject()
+    : transform(*this)
 {
 
 }

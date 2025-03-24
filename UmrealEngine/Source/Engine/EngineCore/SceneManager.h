@@ -106,6 +106,11 @@ public:
         }
 
         /// <summary>
+        /// 씬 매니저가 관리하는 오브젝트를 전부 정리합니다.
+        /// </summary>
+        static void CleanupSceneManager();
+
+        /// <summary>
         /// 씬 매니저가 관리하는 오브젝트들을 업데이트합니다. 클라이언트에서 매 틱 호출해야합니다.
         /// </summary>
         static void SceneUpdate();
@@ -151,11 +156,17 @@ public:
         /// <param name="gameObject :">대상</param>
         /// <param name="newName :">새로운 이름</param>
         static void RenameGameObject(GameObject* gameObject, std::wstring_view newName);
+
+        /// <summary>
+        /// m_runtimeRootObjects의 항목을 갱신합니다. Transform의 부모 자식 관계가 변경될때마다 호출됩니다.
+        /// </summary>
+        static void UpdateRootObjects();
     };
 
 private:
-    ESceneManager() = default;
-    ~ESceneManager() = default;
+    ESceneManager();
+    ~ESceneManager();
+
 public:
     //현재 라이프 사이클에 포함된 루트 오브젝트를 전부 반환합니다.
     const std::vector<std::weak_ptr<GameObject>>& GetRootObjects() const

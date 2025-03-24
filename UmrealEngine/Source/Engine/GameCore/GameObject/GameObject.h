@@ -136,6 +136,8 @@ public:
 public:
     GameObject();
     ~GameObject();
+public:
+    Transform transform;
 
 public:
     /// <summary>
@@ -158,6 +160,12 @@ public:
     /// </summary>
     /// <returns>std::wstring_view 오브젝트의 이름</returns>
     std::wstring_view ToWString() { return m_name; }
+
+    /// <summary>
+    /// <para> 이 GameObject의 이름을 string으로 반환합니다. </para>
+    /// </summary>
+    /// <returns></returns>
+    std::string ToString() { return wstring_to_u8(m_name); }
 
     /// <summary>
     /// 컴포넌트를 추가합니다.

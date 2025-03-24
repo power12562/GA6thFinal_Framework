@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Engine\ClassCore\container_traits.h" />
     <ClInclude Include="Source\Engine\ClassCore\ReflectHelper.h" />
+    <ClInclude Include="Source\Engine\GameCore\Transform\Transform.h" />
     <ClInclude Include="Source\Engine\EngineCore\ComponentFactory.h" />
     <ClInclude Include="Source\Engine\EngineCore\EngineCores.h" />
     <ClInclude Include="Source\Engine\EngineCore\GameObjectFactory.h" />
@@ -160,7 +161,6 @@
     <ClInclude Include="Source\Engine\EngineCore\TimeSystem.h" />
     <ClInclude Include="Source\Engine\GameCore\Component\Component.h" />
     <ClInclude Include="Source\Engine\GameCore\GameObject\GameObject.h" />
-    <ClInclude Include="Source\Engine\GameCore\Transform\Transform.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Source\Engine\Imgui\imgui_impl_dx12.h" />
     <ClInclude Include="Source\Engine\Imgui\imconfig.h" />
@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\ClassCore\ReflectHelper.cpp" />
+    <ClCompile Include="Source\Engine\GameCore\Transform\Transform.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\ComponentFactory.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\EngineCores.cpp" />
     <ClCompile Include="Source\Engine\EngineCore\GameObjectFactory.cpp" />
@@ -188,7 +189,6 @@
     <ClCompile Include="Source\Engine\EngineCore\TimeSystem.cpp" />
     <ClCompile Include="Source\Engine\GameCore\Component\Component.cpp" />
     <ClCompile Include="Source\Engine\GameCore\GameObject\GameObject.cpp" />
-    <ClCompile Include="Source\Engine\GameCore\Transform\Transform.cpp" />
     <ClCompile Include="Source\Engine\Imgui\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

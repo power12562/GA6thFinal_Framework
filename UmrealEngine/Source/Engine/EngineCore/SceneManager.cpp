@@ -1,5 +1,19 @@
 ﻿#include "pch.h"
 
+ESceneManager::ESceneManager() = default;
+ESceneManager::~ESceneManager() = default;
+
+void ESceneManager::Engine::CleanupSceneManager()
+{
+    EngineCore->SceneManager.m_runtimeObjects.clear();
+    EngineCore->SceneManager.m_runtimeRootObjects.clear();
+    EngineCore->SceneManager.m_runtimeObjectsUnorderedMap.clear();
+    EngineCore->SceneManager.m_AddGameObjectsQueue.clear();
+    EngineCore->SceneManager.m_AddComponentsQueue.clear();
+    EngineCore->SceneManager.m_WaitAwakeVec.clear();
+    EngineCore->SceneManager.m_WaitStartVec.clear();
+}
+
 void ESceneManager::Engine::SceneUpdate()
 {
     EngineCore->SceneManager.SceneUpdate();
@@ -260,18 +274,7 @@ void ESceneManager::ObjectsAddToLifeCycle()
         }
         m_runtimeObjects[id] = gameObject;
         m_runtimeRootObjects.emplace_back(gameObject);
-        std::erase_if(m_runtimeRootObjects, [](const std::weak_ptr<GameObject>& weak)
-            {
-                if (weak.expired())
-                    return true;    //파괴된 오브젝트는 전부 제거
-
-                if (std::shared_ptr<GameObject> shared = weak.lock())
-                {
-                    //shared->transform->isParent; //최상위 부모만 남겨야함
-                }
-
-                return false;
-            });
+        ESceneManager::Engine::UpdateRootObjects();
     }
     m_AddGameObjectsQueue.clear();
 
@@ -291,4 +294,19 @@ bool ESceneManager::IsRuntimeActive(std::shared_ptr<GameObject>& obj)
     return !isEmpty && isActive;
 }
 
+
+void ESceneManager::Engine::UpdateRootObjects()
+{
+    std::erase_if(EngineCore->SceneManager.m_runtimeRootObjects, [](const std::weak_ptr<GameObject>& weak)
+        {
+            if (weak.expired())
+                return true;    //파괴된 오브젝트는 전부 제외
+
+            if (std::shared_ptr<GameObject> shared = weak.lock())
+            {
+                return !!shared->transform.parent; //부모 있으면 제외
+            }
+            return false;
+        });
+}
 
