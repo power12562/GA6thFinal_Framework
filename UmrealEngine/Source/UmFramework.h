@@ -62,7 +62,7 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 #include "Engine/ClassCore/container_traits.h"
 #include "Engine/ClassCore/ReflectHelper.h"
 
-//Engine Core
+//EngineCore Core
 #include "Engine/EngineCore/TimeSystem.h"
 #include "Engine/EngineCore/GameObjectFactory.h"
 #include "Engine/EngineCore/ComponentFactory.h"
@@ -71,6 +71,7 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 #include "Engine/EngineCore/EngineCores.h" 
 
 //Game Core
+#include "Engine/GameCore/Transform/Transform.h"
 #include "Engine/GameCore/GameObject/GameObject.h"
 #include "Engine/GameCore/Component/Component.h"
 

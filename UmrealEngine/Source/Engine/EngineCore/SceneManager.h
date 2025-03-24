@@ -144,12 +144,24 @@ public:
         /// <param name="name :">찾을 오브젝트의 이름</param>
         /// <returns>성공시 weak_ptr에 담아줍니다.</returns>
         static std::weak_ptr<GameObject> FindGameObjectWithName(std::wstring_view name);
+
+        /// <summary>
+        /// 게임 오브젝트의 이름을 변경합니다.
+        /// </summary>
+        /// <param name="gameObject :">대상</param>
+        /// <param name="newName :">새로운 이름</param>
+        static void RenameGameObject(GameObject* gameObject, std::wstring_view newName);
     };
 
 private:
     ESceneManager() = default;
     ~ESceneManager() = default;
 public:
+    //현재 라이프 사이클에 포함된 루트 오브젝트를 전부 반환합니다.
+    const std::vector<std::weak_ptr<GameObject>>& GetRootObjects() const
+    {
+        return m_runtimeRootObjects;
+    }
 
 private:
     //Life cycle을 수행. 클라에서 매틱 호출해야함.
@@ -163,7 +175,7 @@ private:
     void ObjectsUpdate();           //Update를 호출합니다.
     void ObjectsLateUpdate();       //LateUpdate를 호출합니다.
     void ObjectsOnDisable();        //OnDisable 예정인 컴포넌트들의 OnDisable 함수를 호출해줍니다.
-    void ObjectsAddToLifeCycle();   //추가 대기중인 오브젝트를 라이프 사이클에 포함시킵니다.
+    void ObjectsAddToLifeCycle();   //추가 대기중인 오브젝트, 컴포넌트를 라이프 사이클에 포함시킵니다.
 private:
     /*게임오브젝트의 Life cycle 수행 여부를 확인하는 함수*/
     bool IsRuntimeActive(std::shared_ptr<GameObject>& obj);
@@ -172,8 +184,12 @@ private:
     //Life cycle에 포함되는 실제 오브젝트들 항목
     std::vector<std::shared_ptr<GameObject>> m_runtimeObjects;
 
+    //모든 루트 오브젝트 캐싱용
+    std::vector<std::weak_ptr<GameObject>> m_runtimeRootObjects;
+
     //오브젝트 이름과 포인터로 관리하는 map
-    std::unordered_map<std::wstring, std::unordered_set<std::shared_ptr<GameObject>>> m_runtimeObjectsUnorderedMap;
+    std::unordered_map<std::wstring,std::unordered_set<std::shared_ptr<GameObject>, 
+        hash_utils::SharedPtrHash, hash_utils::SharedPtrEqual>> m_runtimeObjectsUnorderedMap;
 
     //오브젝트 추가 대기열 
     std::vector<std::shared_ptr<GameObject>> m_AddGameObjectsQueue;

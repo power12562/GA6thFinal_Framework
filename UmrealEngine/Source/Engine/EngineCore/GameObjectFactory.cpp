@@ -9,11 +9,12 @@ EGameObjectFactory::EGameObjectFactory()
 
 EGameObjectFactory::~EGameObjectFactory() = default;
 
-void EGameObjectFactory::NewGameObject(std::string_view typeid_name, std::wstring_view name)
+std::shared_ptr<GameObject> EGameObjectFactory::NewGameObject(std::string_view typeid_name, std::wstring_view name)
 {
     auto sptr_object = MakeGameObject(typeid_name);
     ResetGameObject(sptr_object.get(), name);
     ESceneManager::Engine::AddGameObjectToLifeCycle(sptr_object);
+    return sptr_object;
 }
 
 std::shared_ptr<GameObject> EGameObjectFactory::MakeGameObject(std::string_view typeid_name)

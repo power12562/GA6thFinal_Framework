@@ -5,6 +5,15 @@ class Component;
 //Unity GameObject https://docs.unity3d.com/kr/2021.1/Manual/class-GameObject.html
 //Unity GameObject Script https://docs.unity3d.com/6000.0/Documentation/ScriptReference/GameObject.html
 
+//오브젝트 생성용 전역함수
+template<IS_BASE_GAMEOBJECT_C TObject>
+std::weak_ptr<TObject> NewGameObject(
+    std::wstring_view name)
+{
+    std::shared_ptr<GameObject> shared_object = EngineCore->GameObjectFactory.NewGameObject(typeid(TObject).name(), name);
+    return std::static_pointer_cast<TObject>(shared_object);
+}
+
 //함수는 일단 선언만. 구현은 나중에. 
 class GameObject 
 {
@@ -16,7 +25,6 @@ class GameObject
     //public static 함수
 public:
     /// <summary>
-    /// <para> 구현 X </para>
     /// <para> 매개변수와 같은 이름을 가진 GameObject를 찾아 반환합니다. </para>
     /// <para> 같은 이름의 GameObject가 없으면 nullptr를 반환합니다.    </para>
     /// <para> 참고 : 같은 이름의 오브젝트가 여러개 있으면 특정 오브젝트 반환을 보장하지 못합니다.  </para>
@@ -223,9 +231,8 @@ public:
     }
     SETTER(std::wstring_view, name)
     {
-
+        ESceneManager::Engine::RenameGameObject(this, value);
     }
-    //미구현
     // get, set:
     //  게임 오브젝트의 이름
     PROPERTY(name)
@@ -254,7 +261,7 @@ public:
 template<IS_BASE_COMPONENT_C TComponent >
 inline TComponent& GameObject::AddComponent()
 {
-    EComponentFactory& factory = Engine->ComponentFactory;
+    EComponentFactory& factory = EngineCore->ComponentFactory;
 
     bool result = factory.AddComponentToObject(this, typeid(TComponent).name());
     if (result)

@@ -19,7 +19,7 @@
 //   - Debug Tools                https://github.com/ocornut/imgui/wiki/Debug-Tools
 //   - Software using Dear ImGui  https://github.com/ocornut/imgui/wiki/Software-using-dear-imgui
 // - Issues & support ........... https://github.com/ocornut/imgui/issues
-// - Test Engine & Automation ... https://github.com/ocornut/imgui_test_engine (test suite, test engine to automate your apps)
+// - Test EngineCore & Automation ... https://github.com/ocornut/imgui_test_engine (test suite, test engine to automate your apps)
 
 // For first-time users having issues compiling/linking/running/loading fonts:
 // please post in https://github.com/ocornut/imgui/discussions if you cannot find a solution in resources above.
@@ -31,7 +31,7 @@
 // This library is free but needs your support to sustain development and maintenance.
 // Businesses: you can support continued development via B2B invoiced technical support, maintenance and sponsoring contracts.
 // PLEASE reach out at omar AT dearimgui DOT com. See https://github.com/ocornut/imgui/wiki/Funding
-// Businesses: you can also purchase licenses for the Dear ImGui Automation/Test Engine.
+// Businesses: you can also purchase licenses for the Dear ImGui Automation/Test EngineCore.
 
 // It is recommended that you don't modify imgui.cpp! It will become difficult for you to update the library.
 // Note that 'ImGui::' being a namespace, you can add functions into the namespace from your own source files, without
@@ -1073,7 +1073,7 @@ CODE
       We can discuss ways for your company to fund development via invoiced technical support, maintenance or sponsoring contacts.
       This is among the most useful thing you can do for Dear ImGui. With increased funding, we sustain and grow work on this project.
       >>> See https://github.com/ocornut/imgui/wiki/Funding
-    - Businesses: you can also purchase licenses for the Dear ImGui Automation/Test Engine.
+    - Businesses: you can also purchase licenses for the Dear ImGui Automation/Test EngineCore.
     - If you are experienced with Dear ImGui and C++, look at the GitHub issues, look at the Wiki, and see how you want to help and can help!
     - Disclose your usage of Dear ImGui via a dev blog post, a tweet, a screenshot, a mention somewhere etc.
       You may post screenshot or links in the gallery threads. Visuals are ideal as they inspire other programmers.
@@ -7898,7 +7898,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
                 want_focus = true;
         }
 
-        // [Test Engine] Register whole window in the item system (before submitting further decorations)
+        // [Test EngineCore] Register whole window in the item system (before submitting further decorations)
 #ifdef IMGUI_ENABLE_TEST_ENGINE
         if (g.TestEngineHookItems)
         {
@@ -8215,7 +8215,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
             DebugLocateItemResolveWithLastItem();
 #endif
 
-        // [Test Engine] Register title bar / tab with MoveId.
+        // [Test EngineCore] Register title bar / tab with MoveId.
 #ifdef IMGUI_ENABLE_TEST_ENGINE
         if (!(window->Flags & ImGuiWindowFlags_NoTitleBar))
         {

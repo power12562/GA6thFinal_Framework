@@ -18,7 +18,6 @@ public:
             static EGameObjectFactory instance;
             return instance; 
         }
-
     };
 
     /// <summary>
@@ -31,9 +30,9 @@ public:
     /// <summary>
     /// 게임 오브젝트를 생성합니다. 생성된 오브젝트는 자동으로 씬에 등록됩니다.
     /// </summary>
-    /// <param name="typeid_name"></param>
-    /// <param name="name"></param>
-    void NewGameObject(
+    /// <param name="typeid_name :">생성할 오브젝트 typeid().name()</param>
+    /// <param name="name :">오브젝트 이름</param>
+    std::shared_ptr<GameObject> NewGameObject(
         std::string_view typeid_name,
         std::wstring_view name);
 

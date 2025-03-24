@@ -57,10 +57,13 @@ void WindowApp::ModuleInitialize()
     InitD311();
     InitImgui();
     InitDXGI();
-    Engine->ComponentFactory.InitalizeComponentFactory();
+    EngineCore->ComponentFactory.InitalizeComponentFactory();
 
     //오브젝트 생성 테스트
-    Engine->GameObjectFactory.NewGameObject(typeid(GameObject).name(), L"TestObject");
+    auto obj1 = NewGameObject<GameObject>(L"TestObject").lock();
+    auto obj2 = NewGameObject<GameObject>(L"TestObject").lock();
+    auto obj3 = NewGameObject<GameObject>(L"TestObject").lock();
+
 }
 
 
@@ -72,7 +75,7 @@ void WindowApp::PreUnitialize()
 
 void WindowApp::ModuleUnitialize()
 {
-    Engine->ComponentFactory.UninitalizeComponentFactory();
+    EngineCore->ComponentFactory.UninitalizeComponentFactory();
     UninitDXGI();
     UninitImgui();
     UninitD311();
@@ -93,23 +96,23 @@ void WindowApp::ClientRender()
 
     ImGui::Begin(u8"타임 클래스 확인용"_c_str);
     {
-        ImGui::InputDouble("time scale", &Engine->Time.timeScale);
+        ImGui::InputDouble("time scale", &EngineCore->Time.timeScale);
 
-        ImGui::Text("time : %f", Engine->Time.time());
-        ImGui::Text("realtimeSinceStartup : %f", Engine->Time.realtimeSinceStartup());
+        ImGui::Text("time : %f", EngineCore->Time.time());
+        ImGui::Text("realtimeSinceStartup : %f", EngineCore->Time.realtimeSinceStartup());
 
-        ImGui::Text("frameCount : %llu", Engine->Time.frameCount());
+        ImGui::Text("frameCount : %llu", EngineCore->Time.frameCount());
 
-        ImGui::Text("FPS : %d", Engine->Time.frameRate());
-        ImGui::Text("DeltaTime : %f", Engine->Time.deltaTime());
+        ImGui::Text("FPS : %d", EngineCore->Time.frameRate());
+        ImGui::Text("DeltaTime : %f", EngineCore->Time.deltaTime());
 
-        ImGui::Text("unscaledDeltaTime : %f", Engine->Time.unscaledDeltaTime());
+        ImGui::Text("unscaledDeltaTime : %f", EngineCore->Time.unscaledDeltaTime());
 
-        ImGui::InputDouble("Fixed Time Step", &Engine->Time.fixedTimeStep);
-        ImGui::Text("fixedDeltaTime %f", Engine->Time.fixedDeltaTime());
-        ImGui::Text("fixedUnscaledDeltaTime %f", Engine->Time.fixedUnscaledDeltaTime());
+        ImGui::InputDouble("Fixed Time Step", &EngineCore->Time.fixedTimeStep);
+        ImGui::Text("fixedDeltaTime %f", EngineCore->Time.fixedDeltaTime());
+        ImGui::Text("fixedUnscaledDeltaTime %f", EngineCore->Time.fixedUnscaledDeltaTime());
 
-        ImGui::InputDouble("maximumDeltaTime", &Engine->Time.maximumDeltaTime);
+        ImGui::InputDouble("maximumDeltaTime", &EngineCore->Time.maximumDeltaTime);
     }
     ImGui::End();
 
@@ -135,13 +138,13 @@ void WindowApp::ClientRender()
 
             if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"_c_str))
             {
-                for (auto& key : Engine->ComponentFactory.GetNewComponentFuncList())
+                for (auto& key : EngineCore->ComponentFactory.GetNewComponentFuncList())
                 {
                     if (ImGui::Button(key.c_str()))
                     {
                         if (m_testObject)
                         {
-                            Engine->ComponentFactory.AddComponentToObject(m_testObject.get(), key);
+                            EngineCore->ComponentFactory.AddComponentToObject(m_testObject.get(), key);
                         }
                     }
                 }
@@ -175,7 +178,7 @@ void WindowApp::ClientRender()
     {
         if (ImGui::Button(u8"스크립트 재 빌드"_c_str))
         {
-            Engine->ComponentFactory.InitalizeComponentFactory();
+            EngineCore->ComponentFactory.InitalizeComponentFactory();
         }
 
         //새 스크립트 파일 만들기 테스트용
@@ -195,7 +198,7 @@ void WindowApp::ClientRender()
                 ImGui::InputText("##new_script_file_name", &inputBuffer);
                 if (ImGui::Button("OK"))
                 {
-                    Engine->ComponentFactory.MakeScriptFile(inputBuffer.c_str());
+                    EngineCore->ComponentFactory.MakeScriptFile(inputBuffer.c_str());
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::SameLine();

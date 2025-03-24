@@ -1,7 +1,5 @@
 ﻿#include "pch.h"
 
-ETimeSystem& Time = ETimeSystem::Engine::GetInstance();
-
 ETimeSystem::ETimeSystem()
 {
 	QueryPerformanceFrequency(&m_frequency);
@@ -44,10 +42,10 @@ bool ETimeSystem::TimeSystemFixedUpdate()
 
 void ETimeSystem::Engine::TimeSystemUpdate()
 {
-	Time.TimeSystemUpdate();
+	EngineCore->Time.TimeSystemUpdate();
 }
 
 bool ETimeSystem::Engine::TimeSystemFixedUpdate()
 {
-	return Time.TimeSystemFixedUpdate();
+	return EngineCore->Time.TimeSystemFixedUpdate();
 }

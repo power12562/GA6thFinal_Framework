@@ -1,42 +1,40 @@
 ﻿#include "pch.h"
 
-ESceneManager& SceneManager = ESceneManager::Engine::GetInstance();
-
 void ESceneManager::Engine::SceneUpdate()
 {
-    SceneManager.SceneUpdate();
+    EngineCore->SceneManager.SceneUpdate();
 }
 
 void ESceneManager::Engine::AddGameObjectToLifeCycle(std::shared_ptr<GameObject> gameObject)
 {
-    auto [iter, result] = SceneManager.m_runtimeObjectsUnorderedMap[gameObject->m_name].insert(gameObject);
+    auto [iter, result] = EngineCore->SceneManager.m_runtimeObjectsUnorderedMap[gameObject->m_name].insert(gameObject);
     if (result == false)
     {
         assert(!"이미 추가한 게임 오브젝트 입니다.");
     }
     else
     {
-        SceneManager.m_AddGameObjectsQueue.push_back(gameObject);
+        EngineCore->SceneManager.m_AddGameObjectsQueue.push_back(gameObject);
     }
 }
 
 void ESceneManager::Engine::AddComponentToLifeCycle(std::shared_ptr<Component> component)
 {
-    SceneManager.m_AddComponentsQueue.push_back(component);
+    EngineCore->SceneManager.m_AddComponentsQueue.push_back(component);
 }
 
 void ESceneManager::Engine::SetGameObjectActive(int instanceID, bool value)
 {
-    if (auto& gameObject = SceneManager.m_runtimeObjects[instanceID])
+    if (auto& gameObject = EngineCore->SceneManager.m_runtimeObjects[instanceID])
     {
         if (gameObject->m_activeSelf != value)
         {
             //컴포넌트들의 On__able 함수를 호출하도록 합니다.
-            auto& [WaitSet, WaitVec, WaitValue] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+            auto& [WaitSet, WaitVec, WaitValue] = value ? EngineCore->SceneManager.m_OnEnableQueue : EngineCore->SceneManager.m_OnDisableQueue;
             WaitValue.emplace_back(&gameObject->m_activeSelf);
             for (auto& component : gameObject->m_components)
             {
-                if (component->Enable)
+                if (component->m_enable)
                 {
                     auto [iter, result] = WaitSet.insert(component.get());
                     if (result)
@@ -54,9 +52,9 @@ void ESceneManager::Engine::SetComponentEnable(Component* component, bool value)
     if (component && component->m_enable != value)
     {
         //컴포넌트의 On__able 함수를 호출하도록 합니다.
-        auto& [WaitSet, WaitVec, WaitValue] = value ? SceneManager.m_OnEnableQueue : SceneManager.m_OnDisableQueue;
+        auto& [WaitSet, WaitVec, WaitValue] = value ? EngineCore->SceneManager.m_OnEnableQueue : EngineCore->SceneManager.m_OnDisableQueue;
         WaitValue.emplace_back(&component->m_enable);
-        if (component->gameObect->activeSelf)
+        if (component->gameObect->m_activeSelf)
         {
             auto [iter, result] = WaitSet.insert(component);
             if (result)
@@ -70,12 +68,49 @@ void ESceneManager::Engine::SetComponentEnable(Component* component, bool value)
 std::weak_ptr<GameObject> ESceneManager::Engine::FindGameObjectWithName(std::wstring_view name)
 {
     std::weak_ptr<GameObject> findObject;
-    auto findIter = SceneManager.m_runtimeObjectsUnorderedMap.find(name.data());
-    if (findIter != SceneManager.m_runtimeObjectsUnorderedMap.end() && !findIter->second.empty())
+    auto findIter = EngineCore->SceneManager.m_runtimeObjectsUnorderedMap.find(name.data());
+    if (findIter != EngineCore->SceneManager.m_runtimeObjectsUnorderedMap.end() && !findIter->second.empty())
     {
         findObject = *findIter->second.begin();
     }
     return findObject;
+}
+
+void ESceneManager::Engine::RenameGameObject(GameObject* gameObject, std::wstring_view newName)
+{
+    if (gameObject == nullptr)
+        return;
+
+    if (gameObject->m_name != newName)
+    {
+        auto& ObjectsNameMap = EngineCore->SceneManager.m_runtimeObjectsUnorderedMap;
+        auto mapIter = ObjectsNameMap.find(gameObject->m_name);
+        if (mapIter != ObjectsNameMap.end())
+        {
+            const std::shared_ptr<GameObject>* sptr = nullptr;
+            auto& [name, set] = *mapIter;
+            for (auto& obj : set)
+            {
+                if (obj.get() == gameObject)
+                {
+                    sptr = &obj;
+                    break;
+                }
+            }
+            if (sptr)
+            {
+                ObjectsNameMap[newName.data()].insert(*sptr);
+                set.erase(*sptr);
+                gameObject->m_name = newName;
+                if (set.empty())
+                {
+                    ObjectsNameMap.erase(mapIter);
+                }
+                return;
+            }
+        }
+    }
+    __debugbreak(); //이름 오류.
 }
 
 void ESceneManager::SceneUpdate()
@@ -224,7 +259,19 @@ void ESceneManager::ObjectsAddToLifeCycle()
             m_runtimeObjects.resize(id + 1);
         }
         m_runtimeObjects[id] = gameObject;
-        
+        m_runtimeRootObjects.emplace_back(gameObject);
+        std::erase_if(m_runtimeRootObjects, [](const std::weak_ptr<GameObject>& weak)
+            {
+                if (weak.expired())
+                    return true;    //파괴된 오브젝트는 전부 제거
+
+                if (std::shared_ptr<GameObject> shared = weak.lock())
+                {
+                    //shared->transform->isParent; //최상위 부모만 남겨야함
+                }
+
+                return false;
+            });
     }
     m_AddGameObjectsQueue.clear();
 

@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 
-std::unique_ptr<EngineCores> Engine
+std::unique_ptr<EngineCores> EngineCore
 {
     new EngineCores
     {

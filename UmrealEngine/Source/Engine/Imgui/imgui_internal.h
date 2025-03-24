@@ -38,7 +38,7 @@ Index of this file:
 // [SECTION] Table support
 // [SECTION] ImGui internal API
 // [SECTION] ImFontAtlas internal API
-// [SECTION] Test Engine specific hooks (imgui_test_engine)
+// [SECTION] Test EngineCore specific hooks (imgui_test_engine)
 
 */
 
@@ -2168,7 +2168,7 @@ enum ImGuiDebugLogFlags_
 
     ImGuiDebugLogFlags_EventMask_           = ImGuiDebugLogFlags_EventError | ImGuiDebugLogFlags_EventActiveId | ImGuiDebugLogFlags_EventFocus | ImGuiDebugLogFlags_EventPopup | ImGuiDebugLogFlags_EventNav | ImGuiDebugLogFlags_EventClipper | ImGuiDebugLogFlags_EventSelection | ImGuiDebugLogFlags_EventIO | ImGuiDebugLogFlags_EventFont | ImGuiDebugLogFlags_EventInputRouting | ImGuiDebugLogFlags_EventDocking | ImGuiDebugLogFlags_EventViewport,
     ImGuiDebugLogFlags_OutputToTTY          = 1 << 20,  // Also send output to TTY
-    ImGuiDebugLogFlags_OutputToTestEngine   = 1 << 21,  // Also send output to Test Engine
+    ImGuiDebugLogFlags_OutputToTestEngine   = 1 << 21,  // Also send output to Test EngineCore
 };
 
 struct ImGuiDebugAllocEntry
@@ -3903,7 +3903,7 @@ IMGUI_API void      ImFontAtlasBuildGetOversampleFactors(const ImFontConfig* src
 IMGUI_API bool      ImFontAtlasGetMouseCursorTexData(ImFontAtlas* atlas, ImGuiMouseCursor cursor_type, ImVec2* out_offset, ImVec2* out_size, ImVec2 out_uv_border[2], ImVec2 out_uv_fill[2]);
 
 //-----------------------------------------------------------------------------
-// [SECTION] Test Engine specific hooks (imgui_test_engine)
+// [SECTION] Test EngineCore specific hooks (imgui_test_engine)
 //-----------------------------------------------------------------------------
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE

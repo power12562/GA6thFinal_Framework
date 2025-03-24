@@ -3,7 +3,7 @@
 
 UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores, ImGuiContext* ImguiContext)
 {
-    Engine = std::make_unique<EngineCores>(engineCores);  //코어 동기화
+    EngineCore = std::make_unique<EngineCores>(engineCores);  //코어 동기화
     ImGui::SetCurrentContext(ImguiContext);  //Imguicontext 동기화
 }
 
