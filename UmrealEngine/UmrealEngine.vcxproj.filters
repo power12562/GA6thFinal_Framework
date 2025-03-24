@@ -102,6 +102,24 @@
     <ClInclude Include="Source\Engine\GameCore\Transform\Transform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\imgui_node_editor_internal.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\imgui_node_editor.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\imgui_extra_math.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\imgui_canvas.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\imgui_bezier_math.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Imgui\crude_json.h">
+      <Filter>헤더 파일\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
@@ -173,8 +191,29 @@
     <ClCompile Include="Source\Engine\GameCore\Transform\Transform.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Imgui\crude_json.cpp">
+      <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Imgui\imgui_canvas.cpp">
+      <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Imgui\imgui_node_editor.cpp">
+      <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Imgui\imgui_node_editor_api.cpp">
+      <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="Source\Engine\Imgui\imgui_node_editor_internal.inl">
+      <Filter>소스 파일\imgui</Filter>
+    </None>
+    <None Include="Source\Engine\Imgui\imgui_extra_math.inl">
+      <Filter>소스 파일\imgui</Filter>
+    </None>
+    <None Include="Source\Engine\Imgui\imgui_bezier_math.inl">
+      <Filter>소스 파일\imgui</Filter>
+    </None>
   </ItemGroup>
 </Project>
