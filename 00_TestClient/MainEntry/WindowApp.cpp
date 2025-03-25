@@ -1,10 +1,6 @@
 ﻿#include "pch.h"
 #include "WindowApp.h"
-#include "blueprint.h"
 
-blueprint nodeEditor;
-
-//??
 int APIENTRY wWinMain(
     _In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -33,6 +29,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch (msg)
     {
     case WM_DESTROY:
+        ESceneManager::Engine::CleanupSceneManager();
         PostQuitMessage(0);
         break;
     default:
@@ -40,6 +37,21 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     }
     return 0;
 }
+
+static void DrawTransformNodeTest(const Transform& node)
+{
+    ImGui::PushID(node.gameObject.GetInstanceID());
+    if (ImGui::TreeNode(node.gameObject.ToString().c_str()))
+    {
+        for (int i = 0; i < node.childCount; i++)
+        {
+            Transform& child = *node.GetChild(i);
+            DrawTransformNodeTest(child); // 재귀 호출
+        }
+        ImGui::TreePop();
+    }
+    ImGui::PopID();
+};
 
 WindowApp::WindowApp()
 {
@@ -65,10 +77,19 @@ void WindowApp::ModuleInitialize()
 
     //오브젝트 생성 테스트
     auto obj1 = NewGameObject<GameObject>(L"TestObject").lock();
-    auto obj2 = NewGameObject<GameObject>(L"TestObject").lock();
-    auto obj3 = NewGameObject<GameObject>(L"TestObject").lock();
+    auto obj2 = NewGameObject<GameObject>(L"TestObject2").lock();
+    auto obj3 = NewGameObject<GameObject>(L"TestObject3").lock();
+    auto obj4 = NewGameObject<GameObject>(L"TestObject4").lock();
+    auto obj5 = NewGameObject<GameObject>(L"TestObject5").lock();
+    auto obj6 = NewGameObject<GameObject>(L"TestObject6").lock();
 
-    nodeEditor.OnStart();
+    //Scene Graph 테스트
+    obj2->transform.SetParent(obj1->transform);
+    obj3->transform.SetParent(obj2->transform);
+    obj4->transform.SetParent(obj3->transform);
+    obj5->transform.SetParent(obj4->transform);
+    obj6->transform.SetParent(obj5->transform);
+
 }
 
 
@@ -222,6 +243,19 @@ void WindowApp::ClientRender()
     {
         //nodeEditor.TestUpdate();
         nodeEditor.OnFrame(0.016f);
+    }
+    ImGui::End();
+
+    ImGui::Begin(u8"트리 테스트"_c_str);
+    {
+        const auto& objList = EngineCore->SceneManager.GetRootObjects();
+        for (auto& obj : objList)
+        {
+            if (auto ptr = obj.lock())
+            {
+                DrawTransformNodeTest(ptr->transform);
+            }        
+        }
     }
     ImGui::End();
 

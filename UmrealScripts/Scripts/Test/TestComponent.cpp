@@ -35,6 +35,9 @@ void TestComponent::Update()
 
     ImGui::EndChild();
     ImGui::End();
+
+
+    EngineCore->Time.deltaTime();
 }
 
 void TestComponent::Awake()

@@ -9,7 +9,7 @@
 #define SETTER_ONLY(type, property_name)     
 #define PROPERTY(property_name) TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct> property_name{this}; using property_name##_property_t = TProperty<property_class_type, property_name##_property_getter_struct, property_name##_property_setter_struct>; friend property_name##_property_t;
 
-#define  REFLECT_FIELDS_BASE_BEGIN() {
+#define REFLECT_FIELDS_BASE_BEGIN() {
 #define REFLECT_FIELDS_BASE_END(CLASS, fields_access_modifier) }
-#define  REFLECT_FIELDS_BEGIN(BASE)	 {
+#define REFLECT_FIELDS_BEGIN(BASE)	 {
 #define REFLECT_FIELDS_END(CLASS, fields_access_modifier)	}
