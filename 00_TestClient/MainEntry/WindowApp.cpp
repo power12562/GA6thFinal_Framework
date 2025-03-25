@@ -1,6 +1,9 @@
 ﻿#include "pch.h"
 #include "WindowApp.h"
 
+#include "blueprint.h"
+blueprint nodeEditor;
+
 int APIENTRY wWinMain(
     _In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -90,6 +93,7 @@ void WindowApp::ModuleInitialize()
     obj5->transform.SetParent(obj4->transform);
     obj6->transform.SetParent(obj5->transform);
 
+    nodeEditor.OnStart();
 }
 
 
