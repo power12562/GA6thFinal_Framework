@@ -33,6 +33,14 @@ GameObject::~GameObject()
 
 bool GameObject::activeInHierarchy_property_getter()
 {
+    Transform* curr = &transform;
+    while (curr != nullptr)
+    {
+        if (!curr->gameObject.m_activeSelf)
+            return false;
+
+        curr = curr->parent;
+    }
     return true;
 }
 
