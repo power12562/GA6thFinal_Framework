@@ -149,12 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="blueprint.h" />
     <ClInclude Include="MainEntry\Resource.h" />
     <ClInclude Include="MainEntry\targetver.h" />
     <ClInclude Include="MainEntry\WindowApp.h" />
+    <ClInclude Include="NodeEditor.h" />
+    <ClInclude Include="utilities\builders.h" />
+    <ClInclude Include="utilities\drawing.h" />
+    <ClInclude Include="utilities\widgets.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="blueprint.cpp" />
     <ClCompile Include="MainEntry\WindowApp.cpp" />
+    <ClCompile Include="utilities\builders.cpp" />
+    <ClCompile Include="utilities\drawing.cpp" />
+    <ClCompile Include="utilities\widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MainEntry\00_TestClient.rc" />

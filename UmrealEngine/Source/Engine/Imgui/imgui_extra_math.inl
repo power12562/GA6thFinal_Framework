@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // VERSION 0.9.1
 //
 // LICENSE
@@ -19,15 +19,17 @@
 
 
 //------------------------------------------------------------------------------
-//inline bool operator==(const ImVec2& lhs, const ImVec2& rhs)
-//{
-//    return lhs.x == rhs.x && lhs.y == rhs.y;
-//}
-//
-//inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs)
-//{
-//    return lhs.x != rhs.x || lhs.y != rhs.y;
-//}
+# if IMGUI_VERSION_NUM < 19002
+inline bool operator==(const ImVec2& lhs, const ImVec2& rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs)
+{
+    return lhs.x != rhs.x || lhs.y != rhs.y;
+}
+# endif
 
 inline ImVec2 operator*(const float lhs, const ImVec2& rhs)
 {

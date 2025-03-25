@@ -46,12 +46,14 @@ constexpr bool IS_SCRIPTS_PROJECT = false;
 #include <stack>
 
 //ThirdParty
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "Engine/Imgui/imgui.h"
 #include "Engine/Imgui/imgui_stdlib.h"
 #include "Engine/Imgui/imgui_impl_win32.h"
 #include "Engine/Imgui/imgui_impl_dx11.h"
 #include "Engine/Imgui/imgui_impl_dx12.h"
 #include "Engine/Imgui/imgui_node_editor.h"
+#include "Engine/Imgui/imgui_internal.h"
 
 //Utility
 #include "Engine/Utility/utfHelper.h"

@@ -1,5 +1,9 @@
 ﻿#include "pch.h"
 #include "WindowApp.h"
+#include "blueprint.h"
+
+blueprint nodeEditor;
+
 //??
 int APIENTRY wWinMain(
     _In_ HINSTANCE hInstance,
@@ -64,6 +68,7 @@ void WindowApp::ModuleInitialize()
     auto obj2 = NewGameObject<GameObject>(L"TestObject").lock();
     auto obj3 = NewGameObject<GameObject>(L"TestObject").lock();
 
+    nodeEditor.OnStart();
 }
 
 
@@ -93,122 +98,130 @@ void WindowApp::ClientUpdate()
 void WindowApp::ClientRender()
 {
     using namespace u8_literals;
-
-    ImGui::Begin(u8"타임 클래스 확인용"_c_str);
     {
-        ImGui::InputDouble("time scale", &EngineCore->Time.timeScale);
-
-        ImGui::Text("time : %f", EngineCore->Time.time());
-        ImGui::Text("realtimeSinceStartup : %f", EngineCore->Time.realtimeSinceStartup());
-
-        ImGui::Text("frameCount : %llu", EngineCore->Time.frameCount());
-
-        ImGui::Text("FPS : %d", EngineCore->Time.frameRate());
-        ImGui::Text("DeltaTime : %f", EngineCore->Time.deltaTime());
-
-        ImGui::Text("unscaledDeltaTime : %f", EngineCore->Time.unscaledDeltaTime());
-
-        ImGui::InputDouble("Fixed Time Step", &EngineCore->Time.fixedTimeStep);
-        ImGui::Text("fixedDeltaTime %f", EngineCore->Time.fixedDeltaTime());
-        ImGui::Text("fixedUnscaledDeltaTime %f", EngineCore->Time.fixedUnscaledDeltaTime());
-
-        ImGui::InputDouble("maximumDeltaTime", &EngineCore->Time.maximumDeltaTime);
-    }
-    ImGui::End();
-
-    std::shared_ptr<GameObject> m_testObject = GameObject::Find(L"TestObject").lock();
-    ImGui::Begin(u8"컴포넌트 추가 테스트"_c_str);
-    {
-        if (m_testObject)
+        ImGui::Begin(u8"타임 클래스 확인용"_c_str);
         {
-            for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
-            {
-                std::weak_ptr<Component> wptr = m_testObject->GetComponentAtIndex<Component>(i);
-                if (auto component = wptr.lock())
-                {
-                    ImGui::PushID(i);
-                    if (ImGui::CollapsingHeader(component->class_name()))
-                    {
-                        component->imgui_draw_reflect_fields();
-                    }
-                    ImGui::PopID();
-                    std::string json = component->serialized_reflect_fields();
-                }
-            }
+            ImGui::InputDouble("time scale", &EngineCore->Time.timeScale);
 
-            if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"_c_str))
+            ImGui::Text("time : %f", EngineCore->Time.time());
+            ImGui::Text("realtimeSinceStartup : %f", EngineCore->Time.realtimeSinceStartup());
+
+            ImGui::Text("frameCount : %llu", EngineCore->Time.frameCount());
+
+            ImGui::Text("FPS : %d", EngineCore->Time.frameRate());
+            ImGui::Text("DeltaTime : %f", EngineCore->Time.deltaTime());
+
+            ImGui::Text("unscaledDeltaTime : %f", EngineCore->Time.unscaledDeltaTime());
+
+            ImGui::InputDouble("Fixed Time Step", &EngineCore->Time.fixedTimeStep);
+            ImGui::Text("fixedDeltaTime %f", EngineCore->Time.fixedDeltaTime());
+            ImGui::Text("fixedUnscaledDeltaTime %f", EngineCore->Time.fixedUnscaledDeltaTime());
+
+            ImGui::InputDouble("maximumDeltaTime", &EngineCore->Time.maximumDeltaTime);
+        }
+        ImGui::End();
+
+        std::shared_ptr<GameObject> m_testObject = GameObject::Find(L"TestObject").lock();
+        ImGui::Begin(u8"컴포넌트 추가 테스트"_c_str);
+        {
+            if (m_testObject)
             {
-                for (auto& key : EngineCore->ComponentFactory.GetNewComponentFuncList())
+                for (size_t i = 0; i < m_testObject->GetComponentCount(); i++)
                 {
-                    if (ImGui::Button(key.c_str()))
+                    std::weak_ptr<Component> wptr = m_testObject->GetComponentAtIndex<Component>(i);
+                    if (auto component = wptr.lock())
                     {
-                        if (m_testObject)
+                        ImGui::PushID(i);
+                        if (ImGui::CollapsingHeader(component->class_name()))
                         {
-                            EngineCore->ComponentFactory.AddComponentToObject(m_testObject.get(), key);
+                            component->imgui_draw_reflect_fields();
+                        }
+                        ImGui::PopID();
+                        std::string json = component->serialized_reflect_fields();
+                    }
+                }
+
+                if (ImGui::CollapsingHeader(u8"컴포넌트 추가하기"_c_str))
+                {
+                    for (auto& key : EngineCore->ComponentFactory.GetNewComponentFuncList())
+                    {
+                        if (ImGui::Button(key.c_str()))
+                        {
+                            if (m_testObject)
+                            {
+                                EngineCore->ComponentFactory.AddComponentToObject(m_testObject.get(), key);
+                            }
                         }
                     }
                 }
             }
         }
+        ImGui::End();
+        
+        ImGui::Begin(u8"프로퍼티 테스트"_c_str);
+        {
+            if (m_testObject)
+            {
+                bool input = m_testObject->activeSelf;
+                ImGui::Checkbox("object Active", &input);
+                m_testObject->SetActive(input);
+
+                for (int i = 0;  i < m_testObject->GetComponentCount(); i++)
+                {
+                    if (auto component = m_testObject->GetComponentAtIndex<Component>(i).lock()) 
+                    {
+                        bool input = component->Enable;
+                        ImGui::Checkbox(component->class_name(), &input);
+                        component->Enable = input;
+                    }
+                }
+            }
+        }
+        ImGui::End();
+
+        ImGui::Begin(u8"컴포넌트 팩토리 테스트"_c_str);
+        {
+            if (ImGui::Button(u8"스크립트 재 빌드"_c_str))
+            {
+                EngineCore->ComponentFactory.InitalizeComponentFactory();
+            }
+
+            //새 스크립트 파일 만들기 테스트용
+            {
+                static ImVec2 popupPos{};
+                static std::string inputBuffer{};
+                if (ImGui::Button(u8"테스트 스크립트 파일 만들기"_c_str))
+                {
+                    popupPos = ImGui::GetMousePos();
+                    inputBuffer.clear();
+                    ImGui::OpenPopup(u8"파일 이름을 입력하세요."_c_str);
+                }
+                
+                if (ImGui::BeginPopup(u8"파일 이름을 입력하세요."_c_str))
+                {
+                    ImGui::SetNextWindowPos(popupPos, ImGuiCond_Appearing);
+                    ImGui::InputText("##new_script_file_name", &inputBuffer);
+                    if (ImGui::Button("OK"))
+                    {
+                        EngineCore->ComponentFactory.MakeScriptFile(inputBuffer.c_str());
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::SameLine();
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+            }
+        }
+        ImGui::End();
     }
-    ImGui::End();
-    
-    ImGui::Begin(u8"프로퍼티 테스트"_c_str);
+
+    ImGui::Begin("Node Editor");
     {
-        if (m_testObject)
-        {
-            bool input = m_testObject->activeSelf;
-            ImGui::Checkbox("object Active", &input);
-            m_testObject->SetActive(input);
-
-            for (int i = 0;  i < m_testObject->GetComponentCount(); i++)
-            {
-                if (auto component = m_testObject->GetComponentAtIndex<Component>(i).lock()) 
-                {
-                    bool input = component->Enable;
-                    ImGui::Checkbox(component->class_name(), &input);
-                    component->Enable = input;
-                }
-            }
-        }
-    }
-    ImGui::End();
-
-    ImGui::Begin(u8"컴포넌트 팩토리 테스트"_c_str);
-    {
-        if (ImGui::Button(u8"스크립트 재 빌드"_c_str))
-        {
-            EngineCore->ComponentFactory.InitalizeComponentFactory();
-        }
-
-        //새 스크립트 파일 만들기 테스트용
-        {
-            static ImVec2 popupPos{};
-            static std::string inputBuffer{};
-            if (ImGui::Button(u8"테스트 스크립트 파일 만들기"_c_str))
-            {
-                popupPos = ImGui::GetMousePos();
-                inputBuffer.clear();
-                ImGui::OpenPopup(u8"파일 이름을 입력하세요."_c_str);
-            }
-            
-            if (ImGui::BeginPopup(u8"파일 이름을 입력하세요."_c_str))
-            {
-                ImGui::SetNextWindowPos(popupPos, ImGuiCond_Appearing);
-                ImGui::InputText("##new_script_file_name", &inputBuffer);
-                if (ImGui::Button("OK"))
-                {
-                    EngineCore->ComponentFactory.MakeScriptFile(inputBuffer.c_str());
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel"))
-                {
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::EndPopup();
-            }
-        }
+        //nodeEditor.TestUpdate();
+        nodeEditor.OnFrame(0.016f);
     }
     ImGui::End();
 
