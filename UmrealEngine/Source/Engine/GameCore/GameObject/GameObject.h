@@ -55,18 +55,6 @@ public:
     static std::weak_ptr<GameObject> FindWithTag(std::wstring_view tag) { return std::weak_ptr<GameObject>(); }
 
     /// <summary>
-    /// <para> 구현 X                                                            </para>
-    /// <para> 전달받은 인스턴스 ID를 가진 GameObject가 속해있는 Scene을 반환합니다. </para>
-    /// </summary>
-    /// <param name="instanceID :">대상 인스턴스 아이디</param>
-    /// <returns>Scene 정보</returns>
-    static Scene& GetScene(int instanceID) 
-    { 
-        static Scene empty;
-        return empty;
-    }
-
-    /// <summary>
     /// <para>구현 X                                  </para>
     /// <para>전달받은 오브젝트 or 컴포넌트를 파괴합니다. </para>
     /// </summary>
@@ -136,10 +124,19 @@ public:
 public:
     GameObject();
     ~GameObject();
-public:
-    Transform transform;
 
 public:
+    /// <summary>
+    /// <para> 구현 X                                           </para>
+    /// <para> 전달받은 GameObject가 속해있는 Scene을 반환합니다. </para>
+    /// </summary>
+    /// <returns>Scene 정보</returns>
+    Scene& GetScene()
+    {
+        static Scene empty;
+        return empty;
+    }
+
     /// <summary>
     /// <para>이 GameObject의 InstanceID를 반환합니다.                                 </para>
     /// <para>참고 : InstanceID는 매 런타임마다 달라집니다. 즉 UUID로 사용할 수 없습니다. </para>
@@ -209,8 +206,19 @@ public:
 
 //프로퍼티
 public:
-    GETTER_ONLY(bool, activeInHierarchy);
-    // get : 실제 활성화 여부 (부모가 false면 false) 구현 x
+    GETTER_ONLY(bool, activeInHierarchy)
+    {
+        Transform* curr = &transform;
+        while (curr != nullptr)
+        {
+            if (!curr->gameObject.m_activeSelf)
+                return false;
+
+            curr = curr->parent;
+        }
+        return true;
+    }
+    // get : 실제 활성화 여부 (부모가 false면 false)
     PROPERTY(activeInHierarchy);
     
     GETTER_ONLY(bool, activeSelf)
@@ -243,8 +251,10 @@ public:
     }
     // get, set:
     //  게임 오브젝트의 이름
-    PROPERTY(name)
+    PROPERTY(name) 
 
+public:
+    Transform transform;
 private:
     std::wstring                             m_name = L"null";
     bool                                     m_activeSelf = true;

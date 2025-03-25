@@ -246,7 +246,7 @@ void WindowApp::ClientRender()
     ImGui::Begin("Node Editor");
     {
         //nodeEditor.TestUpdate();
-        nodeEditor.OnFrame(0.016f);
+        //nodeEditor.OnFrame(0.016f);
     }
     ImGui::End();
 
