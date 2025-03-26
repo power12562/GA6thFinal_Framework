@@ -44,11 +44,6 @@ struct property_void_type
     using Type = void;
 };
 
-// 예제: field_type이 있는 타입
-struct WithFieldType {
-    using field_type = double;
-};
-
 //Set, Get 함수 선언 도움을 위한 헬퍼 템플릿 클래스
 template <typename owner_type, class getter, class setter>
 class TProperty
