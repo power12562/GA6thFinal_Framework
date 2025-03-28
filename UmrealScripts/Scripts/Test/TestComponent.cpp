@@ -36,8 +36,9 @@ void TestComponent::Update()
     ImGui::EndChild();
     ImGui::End();
 
-
-    EngineCore->Time.deltaTime();
+    ImGui::Begin(u8"스크립트 델타 타임"_c_str);
+    ImGui::Text("%f", EngineCore->Time.deltaTime());
+    ImGui::End();
 }
 
 void TestComponent::Awake()

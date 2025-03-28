@@ -66,7 +66,7 @@ public:
     /// <param name="fileName :">사용할 파일 이름</param>
     void MakeScriptFile(const char* fileName) const;
 private:
-    using InitScripts = void(*)(const EngineCores&, ImGuiContext*);
+    using InitScripts = void(*)(const std::shared_ptr<EngineCores>, ImGuiContext*);
     using MakeUmScriptsFile = void(*)(const char* fileName);
     using NewScripts = Component*(*)();
 

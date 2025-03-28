@@ -7,7 +7,7 @@ public:
     ~EngineCores();
     struct Engine
     {
-        static std::unique_ptr<EngineCores> MakeEngineCores();
+        static std::shared_ptr<EngineCores> MakeEngineCores();
     };
 
     ETimeSystem Time;
@@ -16,7 +16,7 @@ public:
     EComponentFactory ComponentFactory;
 };
 
-extern std::unique_ptr<EngineCores> EngineCore; //스크립트에서 엔진 접근을 위한 전역 변수.
+extern std::shared_ptr<EngineCores> EngineCore; //스크립트에서 엔진 접근을 위한 전역 변수.
 
 
 

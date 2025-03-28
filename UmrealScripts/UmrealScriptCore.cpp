@@ -1,9 +1,9 @@
 ﻿#include "UmFramework.h"
 #include "UmrealScriptCore.h"
 
-UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const EngineCores& engineCores, ImGuiContext* ImguiContext)
+UMREALSCRIPTS_DECLSPEC void InitalizeUmrealScript(const std::shared_ptr<EngineCores> engineCores, ImGuiContext* ImguiContext)
 {
-    EngineCore = std::make_unique<EngineCores>(engineCores);  //코어 동기화
+    EngineCore = engineCores;  //코어 동기화
     ImGui::SetCurrentContext(ImguiContext);  //Imguicontext 동기화
 }
 

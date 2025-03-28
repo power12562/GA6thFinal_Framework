@@ -3,9 +3,9 @@
 EngineCores::EngineCores() = default;
 EngineCores::~EngineCores() = default;
 
-std::unique_ptr<EngineCores> EngineCore{};
+std::shared_ptr<EngineCores> EngineCore{};
 
-std::unique_ptr<EngineCores> EngineCores::Engine::MakeEngineCores()
+std::shared_ptr<EngineCores> EngineCores::Engine::MakeEngineCores()
 {
-    return std::make_unique<EngineCores>();
+    return std::make_shared<EngineCores>();
 }
