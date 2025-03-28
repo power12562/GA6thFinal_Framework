@@ -2,6 +2,7 @@
 
 class ETimeSystem
 {
+    friend class EngineCores;
 private:
     ETimeSystem();
     ~ETimeSystem();
@@ -15,13 +16,6 @@ public:
 
         /*엔진 Fixed Update를 제어하기 위한 함수. true를 반환하면 Fixed Update를 호출하면 됨.*/
         static bool TimeSystemFixedUpdate();
-
-        /*싱글톤 객체 접근용*/
-        inline static ETimeSystem& GetInstance() 
-        {
-            static ETimeSystem instance;
-            return instance; 
-        }
     };
 private:
     /*엔진 Update를 제어하기 위한 함수. 매프레임 호출해야함.*/

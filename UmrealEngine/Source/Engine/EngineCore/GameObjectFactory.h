@@ -6,19 +6,11 @@ concept IS_BASE_GAMEOBJECT_C = std::is_base_of_v<GameObject, T>;
 
 class EGameObjectFactory
 {
+    friend class EngineCores;
 private:
     EGameObjectFactory();
     ~EGameObjectFactory();
 public:
-    //엔진 접근용 네임스페이스
-    struct Engine
-    {
-        inline static EGameObjectFactory& GetInstance() 
-        { 
-            static EGameObjectFactory instance;
-            return instance; 
-        }
-    };
 
     /// <summary>
     /// 게임 오브젝트 클래스를 팩토리에서 생성 가능하도록 등록합니다.

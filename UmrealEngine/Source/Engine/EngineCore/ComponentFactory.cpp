@@ -56,12 +56,8 @@ bool EComponentFactory::InitalizeComponentFactory()
     }
 
     auto InitDLLCores = (InitScripts)GetProcAddress(m_scriptsDll, funcList[1].c_str());
-    InitDLLCores(EngineCores{
-        ETimeSystem::Engine::GetInstance(),
-        ESceneManager::Engine::GetInstance(),
-        EComponentFactory::Engine::GetInstance(),
-        EGameObjectFactory::Engine::GetInstance()
-        },
+    InitDLLCores(
+        *EngineCore,
         ImGui::GetCurrentContext());
     if (funcList[1] != "InitalizeUmrealScript")
     {

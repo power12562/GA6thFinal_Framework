@@ -8,16 +8,11 @@ concept IS_BASE_COMPONENT_C = std::is_base_of_v<Component, T>;
 
 class EComponentFactory
 {
+    friend class EngineCores;
 public:
     //엔진 접근용 네임스페이스
     struct Engine
     {
-        //싱글톤 객체 접근용
-        inline static EComponentFactory& GetInstance() 
-        {
-            static EComponentFactory instance;
-            return instance; 
-        }
         //dll 경로
 #ifdef _DEBUG
         static constexpr const wchar_t* ScriptsDllPath = L"..\\UmrealScripts\\bin\\Debug";

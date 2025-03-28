@@ -1,13 +1,11 @@
 ﻿#include "pch.h"
 
-std::unique_ptr<EngineCores> EngineCore
-{
-    new EngineCores
-    {
-        ETimeSystem::Engine::GetInstance(),
-        ESceneManager::Engine::GetInstance(),
-        EComponentFactory::Engine::GetInstance(),
-        EGameObjectFactory::Engine::GetInstance()
-    }
-};
+EngineCores::EngineCores() = default;
+EngineCores::~EngineCores() = default;
 
+std::unique_ptr<EngineCores> EngineCore{};
+
+std::unique_ptr<EngineCores> EngineCores::Engine::MakeEngineCores()
+{
+    return std::make_unique<EngineCores>();
+}

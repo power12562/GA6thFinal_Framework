@@ -95,16 +95,11 @@ public:
 //함수는 일단 선언만. 구현은 나중에.
 class ESceneManager
 {
+    friend class EngineCores;
 public:
     //엔진 접근용 네임스페이스
     struct Engine
     {
-        inline static ESceneManager& GetInstance() 
-        { 
-            static ESceneManager instance;
-            return instance; 
-        }
-
         /// <summary>
         /// 씬 매니저가 관리하는 오브젝트를 전부 정리합니다.
         /// </summary>

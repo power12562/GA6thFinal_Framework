@@ -68,7 +68,8 @@ WindowApp::~WindowApp() = default;
 
 void WindowApp::PreInitialize()
 {
-   
+    EngineCore = EngineCores::Engine::MakeEngineCores();
+
 }
 
 void WindowApp::ModuleInitialize()
