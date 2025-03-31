@@ -194,8 +194,7 @@ private:
     std::vector<std::weak_ptr<GameObject>> m_runtimeRootObjects;
 
     //오브젝트 이름과 포인터로 관리하는 map
-    std::unordered_map<std::wstring,std::unordered_set<std::shared_ptr<GameObject>, 
-        hash_utils::SharedPtrHash, hash_utils::SharedPtrEqual>> m_runtimeObjectsUnorderedMap;
+    std::unordered_map<std::wstring, std::unordered_set<std::shared_ptr<GameObject>>> m_runtimeObjectsUnorderedMap;
 
     //오브젝트 추가 대기열 
     std::vector<std::shared_ptr<GameObject>> m_AddGameObjectsQueue;

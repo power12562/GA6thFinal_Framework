@@ -5,7 +5,17 @@ EngineCores::~EngineCores() = default;
 
 std::shared_ptr<EngineCores> EngineCore{};
 
-std::shared_ptr<EngineCores> EngineCores::Engine::MakeEngineCores()
+void EngineCores::Engine::CreateEngineCores()
 {
-    return std::make_shared<EngineCores>();
+    if (EngineCore)
+    {
+        assert(!"엔진 코어가 이미 존재합니다.");
+        return;
+    }
+    EngineCore = std::make_shared<EngineCores>();
+}
+
+void EngineCores::Engine::DestroyEngineCores()
+{
+    EngineCore.reset();
 }

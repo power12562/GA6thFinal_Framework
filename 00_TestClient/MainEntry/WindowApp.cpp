@@ -14,30 +14,11 @@ int APIENTRY wWinMain(
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    WindowApp app;
-    app.Initialize(hInstance);
+    WindowApp app(hInstance);
+    app.Initialize();
     app.Run();
-    app.Uninitialize();
+    app.UnInitialize();
 
-    return 0;
-}
-
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
-        return true;
-
-    switch (msg)
-    {
-    case WM_DESTROY:
-        ESceneManager::Engine::CleanupSceneManager();
-        PostQuitMessage(0);
-        break;
-    default:
-        return DefWindowProc(hwnd, msg, wParam, lParam);
-    }
     return 0;
 }
 
@@ -56,68 +37,30 @@ static void DrawTransformNodeTest(const Transform& node)
     ImGui::PopID();
 };
 
-WindowApp::WindowApp()
+WindowApp::WindowApp(HINSTANCE hInstance)
+    : Application(hInstance)
 {
     this->SetStyleToWindowed();
-    this->clientSize = { 1920, 1080 };
-    this->windowName = L"TestClient";
-    this->customWndProc = WndProc;
+    this->_clientSize = { 1920, 1080 };
+    this->_windowName = L"TestClient";
+
+    WindowApp::D311Module::App = this;
+    this->AddModule<WindowApp::D311Module>();
+
+    WindowApp::ImguiModule::App = this;
+    this->AddModule<WindowApp::ImguiModule>();
+
+    WindowApp::DXGIModule::App = this;
+    this->AddModule<WindowApp::DXGIModule>();
+
 }
 WindowApp::~WindowApp() = default;
-
-
-void WindowApp::PreInitialize()
-{
-    EngineCore = EngineCores::Engine::MakeEngineCores();
-
-}
-
-void WindowApp::ModuleInitialize()
-{
-    InitD311();
-    InitImgui();
-    InitDXGI();
-    EngineCore->ComponentFactory.InitalizeComponentFactory();
-
-    //오브젝트 생성 테스트
-    auto obj1 = NewGameObject<GameObject>(L"TestObject").lock();
-    auto obj2 = NewGameObject<GameObject>(L"TestObject2").lock();
-    auto obj3 = NewGameObject<GameObject>(L"TestObject3").lock();
-    auto obj4 = NewGameObject<GameObject>(L"TestObject4").lock();
-    auto obj5 = NewGameObject<GameObject>(L"TestObject5").lock();
-    auto obj6 = NewGameObject<GameObject>(L"TestObject6").lock();
-
-    //Scene Graph 테스트
-    obj2->transform.SetParent(obj1->transform);
-    obj3->transform.SetParent(obj2->transform);
-    obj4->transform.SetParent(obj3->transform);
-    obj5->transform.SetParent(obj4->transform);
-    obj6->transform.SetParent(obj5->transform);
-
-    nodeEditor.OnStart();
-}
-
-
-void WindowApp::PreUnitialize()
-{
-
-
-}
-
-void WindowApp::ModuleUnitialize()
-{
-    EngineCore->ComponentFactory.UninitalizeComponentFactory();
-    UninitDXGI();
-    UninitImgui();
-    UninitD311();
-}
 
 void WindowApp::ClientUpdate()
 {
     constexpr float clearColor[] = { 0.f,0.f,0.f,1.f };
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
     ImguiBeginDraw();
-
     ESceneManager::Engine::SceneUpdate();
 }
 
@@ -305,7 +248,7 @@ void WindowApp::InitImgui()
     ImFontConfig fontConfig{};
     io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\malgun.ttf", 20.0f, &fontConfig, ImGui::GetIO().Fonts->GetGlyphRangesKorean());
 
-    ImGui_ImplWin32_Init(this->GetHWND());
+    ImGui_ImplWin32_Init(GetHwnd());
     ImGui_ImplDX11_Init(this->m_device.Get(), this->m_deviceContext.Get());
 }
 
@@ -334,8 +277,8 @@ void WindowApp::InitDXGI()
 {
     CreateDXGIFactory1(__uuidof(IDXGIFactory4), &m_DXGIFactory4);
     DXGI_SWAP_CHAIN_DESC1 swapDesc{};
-    swapDesc.Width = clientSize.cx;
-    swapDesc.Height = clientSize.cy;
+    swapDesc.Width = _clientSize.cx;
+    swapDesc.Height = _clientSize.cy;
     swapDesc.BufferCount = 2; //버퍼 개수
     swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; //버퍼 사용 방식 지정
     swapDesc.SampleDesc.Count = 1;
@@ -349,7 +292,7 @@ void WindowApp::InitDXGI()
     screenDesc.RefreshRate.Numerator = 0;
     screenDesc.RefreshRate.Denominator = 0;
 
-    m_DXGIFactory4->CreateSwapChainForHwnd(m_device.Get(), GetHWND(), &swapDesc, &screenDesc, nullptr, &m_SwapChain1);
+    m_DXGIFactory4->CreateSwapChainForHwnd(m_device.Get(), GetHwnd(), &swapDesc, &screenDesc, nullptr, &m_SwapChain1);
 
     ComPtr<ID3D11Texture2D> pBackBufferTexture;
     m_SwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBufferTexture); //스왑체인 백버퍼를 가져온다.
@@ -358,8 +301,8 @@ void WindowApp::InitDXGI()
         m_device->CreateRenderTargetView(pBackBufferTexture.Get(), nullptr, &m_backBufferRTV);
 
         D3D11_VIEWPORT viewPort{};
-        viewPort.Width = clientSize.cx;
-        viewPort.Height = clientSize.cy;
+        viewPort.Width = _clientSize.cx;
+        viewPort.Height = _clientSize.cy;
         m_deviceContext->RSSetViewports(1, &viewPort);
     }
 }
@@ -369,3 +312,49 @@ void WindowApp::UninitDXGI()
 
 }
 
+void WindowApp::D311Module::ModuleInitialize()
+{
+    App->InitD311();
+}
+
+void WindowApp::D311Module::ModuleUnInitialize()
+{
+    App->UninitD311();
+}
+
+void WindowApp::ImguiModule::ModuleInitialize()
+{
+    App->InitImgui();
+}
+
+void WindowApp::ImguiModule::ModuleUnInitialize()
+{
+    App->UninitImgui();
+}
+
+void WindowApp::DXGIModule::ModuleInitialize()
+{
+    App->InitDXGI();
+
+    //오브젝트 생성 테스트
+    auto obj1 = NewGameObject<GameObject>(L"TestObject").lock();
+    auto obj2 = NewGameObject<GameObject>(L"TestObject2").lock();
+    auto obj3 = NewGameObject<GameObject>(L"TestObject3").lock();
+    auto obj4 = NewGameObject<GameObject>(L"TestObject4").lock();
+    auto obj5 = NewGameObject<GameObject>(L"TestObject5").lock();
+    auto obj6 = NewGameObject<GameObject>(L"TestObject6").lock();
+
+    //Scene Graph 테스트
+    obj2->transform.SetParent(obj1->transform);
+    obj3->transform.SetParent(obj2->transform);
+    obj4->transform.SetParent(obj3->transform);
+    obj5->transform.SetParent(obj4->transform);
+    obj6->transform.SetParent(obj5->transform);
+
+    nodeEditor.OnStart();
+}
+
+void WindowApp::DXGIModule::ModuleUnInitialize()
+{
+    App->UninitDXGI();
+}

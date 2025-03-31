@@ -24,9 +24,6 @@
     <ClInclude Include="Source\pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\WindowAppCore\SimpleWindowClient.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Utility\DumpUtility.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -120,15 +117,15 @@
     <ClInclude Include="Source\Engine\Imgui\crude_json.h">
       <Filter>헤더 파일\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\ApplicationCore\Application.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Utility\DumpUtility.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\WindowAppCore\SimpleWindowClient.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Imgui\imgui.cpp">
@@ -202,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Imgui\imgui_node_editor_api.cpp">
       <Filter>소스 파일\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ApplicationCore\Application.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
