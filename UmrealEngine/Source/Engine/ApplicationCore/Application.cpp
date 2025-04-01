@@ -24,6 +24,10 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 
 Application::Application(HINSTANCE hInstance)
 {
+    this->SetStyleToWindowed();
+    this->_clientSize = { 1920, 1080 };
+    this->_windowName = L"TestClient";
+
     if (App)
     {
         assert(!"Application은 하나만 존재 가능합니다.");

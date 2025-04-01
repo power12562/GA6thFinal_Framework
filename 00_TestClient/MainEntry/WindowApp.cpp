@@ -40,10 +40,6 @@ static void DrawTransformNodeTest(const Transform& node)
 WindowApp::WindowApp(HINSTANCE hInstance)
     : Application(hInstance)
 {
-    this->SetStyleToWindowed();
-    this->_clientSize = { 1920, 1080 };
-    this->_windowName = L"TestClient";
-
     WindowApp::D311Module::App = this;
     this->AddModule<WindowApp::D311Module>();
 
