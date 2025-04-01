@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "EditorManager.h"
 #include "EditorBase.h"
+#include "EditorMainToolBar.h"
 
 EditorManager EditorManager::Editor;
 EditorManager& Editor = EditorManager::Editor;
@@ -8,6 +9,7 @@ EditorManager& Editor = EditorManager::Editor;
 EditorManager::EditorManager()
 {
     mDockNodeFlags = ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoWindowMenuButton;
+    mMainToolBar = new EditorMainToolBar;
 }
 
 EditorManager::~EditorManager()
@@ -56,7 +58,7 @@ void EditorManager::Begin()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
     //ImGuizmo::BeginFrame();
-
+    
     //////////////////////////////////////////////
     // DockSpace 
     //////////////////////////////////////////////
@@ -98,7 +100,7 @@ void EditorManager::OnGuiStart()
     }
 }
 
-void EditorManager::DrawGui()
+void EditorManager::OnDrawGui()
 {
     // 비어있을 시 return
     if (mEditorToolArray.empty())
@@ -107,12 +109,14 @@ void EditorManager::DrawGui()
     Begin();
 
     /* ========GUI Drawing======== */ 
+    mMainToolBar->OnDrawGui();
+
     for (auto& [key, tool] : mEditorToolArray)
     {
         if (tool)
         {
             ImGui::PushID(reinterpret_cast<uintptr_t>(tool));
-            tool->DrawGui();
+            tool->OnDrawGui();
             ImGui::PopID();
         }
     }

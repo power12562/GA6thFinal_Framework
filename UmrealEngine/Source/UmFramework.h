@@ -31,6 +31,10 @@
 #include <vector>
 #include <map>
 
+// 파일열기대화상자
+#include <commdlg.h>
+#include <shlobj.h>
+
 //ThirdParty
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "Engine/Imgui/imgui.h"
@@ -44,6 +48,9 @@
 #include "Engine/Imgui/ImCurveEdit.h"
 #include "Engine/Imgui/GraphEditor.h"
 
+#include "../AssetSystem/framework.h"
+#include "../ProjectManager/framework.h"
+
 //Core
 #include "Engine/Core/TimeSystem.h"
 
@@ -53,6 +60,7 @@
 #include "Engine/Framework/Scene.h"
 
 // Editor
+#include "Engine/Editor/GUI.h"
 #include "Engine/Editor/EditorEnum.h"
 #include "Engine/Editor/EditorManager.h"
 #include "Engine/Editor/EditorBase.h"

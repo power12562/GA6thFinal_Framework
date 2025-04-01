@@ -2,33 +2,6 @@
 #include "EditorBase.h"
 #include "EditorManager.h"
 
-EditorTool::EditorTool()
-{
-}
-
-EditorMenuBar::EditorMenuBar()
-{
-    mEditorToolType = eEditorToolType::MENU_BAR;
-}
-
-void EditorMenuBar::DrawGui()
-{
-    OnPreFrame();
-
-    ImGui::BeginMainMenuBar();
-
-    OnFrame();
-    
-    ImGui::EndMainMenuBar();
-
-    OnPostFrame();
-}
-
-EditorWindow::EditorWindow()
-{
-    mEditorToolType = eEditorToolType::WINDOW;
-}
-
 /*
 2025.03.13 -  
 Begin의 if문 안에 End를 넣으니까 같은 Tab으로 Docking시도 시 Missing End() 예외가 발생하며 터짐.
@@ -40,9 +13,9 @@ When using Docking, it is expected that all dockable windows are submitted each 
 
 결론: Docking을 사용 시 Begin상관 없이 End를 호출해줘야 한다.
 */
-void EditorWindow::DrawGui()
+void EditorTool::OnDrawGui()
 {
-    if (GetToolActive())
+    if (GetActive())
     {
         OnPreFrame();
 

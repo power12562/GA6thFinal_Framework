@@ -3,6 +3,7 @@
 class EditorTool;
 class EditorManager;
 extern EditorManager& Editor;
+class EditorMainToolBar;
 
  class EditorManager
  {
@@ -20,7 +21,7 @@ extern EditorManager& Editor;
  public:
      /* InitImGui 직후 호출 */
      void OnGuiStart();
-     void DrawGui();
+     void OnDrawGui();
  public:
      // 나중에 자동으로 하나씩 전부 들어가게 만들자
      void PushTool(EditorTool* tool);
@@ -41,11 +42,15 @@ extern EditorManager& Editor;
  private:
      ImGuiContext* mGuiContext;
 
-     /* 에디터 툴 리스트 (map을 써야 나중에 정렬이 가능) */
      std::map<std::string, EditorTool*> mEditorToolArray;
+ private:
+     //////////////////////////////////////////////
+     // MainMenu
+     //////////////////////////////////////////////
+     EditorMainToolBar* mMainToolBar;
 
      //////////////////////////////////////////////
-     // 아래부턴 DockSpace용 변수와 메소드
+     // DockSpace
      //////////////////////////////////////////////
  private:
      /* DockSpace식별용 Label값 */

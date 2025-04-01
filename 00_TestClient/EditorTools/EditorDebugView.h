@@ -2,7 +2,7 @@
 #include "UmFramework.h"
 
 class EditorDebugView
-    : public EditorWindow
+    : public EditorTool
 {
 public:
     EditorDebugView();

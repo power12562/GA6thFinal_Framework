@@ -11,10 +11,3 @@ enum class eDockSpaceArea
     CENTER = 4,
     SIZE,
 };
-
-enum class eEditorToolType
-{
-    NONE = -1,
-    MENU_BAR,
-    WINDOW,
-};

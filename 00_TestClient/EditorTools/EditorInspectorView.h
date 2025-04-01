@@ -2,7 +2,7 @@
 #include "UmFramework.h"
 
 class EditorInspectorView
-    : public EditorWindow
+    : public EditorTool
 {
 public:
     EditorInspectorView();
@@ -15,5 +15,9 @@ private:
     virtual void _CALLBACK OnFrame() override;
 
     virtual void _CALLBACK OnPostFrame() override;
+public:
+    void SetFocusObject(std::weak_ptr<IEditorObject> obj);
+private:
+    std::weak_ptr<IEditorObject> mFocusedObject;
 };
 

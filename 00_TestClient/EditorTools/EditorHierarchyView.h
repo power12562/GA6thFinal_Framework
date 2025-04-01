@@ -2,7 +2,7 @@
 #include "UmFramework.h"
 
 class EditorHierarchyView
-    : public EditorWindow
+    : public EditorTool
 {
 public:
     EditorHierarchyView();
@@ -17,3 +17,16 @@ private:
     virtual void _CALLBACK OnPostFrame() override;
 };
 
+class SampleObject : public IEditorObject
+{
+public:
+    SampleObject()
+    {
+        File::CreateFileID(&mID);
+    }
+    virtual void _CALLBACK OnDrawInspectorView() override {
+        ImGui::Text(mID.c_str());
+    }
+private:
+    File::ID mID;
+};

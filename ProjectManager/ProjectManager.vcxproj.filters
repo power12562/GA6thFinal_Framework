@@ -15,62 +15,46 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainEntry\Resource.h">
+    <ClInclude Include="framework.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MainEntry\targetver.h">
+    <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MainEntry\WindowApp.h">
+    <ClInclude Include="FileSystem\File.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EditorTools\EditorInspectorView.h">
+    <ClInclude Include="Project\ProjectManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EditorTools\EditorHierarchyView.h">
+    <ClInclude Include="Asset\AssetManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EditorTools\EditorSceneView.h">
+    <ClInclude Include="FileSystem\Serializer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EditorTools\EditorDebugView.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="EditorTools\EditorAssetBrowser.h">
+    <ClInclude Include="Setting\SettingManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainEntry\WindowApp.cpp">
+    <ClCompile Include="Project\ProjectManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EditorTools\EditorInspectorView.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EditorTools\EditorHierarchyView.cpp">
+    <ClCompile Include="FileSystem\File.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EditorTools\EditorSceneView.cpp">
+    <ClCompile Include="Asset\AssetManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EditorTools\EditorDebugView.cpp">
+    <ClCompile Include="FileSystem\Serializer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EditorTools\EditorAssetBrowser.cpp">
+    <ClCompile Include="Setting\SettingManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MainEntry\00_TestClient.rc">
-      <Filter>리소스 파일</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="MainEntry\small.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="MainEntry\00_TestClient.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
   </ItemGroup>
 </Project>

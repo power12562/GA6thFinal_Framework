@@ -149,6 +149,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\Editor\GUI.h" />
+    <ClInclude Include="Source\Engine\Editor\EditorMainToolBar.h" />
     <ClInclude Include="Source\Engine\Framework\Scene.h" />
     <ClInclude Include="Source\Engine\Framework\SceneManager.h" />
     <ClInclude Include="Source\Engine\Editor\EditorEnum.h" />
@@ -177,6 +179,8 @@
     <ClInclude Include="Source\Engine\WindowAppCore\SimpleWindowClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\Editor\GUI.cpp" />
+    <ClCompile Include="Source\Engine\Editor\EditorMainToolBar.cpp" />
     <ClCompile Include="Source\Engine\Framework\Scene.cpp" />
     <ClCompile Include="Source\Engine\Framework\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\Editor\EditorEnum.cpp" />
@@ -227,6 +231,14 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Utility\DumpUtility.cpp" />
     <ClCompile Include="Source\Engine\WindowAppCore\SimpleWindowClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AssetSystem\AssetSystem.vcxproj">
+      <Project>{3c15430e-d5aa-40b5-a329-68df67ae49f6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectManager\ProjectManager.vcxproj">
+      <Project>{e33f57b4-ce2d-40eb-bbd7-f23914bb8a75}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

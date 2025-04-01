@@ -4,7 +4,6 @@
 /* 에디터 툴 */
 //#include "EditorTools/EditorDockSpace.h"
 #include "EditorTools/EditorDebugView.h"
-#include "EditorTools/EditorMainMenuBar.h"
 #include "EditorTools/EditorHierarchyView.h"
 #include "EditorTools/EditorInspectorView.h"
 #include "EditorTools/EditorSceneView.h"
@@ -23,6 +22,8 @@ int APIENTRY wWinMain(
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
+
+    Asset::System system;
 
     Application.Initialize(hInstance);
     Application.Run();
@@ -113,8 +114,6 @@ void WindowApp::ResizeRenderTarget(UINT width, UINT height)
 void WindowApp::PreInitialize()
 {
     /* 에디터 툴 초기화 */
-    //Editor.PushTool(new EditorDockSpace);
-    Editor.PushTool(new EditorMainMenuBar);
     Editor.PushTool(new EditorHierarchyView);
     Editor.PushTool(new EditorInspectorView);
     Editor.PushTool(new EditorSceneView);
@@ -153,7 +152,7 @@ void WindowApp::ClientRender()
     m_deviceContext->ClearRenderTargetView(m_backBufferRTV.Get(), clearColor);
     m_deviceContext->OMSetRenderTargets(1, m_backBufferRTV.GetAddressOf(), nullptr);
     
-    Editor.DrawGui();
+    Editor.OnDrawGui();
 
     m_SwapChain1->Present(1, 0);
 }
